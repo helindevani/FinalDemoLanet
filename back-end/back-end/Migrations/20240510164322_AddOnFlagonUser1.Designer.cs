@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using back_end.DatabaseContext;
 
@@ -11,9 +12,11 @@ using back_end.DatabaseContext;
 namespace back_end.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240510164322_AddOnFlagonUser1")]
+    partial class AddOnFlagonUser1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,9 +134,6 @@ namespace back_end.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ActionBy")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -161,7 +161,7 @@ namespace back_end.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AdminRequests", (string)null);
+                    b.ToTable("AdminRequests");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.Brand", b =>
@@ -189,7 +189,7 @@ namespace back_end.Migrations
 
                     b.HasKey("BrandId");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.Category", b =>
@@ -217,7 +217,7 @@ namespace back_end.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.Connection", b =>
@@ -350,7 +350,7 @@ namespace back_end.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Connections", (string)null);
+                    b.ToTable("Connections");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.Notification", b =>
@@ -379,7 +379,7 @@ namespace back_end.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.Order", b =>
@@ -445,7 +445,7 @@ namespace back_end.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.OrderItem", b =>
@@ -479,7 +479,7 @@ namespace back_end.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.Product", b =>
@@ -529,7 +529,7 @@ namespace back_end.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("back_end.Domain.Identity.ApplicationRole", b =>

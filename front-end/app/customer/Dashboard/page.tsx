@@ -1,8 +1,11 @@
 'use client';
 
+import Sidebar from "@/components/Sidebar";
+
 const Dashboard = () => {
   return (
     <>
+    <Sidebar>
         <div className="bg-white px-6 py-8 sm:px-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-6">Welcome to Gas Booking</h1>
           <p className="text-lg text-gray-700 mb-6">Book your gas cylinders hassle-free with our user-friendly platform.</p>
@@ -15,6 +18,7 @@ const Dashboard = () => {
           </ul>
           <p className="text-lg text-gray-700 mb-6">Start booking now and experience convenience at your fingertips!</p>
         </div>
+        </Sidebar>
     </>
   );
 }

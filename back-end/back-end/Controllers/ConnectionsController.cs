@@ -16,6 +16,8 @@ using Microsoft.CodeAnalysis;
 using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authorization;
+using back_end.Domain.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace back_end.Controllers
 {
@@ -25,10 +27,12 @@ namespace back_end.Controllers
     public class ConnectionsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _usermanager;
 
-        public ConnectionsController(ApplicationDbContext context)
+        public ConnectionsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _usermanager = userManager;
         }
 
         // GET: api/Connections
@@ -91,8 +95,6 @@ namespace back_end.Controllers
             return NoContent();
         }
 
-        // POST: api/Connections
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Connection>> PostConnection([FromForm]ConnectionDTO connectionDTO)
         {
@@ -104,6 +106,8 @@ namespace back_end.Controllers
             {
                 return BadRequest("Invalid brand status.");
             }
+
+            var user =await _usermanager.FindByIdAsync(connectionDTO.UserId);
 
             var connection = new Connection
             {
@@ -211,7 +215,15 @@ namespace back_end.Controllers
                 connection.PhotoGraph = uploadResult.SecureUrl.ToString();
             }
 
-
+            var connectionRequest = new AdminRequest
+            {
+                Description = "New Connection Request",
+                Id=Guid.Parse(connectionDTO.UserId),
+                RequestTypeName = RequestType.Connection
+            };
+            user.IsHasConnection= true;
+            await _usermanager.UpdateAsync(user);
+            _context.AdminRequests.Add(connectionRequest);
             _context.Connections.Add(connection);
             try
             {
@@ -232,7 +244,6 @@ namespace back_end.Controllers
             return CreatedAtAction("GetConnection", new { id = connection.LpgNo }, connection);
         }
 
-        // DELETE: api/Connections/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteConnection(string id)
         {

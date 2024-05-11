@@ -101,6 +101,32 @@
   },
   {
     "ContainingType": "back_end.Controllers.AdminController",
+    "Method": "ApproveConnectionStatus",
+    "RelativePath": "api/Admin/Connection/{userId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "remark",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "back_end.Controllers.AdminController",
     "Method": "GetCount",
     "RelativePath": "api/Admin/Dashboard",
     "HttpMethod": "GET",
@@ -267,7 +293,7 @@
   {
     "ContainingType": "back_end.Controllers.AdminRequestsController",
     "Method": "GetNewConnectionRequests",
-    "RelativePath": "api/AdminRequests/NewConnection",
+    "RelativePath": "api/AdminRequests/Connection",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1148,6 +1174,43 @@
         "Name": "id",
         "Type": "System.Guid",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "back_end.Controllers.UserController",
+    "Method": "AppliedNewConnection",
+    "RelativePath": "api/User/AppliedNewConnection/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "back_end.Controllers.UserController",
+    "Method": "LinkConnection",
+    "RelativePath": "api/User/LinkConnection/{userId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "LpgNo",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

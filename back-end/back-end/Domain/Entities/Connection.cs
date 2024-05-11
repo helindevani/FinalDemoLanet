@@ -72,6 +72,7 @@ namespace back_end.Domain.Entities
         public DateTime UpdateDate { get; set; } = DateTime.UtcNow;
 
         public Guid UserId { get; set; }
+
     }
 }
     

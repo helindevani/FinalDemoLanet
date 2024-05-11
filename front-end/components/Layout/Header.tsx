@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import LogoVPN from "../../public/logo.png";
 import ButtonOutline from "../ButtonOutline";
+import { FaCoffee } from "react-icons/fa";
 
 const Header: React.FC = () => {
   const [activeLink, setActiveLink] = useState<string | null>(null);
@@ -24,11 +25,12 @@ const Header: React.FC = () => {
     <>
       <header
         className={
-          "fixed top-0 w-full z-50 bg-white transition-all" +
+          "fixed top-0 w-full z-50 bg-white transition-all border-b" +
           (scrollActive ? " shadow-md pt-0" : " pt-3")
         }
       >
         <nav className="max-w-screen-xl px-6 sm:px-8 lg:px-16 mx-auto grid grid-flow-col py-3 sm:py-4">
+          {/* <button> <FaCoffee /></button> */}
           <div className="col-start-1 col-end-2 flex items-center">
             <Image src={LogoVPN} alt="LogoImage" height={100} width={100} />
           </div>

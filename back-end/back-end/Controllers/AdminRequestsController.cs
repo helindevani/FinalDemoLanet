@@ -70,12 +70,12 @@ namespace back_end.Controllers
             return Adminrequest;
         }
 
-        [HttpGet("NewConnection")]
+        [HttpGet("Connection")]
         public async Task<ActionResult<List<AdminRequestResponse>>> GetNewConnectionRequests()
         {
             var newConnectionRequests = await _context.AdminRequests
                 .Include(r => r.User)
-                .Where(r => r.RequestTypeName == RequestType.NewConnection)
+                .Where(r => r.RequestTypeName == RequestType.Connection)
                 .ToListAsync();
             
 

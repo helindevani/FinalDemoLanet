@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\back-end\\back-end\\back-end.csproj": {}
+    "D:\\Final Demo Lanet\\back-end\\back-end\\back-end.csproj": {}
   },
   "projects": {
-    "D:\\back-end\\back-end\\back-end.csproj": {
+    "D:\\Final Demo Lanet\\back-end\\back-end\\back-end.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\back-end\\back-end\\back-end.csproj",
+        "projectUniqueName": "D:\\Final Demo Lanet\\back-end\\back-end\\back-end.csproj",
         "projectName": "back-end",
-        "projectPath": "D:\\back-end\\back-end\\back-end.csproj",
+        "projectPath": "D:\\Final Demo Lanet\\back-end\\back-end\\back-end.csproj",
         "packagesPath": "C:\\Users\\Helin Devani\\.nuget\\packages\\",
-        "outputPath": "D:\\back-end\\back-end\\obj\\",
+        "outputPath": "D:\\Final Demo Lanet\\back-end\\back-end\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Helin Devani\\AppData\\Roaming\\NuGet\\NuGet.Config",

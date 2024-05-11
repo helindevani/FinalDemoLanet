@@ -79,63 +79,71 @@ namespace back_end.Controllers
             }
         }
 
-        //[HttpPut("NewConnection/{userId}")]
-        //public async Task<IActionResult> ApproveConnectionStatus(Guid userId, [FromQuery] string remark, [FromQuery] string status)
-        //{
+        [HttpPut("Connection/{userId}")]
+        public async Task<IActionResult> ApproveConnectionStatus(Guid userId, [FromQuery] string remark, [FromQuery] string status)
+        {
+            var connectionForm = await _context.Connections.FirstOrDefaultAsync(r=>r.UserId ==  userId);
 
+            var user = await _usermanager.FindByIdAsync(userId.ToString());
 
-        //    if (connectionForm == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var request = await _context.AdminRequests.FirstOrDefaultAsync(req => req.Id == userId);
 
-        //    if(status==ConnectionType.Approved.ToString())
-        //    {
-        //        var isRationCardUnique = _context.NewConnectionForms
-        //        .Where(f => f.RationCardNo == connectionForm.RationCardNo && f.UserId != userId.ToString())
-        //        .Count() == 0;
+            var approverUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        //        var request = await _context.AdminRequests.FirstOrDefaultAsync(req => req.Id == userId);
+            if (connectionForm == null)
+            {
+                return NotFound();
+            }
 
-        //        if (isRationCardUnique)
-        //        {
-        //            var approverUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (status == ConnectionStatus.Approved.ToString())
+            {
+                var isRationCardUnique = _context.Connections
+                .Where(f => f.RationCardNumber == connectionForm.RationCardNumber && f.UserId != userId)
+                .Count() == 0;
 
-        //            connectionForm.ConnectionStatus = ConnectionType.Approved;
-        //            connectionForm.UpdateDate = DateTime.UtcNow;
+                if (isRationCardUnique)
+                {
+                    connectionForm.Status = ConnectionStatus.Approved;
 
-        //            _context.SaveChanges();
+                    if (connectionForm.Status == ConnectionStatus.Approved)
+                    {
+                        request.ActionBy = approverUserId;
+                        request.Status = RequestStatus.Approved;
+                        request.Remark = remark;
+                        _context.AdminRequests.Update(request);
+                       
+                    }
+                    await _context.SaveChangesAsync();
+                    return Ok("Connection status approved successfully.");
+                }
+                else
+                {
+                    connectionForm.Status = ConnectionStatus.Rejected;
 
-        //            if (connectionForm.ConnectionStatus == ConnectionType.Approved)
-        //            {
-        //                request.Status = RequestStatus.Approved;
-        //                request.Remark = remark;
-        //                _context.AdminRequests.Update(request);
-        //                _context.SaveChanges();
-        //            }
+                    if (connectionForm.Status == ConnectionStatus.Rejected)
+                    {
+                        user.IsHasConnection = false;
+                        await _usermanager.UpdateAsync(user);
+                        request.ActionBy = approverUserId;
+                        request.Status = RequestStatus.Rejected;
+                        request.Remark = remark;
 
-        //            return Ok("Connection status approved successfully.");
-        //        }
-        //    }
+                        _context.AdminRequests.Update(request);
 
-        //    var requestr = await _context.AdminRequests.FirstOrDefaultAsync(req => req.Id == userId);
+                    }
 
-        //    connectionForm.ConnectionStatus = ConnectionType.Rejected;
-        //    connectionForm.UpdateDate = DateTime.UtcNow;
-        //    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
 
-        //        if (connectionForm.ConnectionStatus== ConnectionType.Rejected)
-        //        {
-        //            requestr.Status = RequestStatus.Rejected;
-        //            requestr.Remark = remark;
-        //            _context.AdminRequests.Update(requestr);
-        //            _context.SaveChanges();
-        //        }
+                    return Ok("Connection status rejected due to You Have Already Hold Gas Connection.");
 
-        //        return Ok("Connection status rejected due to You Have Already Hold Gas Connection.");
-            
+                }
+            }
+            else
+            {
+                return BadRequest("Please Provide valid Data");  
+            }
 
-        //}
+        }
 
         [HttpGet("Dashboard")]
         public ActionResult<Dictionary<string, int>> GetCount()

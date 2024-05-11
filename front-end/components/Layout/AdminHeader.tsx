@@ -5,6 +5,7 @@ import LogoVPN from "../../public/logo.png";
 import Notification from "../Notification";
 import { useDispatch } from "react-redux";
 import { logout } from "@/store/authSlice";
+import { FaCoffee } from "react-icons/fa";
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
@@ -63,11 +64,14 @@ const Header: React.FC = () => {
     <>
       <header
         className={
-          "fixed top-0 w-full z-50 bg-white transition-all" 
+          "fixed top-0 w-full z-50 bg-white transition-all border-b" 
         }
       >
+        
         <nav className="max-w-screen-xl px-6 sm:px-8 lg:px-16 mx-auto grid grid-flow-col py-3 sm:py-4">
+        {/* <button className="m-5 bg-black"> <FaCoffee /></button> */}
           <div className="col-start-1 col-end-2 flex items-center">
+          
             <Image src={LogoVPN} alt="LogoImage" height={100} width={100} />
           </div>
 

@@ -1,15 +1,8 @@
-'use client';
-import Sidebar from "../../components/Sidebar";
+"use client";
 import Dashboard from "./Dashboard/page";
-import ContactUs from "@/components/ContactUs";
 
-
-const Customer=()=>{
-    return(
-        <Sidebar>
-            <Dashboard/>
-        </Sidebar>
-    );
-}
+const Customer = () => {
+  return <Dashboard />;
+};
 
 export default Customer;

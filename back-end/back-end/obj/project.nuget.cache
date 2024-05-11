@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dCaxu0VUeppGpR16l8rIVX1gkMfb9lQ/PEyNykbhkG/nh1Nil61jvbmRFNFnzNgHXjHafxOYmd4w91MqA75YDg==",
+  "dgSpecHash": "8zBEdPFSJRRxtvb3NIsvdDYiIEyAqlBZbeYhg7i1EdP1haHL8dToMN58eETqtYkfv5B9LqL5rs9mdZZ3QJcfZw==",
   "success": true,
-  "projectFilePath": "D:\\back-end\\back-end\\back-end.csproj",
+  "projectFilePath": "D:\\Final Demo Lanet\\back-end\\back-end\\back-end.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Helin Devani\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Helin Devani\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

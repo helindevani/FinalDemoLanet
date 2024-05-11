@@ -6,6 +6,8 @@ namespace back_end.Domain.Identity
     public class ApplicationUser : IdentityUser<Guid>
     {
         public string Name { get; set; }
+        public bool IsHasConnection { get; set; }
+        public bool IsHasConnectionLinked { get; set; }
         public ICollection<AdminRequest>? AdminRequests { get; set; }
     }
 }

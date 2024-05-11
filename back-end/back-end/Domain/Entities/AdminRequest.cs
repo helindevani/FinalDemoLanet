@@ -29,5 +29,7 @@ namespace back_end.Domain.Entities
 
         [Required]
         public DateTime? RequestDate { get; set; }=DateTime.UtcNow;
+
+        public string? ActionBy {  get; set; }
     }
 }
