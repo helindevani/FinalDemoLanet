@@ -170,9 +170,9 @@ const EditProduct = () => {
           </div>
 
           <div className="container m-auto">
-            <div className="max-w-4xl mx-auto h-screen">
+            <div className="max-w-4xl mx-auto mb-28 h-screen">
               <div className="bg-white shadow-md rounded px-8 pt-6 pb-15 m-10 w-3/4 h-auto">
-                <h1>Product Info</h1>
+                <h1 className="text-xl text-blue-800 font-semibold text-primary">Product Info</h1>
                 <form className="space-y-4 px-5 py-8" onSubmit={handleSubmit}>
                   <div className="flex items-center">
                     <div

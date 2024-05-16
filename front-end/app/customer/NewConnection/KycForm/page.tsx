@@ -254,7 +254,7 @@ export default function Connection() {
                     </button>
                     <div className="mt-1">Declaration</div>
                   </div>
-                  <span className="absolute h-[2px] bg-black w-80 top-5 left-[221px]"></span>
+                  <span className="absolute h-[2px] bg-black w-80 top-5 left-[233px]"></span>
                 </div>
                 {renderComponent()}
 

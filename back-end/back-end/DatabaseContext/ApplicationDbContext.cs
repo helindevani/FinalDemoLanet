@@ -26,6 +26,8 @@ namespace back_end.DatabaseContext
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
         public virtual DbSet<Connection> Connections { get; set; }
+        public virtual DbSet<Booking> Bookings { get; set; }
+        public virtual DbSet<Staff> Staffs { get; set; }
 
         public override int SaveChanges()
         {
@@ -65,7 +67,6 @@ namespace back_end.DatabaseContext
 
             var AdminId = "7DBD5480-1224-4288-AEE8-1249F8A94E1A";
             var UserId = "3AC53885-3553-4B1C-93D2-4DECA3B4CB54";
-            var SupplierId = "4304A85E-15E6-4C29-A971-1C9B37863F51";
 
             var roles = new List<ApplicationRole>
             {
@@ -82,13 +83,6 @@ namespace back_end.DatabaseContext
                     ConcurrencyStamp = UserId,
                     Name = "User",
                     NormalizedName = "User".ToUpper()
-                },
-                new ApplicationRole
-                {
-                    Id = Guid.Parse(SupplierId),
-                    ConcurrencyStamp = SupplierId,
-                    Name = "Supplier",
-                    NormalizedName = "Supplier".ToUpper()
                 }
             };
 

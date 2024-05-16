@@ -6,6 +6,7 @@ import { IoInformationCircleSharp, IoReceiptSharp } from "react-icons/io5";
 
 const Sidebar = ({ showName,children }: any) => {
   const [expandedMenu, setExpandedMenu] = useState("");
+  const [selectedMenuItem, setSelectedMenuItem] = useState("");
 
   useEffect(() => {
     console.log("Expanded menu:", expandedMenu);
@@ -13,6 +14,14 @@ const Sidebar = ({ showName,children }: any) => {
 
   const toggleSubMenu = (menuId: string) => {
     setExpandedMenu(menuId === expandedMenu ? "" : menuId);
+  };
+
+  const selectMenuItem = (menuId: string) => {
+    setSelectedMenuItem(menuId);
+  };
+
+  const isMenuItemSelected = (menuId: string) => {
+    return selectedMenuItem === menuId;
   };
 
   return (
@@ -26,9 +35,14 @@ const Sidebar = ({ showName,children }: any) => {
           <div className="h-full px-3 py-4 overflow-y-auto bg-gray-100 dark:bg-gray-800 ">
           <ul className="space-y-2 font-medium">
               <li>
-                <a
+              <a
                   href="/customer/Dashboard"
-                  className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className={`flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white group ${
+                    isMenuItemSelected("dashboard")
+                      ? "bg-gray-200 dark:bg-gray-700"
+                      : ""
+                  }`}
+                  onClick={() => selectMenuItem("dashboard")}
                 >
                   <FaTachometerAlt size={20}/>
                   {/* {showName &&*/} <span className="ms-3">Dashboard</span>{/* {} */}
@@ -84,7 +98,15 @@ const Sidebar = ({ showName,children }: any) => {
                   <ul className="py-2 space-y-2">
                     <li>
                       <a
-                        href="#"
+                        href="/customer/Booking"
+                        className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                      >
+                        Book Cylinder
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="/customer/Booking/LastBooking"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Last Booking
@@ -92,10 +114,10 @@ const Sidebar = ({ showName,children }: any) => {
                     </li>
                     <li>
                       <a
-                        href="#"
+                        href="/customer/Booking/History"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
-                        Total Booking
+                        Booking History
                       </a>
                     </li>
                   </ul>

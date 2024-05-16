@@ -161,7 +161,61 @@ namespace back_end.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AdminRequests", (string)null);
+                    b.ToTable("AdminRequests");
+                });
+
+            modelBuilder.Entity("back_end.Domain.Entities.Booking", b =>
+                {
+                    b.Property<Guid>("BookingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("BookingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LpgNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymrntStaus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Price")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ShippingAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("BookingId");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.Brand", b =>
@@ -189,7 +243,7 @@ namespace back_end.Migrations
 
                     b.HasKey("BrandId");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.Category", b =>
@@ -217,7 +271,7 @@ namespace back_end.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.Connection", b =>
@@ -350,7 +404,7 @@ namespace back_end.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Connections", (string)null);
+                    b.ToTable("Connections");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.Notification", b =>
@@ -379,7 +433,7 @@ namespace back_end.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.Order", b =>
@@ -445,7 +499,7 @@ namespace back_end.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.OrderItem", b =>
@@ -479,7 +533,7 @@ namespace back_end.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.Product", b =>
@@ -529,7 +583,54 @@ namespace back_end.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("back_end.Domain.Entities.Staff", b =>
+                {
+                    b.Property<Guid>("StaffId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AadharCardNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("JoiningDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StaffName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("StaffId");
+
+                    b.ToTable("Staffs");
                 });
 
             modelBuilder.Entity("back_end.Domain.Identity.ApplicationRole", b =>
@@ -573,13 +674,6 @@ namespace back_end.Migrations
                             ConcurrencyStamp = "3AC53885-3553-4B1C-93D2-4DECA3B4CB54",
                             Name = "User",
                             NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = new Guid("4304a85e-15e6-4c29-a971-1c9b37863f51"),
-                            ConcurrencyStamp = "4304A85E-15E6-4C29-A971-1C9B37863F51",
-                            Name = "Supplier",
-                            NormalizedName = "SUPPLIER"
                         });
                 });
 
@@ -717,6 +811,17 @@ namespace back_end.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("back_end.Domain.Entities.Booking", b =>
+                {
+                    b.HasOne("back_end.Domain.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("back_end.Domain.Entities.Connection", b =>

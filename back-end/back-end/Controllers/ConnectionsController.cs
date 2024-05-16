@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using back_end.DatabaseContext;
 using back_end.Domain.Entities;
 using back_end.DTO;
-using NuGet.Packaging.Signing;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using back_end.Enums;
-using MimeKit.Encodings;
 using Microsoft.CodeAnalysis;
 using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
@@ -46,26 +38,53 @@ namespace back_end.Controllers
             return await _context.Connections.ToListAsync();
         }
 
-        // GET: api/Connections/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Connection>> GetConnection(string id)
+        [HttpGet("{status}")]
+        public async Task<ActionResult<IEnumerable<Connection>>> GetConnection(string status)
         {
-          if (_context.Connections == null)
-          {
-              return NotFound();
-          }
-            var connection = await _context.Connections.FindAsync(id);
-
-            if (connection == null)
+            if (_context.Connections == null)
             {
                 return NotFound();
             }
 
-            return connection;
+            switch (status)
+            {
+                case "New":
+                    var newConnections = await _context.Connections.Include(r=>r.Product).Include(r=>r.Product.Brand)
+                        .Where(r => r.Status == ConnectionStatus.Pending)
+                        .ToListAsync();
+
+                    if (newConnections.Count == 0)
+                    {
+                        return NotFound();
+                    }
+                    return newConnections;
+
+                case "Approve":
+                    var approvedConnection = await _context.Connections.Include(r => r.Product).Include(r => r.Product.Brand)
+                        .Where(r => r.Status == ConnectionStatus.Approved)
+                        .ToListAsync(); 
+                    if (approvedConnection == null)
+                    {
+                        return NotFound();
+                    }
+                    return approvedConnection; 
+
+                case "Reject":
+                    var rejectedConnection = await _context.Connections.Include(r => r.Product).Include(r => r.Product.Brand)
+                         .Where(r => r.Status == ConnectionStatus.Rejected)
+                         .ToListAsync(); 
+                    if (rejectedConnection == null)
+                    {
+                        return NotFound();
+                    }
+                    return rejectedConnection; 
+
+                default:
+                    return NotFound(); 
+            }
         }
 
-        // PUT: api/Connections/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutConnection(string id, Connection connection)
         {

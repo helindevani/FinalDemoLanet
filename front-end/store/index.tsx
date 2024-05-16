@@ -15,6 +15,7 @@ import authReducer from "./authSlice";
 import categoryReducer from "./categorySlice";
 import brandReducer from "./supplierSlice";
 import productReducer from "./productSlice";
+import staffReducer from "./staffSlice";
 
 const persistConfig = {
   key: "root",
@@ -29,7 +30,8 @@ export const store = configureStore({
     auth: persistedReducer,
     category: categoryReducer,
     brand : brandReducer,
-    product : productReducer
+    product : productReducer,
+    staff : staffReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

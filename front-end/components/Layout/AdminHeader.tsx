@@ -75,7 +75,7 @@ const Header: React.FC = () => {
             <Image src={LogoVPN} alt="LogoImage" height={100} width={100} />
           </div>
 
-          <div className="col-start-10 col-end-12 font-medium flex justify-end items-center">
+          <div className="col-start-10 col-end-12 font-medium flex justify-end items-center sm:right-11">
             <ul className="lg:flex col-start-4 col-end-8 text-black-500  items-center">
               <Link
                 href="/"
@@ -116,7 +116,7 @@ const Header: React.FC = () => {
               </button>
               <div className="relative sm:h-auto sm:w-auto" ref={avatarRef}>
                 <div
-                  className="flex items-center cursor-pointer sm:h-auto w-auto"
+                  className="flex items-center cursor-pointer h-auto w-auto"
                   onClick={handleDropdownToggle}
                 >
                   <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">

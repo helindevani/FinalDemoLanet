@@ -1,24 +1,36 @@
 'use client';
 import AdminSidebar from '@/components/AdminSidebar';
 import { useEffect, useState } from 'react';
-import { FaDeleteLeft } from 'react-icons/fa6';
+import axios from 'axios';
+import Link from 'next/link';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import Cookies from 'js-cookie';
 
 const NewConnection = () => {
-    const [clients, setClients] = useState([]);
+  const [consumers, setConsumers] = useState([]);
+  const token= Cookies.get('token');
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+  useEffect(() => {
+    const response=axios.get('http://localhost:5057/api/Connections/New',{
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(response => setConsumers(response.data))
+      .catch(error => console.error('Error fetching data:', error));
+  }, [token]);
 
-    const fetchData = async () => {
-        try {
-            const response = await fetch('/api/clients'); // Replace '/api/clients' with your API endpoint
-            const data = await response.json();
-            setClients(data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
+  const getSubsidyStatus = (value: boolean): string => {
+    switch (value) {
+        case true:
+            return "Yes";
+        case false:
+            return "No";
+        default:
+            return "";
+    }
+};
 
     return (
       <AdminSidebar>
@@ -77,22 +89,22 @@ const NewConnection = () => {
                         #
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        Photo
+                        LPG No
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
                         Consumer Name
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        Gender
+                        Subsidy Applied
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
                         Mobile NO
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        ID Proof Number
+                        Ration Card No
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        Address
+                        Product Name
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
                         Action
@@ -100,50 +112,54 @@ const NewConnection = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {/* {consumers.map((consumer: any, index) => ( */}
+                    {consumers.map((consumer: any, index) => ( 
                       <tr
-                        // key={index}
+                        key={consumer.lpgNo}
                         className="border-b border border-gray-300 bg-gray-100"
                       >
                         <td className="p-3 border border-b border-gray-300">
-                          1
+                          {index + 1}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          Image
+                         {consumer.lpgNo}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          helin
+                        {consumer.firstName} {consumer.lastName}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          Male
+                          {getSubsidyStatus(consumer.isGovScheme)}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          9157420020
+                          {consumer.phoneNumber}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          20
+                          {consumer.rationCardNumber}
                         </td>
                         <td className="p-3  border border-b border-gray-300">
-                          Amreli
+                          {consumer.product.productName} {consumer.product.brand.brandName}
                         </td>
-                        <td className="p-3  border border-b border-gray-300">
-                          {/* <a href={`editclient.php?id=${consumer.id}`}> */}
-                          <a>
-                            <button className="btn btn-primary">Edit</button>
-                          </a>
-                          <a
-                            // href={`php_action/removeclient.php?id=${consumer.id}`}
-                            onClick={() =>
-                              confirm("Are you sure to delete this record?")
-                            }
-                          >
-                            <FaDeleteLeft className="btn btn-danger ml-2">
-                              Delete
-                            </FaDeleteLeft>
-                          </a>
+                        <td className="p-3   border-gray-300 flex justify-end">
+                          <div className="m-1">
+                            <Link
+                              href="#"
+                              className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center"
+                            >
+                              <FaEdit />
+                            </Link>
+                          </div>
+                          <div className="m-1">
+                            <button
+                              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded flex items-center"
+                              // onClick={() =>
+                              //   handleDeleteCategory(category.categoryId)
+                              // }
+                            >
+                              <FaTrash />
+                            </button>
+                          </div>
                         </td>
                       </tr>
-                    {/* ))} */}
+                     ))}
                   </tbody>
                 </table>
                 <div className="flex justify-between items-center">

@@ -1,42 +1,67 @@
 "use client";
-import Head from "next/head";
-// import Header from './constant/layout/header';
-// import Sidebar from './constant/layout/sidebar';
-import axios from "axios"; // Import axios for fetching data
+import { format } from 'date-fns';
 import { useEffect, useState } from "react";
 import AdminSidebar from "@/components/AdminSidebar";
-import { FaDeleteLeft } from "react-icons/fa6";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { Staff, deleteStaff, fetchStaffs } from "@/store/staffSlice";
+import Cookies from "js-cookie";
 
-const ViewConsumer = () => {
-  const [consumers, setConsumers] = useState([]);
+const ViewStaff = () => {
+  const dispatch = useDispatch<any>();
+
+  const staffs: Staff[] = useSelector(
+    (state: any) => state.staff.staffs
+  );
+
+  const token = Cookies.get("token");
 
   useEffect(() => {
-    return ()=>{const fetchConsumerData = async () => {
-      try {
-        const response = await axios.get("/api/consumers"); // Adjust API endpoint as per your backend
-        setConsumers(response.data);
-      } catch (error) {
-        console.error("Error fetching consumer data:", error);
-      }
-      
-    fetchConsumerData();
-    };
-  }
-  }, []);
+    return () => dispatch(fetchStaffs());
+  }, [dispatch, token]);
+
+  const handleDeleteCategory = (staffId: string) => {
+    if (window.confirm("Are you sure to delete this category?")) {
+      dispatch(deleteStaff(staffId));
+    }
+  };
+
+  const getStatusString = (status: number) => {
+    switch (status) {
+      case 0:
+        return "Available";
+      case 1:
+        return "NotAvailable";
+      default:
+        return "";
+    }
+  };
+
+  const getStatusClass = (status: number) => {
+    switch (status) {
+      case 0:
+        return "bg-green-500"; // Available status
+      case 1:
+        return "bg-red-500"; // Not Available status
+      default:
+        return ""; // Default background color
+    }
+  };
 
   return (
     <AdminSidebar>
       <div className="page-wrapper">
         <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
-            View Consumer
+            View Staff
           </h3>
           <nav className="flex items-center space-x-2">
             <a href="#" className="text-gray-400 hover:text-blue-800">
               Home
             </a>
             <span className="text-gray-400">{`>`}</span>
-            <span className="text-gray-600">View Client</span>
+            <span className="text-gray-600">View Staff</span>
           </nav>
         </div>
 
@@ -46,7 +71,7 @@ const ViewConsumer = () => {
               <div className="mb-20">
                 <a href="#">
                   <button className="bg-purple-900 hover:bg-purple-950 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
-                    Add Consumer
+                    Add Staff
                   </button>
                 </a>
               </div>
@@ -89,22 +114,25 @@ const ViewConsumer = () => {
                         #
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        Photo
+                        Staff Name
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        Consumer Name
+                        Phone No.
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
                         Gender
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        Mobile NO
+                        Address
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
                         ID Proof Number
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        Address
+                        Joining Date
+                      </th>
+                      <th className="p-3 border border-b border-gray-300 text-gray-700">
+                        Status
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
                         Action
@@ -112,50 +140,57 @@ const ViewConsumer = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {/* {consumers.map((consumer: any, index) => ( */}
+                    {staffs.map((staff: any, index) => (
                       <tr
-                        // key={index}
+                        key={staff.staffId}
                         className="border-b border border-gray-300 bg-gray-100"
                       >
                         <td className="p-3 border border-b border-gray-300">
-                          1
+                          {index + 1}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          Image
+                          {staff.staffName}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          helin
+                          {staff.phoneNumber}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          Male
+                          {staff.gender}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          9157420020
+                          {staff.address}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          20
+                          {staff.aadharCardNo}
                         </td>
                         <td className="p-3  border border-b border-gray-300">
-                          Amreli
+                        {format(new Date(staff.joiningDate), 'dd-MM-yyyy')}
                         </td>
-                        <td className="p-3  border border-b border-gray-300">
-                          {/* <a href={`editclient.php?id=${consumer.id}`}> */}
-                          <a>
-                            <button className="btn btn-primary">Edit</button>
-                          </a>
-                          <a
-                            // href={`php_action/removeclient.php?id=${consumer.id}`}
-                            onClick={() =>
-                              confirm("Are you sure to delete this record?")
-                            }
-                          >
-                            <FaDeleteLeft className="btn btn-danger ml-2">
-                              Delete
-                            </FaDeleteLeft>
-                          </a>
+                        <td className="p-3  border  border-gray-300">
+                        <span className={`rounded text-white px-2 py-1 ${getStatusClass(staff.status)}`}>
+                            {getStatusString(staff.status)}
+                          </span>
+                        </td>
+                        <td className="p-3 border-gray-300 flex justify-end">
+                          <div className="m-1">
+                            <Link
+                              href={`/admin/DeliveryStaff/${staff.staffId}`}
+                              className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center"
+                            >
+                              <FaEdit />
+                            </Link>
+                          </div>
+                          <div className="m-1">
+                            <button
+                              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded flex items-center"
+                             
+                            >
+                              <FaTrash />
+                            </button>
+                          </div>
                         </td>
                       </tr>
-                    {/* ))} */}
+                     ))} 
                   </tbody>
                 </table>
                 <div className="flex justify-between items-center">
@@ -170,15 +205,9 @@ const ViewConsumer = () => {
             </div>
           </div>
         </div>
-
-        
-
-        {/* <footer className="text-center text-sm text-gray-600 mt-8">
-                Author Name- Mayuri K. For any PHP, Codeignitor, Laravel OR Python work contact me at mayuri.infospace@gmail.com Visit website - www.mayurik.com
-            </footer> */}
       </div>
     </AdminSidebar>
   );
 };
 
-export default ViewConsumer;
+export default ViewStaff;

@@ -1,8 +1,15 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
-import { FaExpandArrowsAlt, FaTachometerAlt, FaUserFriends, FaMoneyBillAlt, FaChartBar, FaCog } from "react-icons/fa";
+import {
+  FaExpandArrowsAlt,
+  FaTachometerAlt,
+  FaUserFriends,
+  FaMoneyBillAlt,
+  FaChartBar,
+  FaCog,
+} from "react-icons/fa";
 import { FaRegChartBar, FaUser } from "react-icons/fa6";
-import { BiCylinder, BiListCheck } from 'react-icons/bi';
+import { BiCylinder, BiListCheck } from "react-icons/bi";
 
 const AdminSidebar = ({ children }: any) => {
   const [expandedMenu, setExpandedMenu] = useState("");
@@ -16,7 +23,7 @@ const AdminSidebar = ({ children }: any) => {
   };
   return (
     <>
-      <div className='flex border z-40'>
+      <div className="flex border z-40">
         <aside
           id="sidebar-multi-level-sidebar"
           className="sticky top-[85px] left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 flex-col-2"
@@ -29,7 +36,7 @@ const AdminSidebar = ({ children }: any) => {
                   href="/admin/AdminDasboard"
                   className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
-                  <FaTachometerAlt />
+                  <FaTachometerAlt size={20} />
                   <span className="ms-3">Dashboard</span>
                 </a>
               </li>
@@ -39,9 +46,9 @@ const AdminSidebar = ({ children }: any) => {
                   className="flex items-center w-full p-2 text-base text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   onClick={() => toggleSubMenu("consumer")}
                 >
-                  <FaUser />
+                  <FaUser size={20} />
                   <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
-                    Consumer
+                    Delivery Staff
                   </span>
                   <svg
                     className={`w-3 h-3 ml-auto ${
@@ -65,18 +72,18 @@ const AdminSidebar = ({ children }: any) => {
                   <ul className="py-2 space-y-2">
                     <li>
                       <a
-                        href="/admin/Consumer"
+                        href="/admin/DeliveryStaff"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
-                        Add Consumer
+                        Add Staff
                       </a>
                     </li>
                     <li>
                       <a
-                        href="/admin/Consumer/ManageConsumer"
+                        href="/admin/DeliveryStaff/ManageStaff"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
-                        Manage Consumer
+                        Manage Staff
                       </a>
                     </li>
                   </ul>
@@ -88,7 +95,7 @@ const AdminSidebar = ({ children }: any) => {
                   className="flex items-center w-full p-2 text-base text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   onClick={() => toggleSubMenu("supplier")}
                 >
-                  <FaUserFriends />
+                  <FaUserFriends size={20} />
                   <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
                     Supplier
                   </span>
@@ -145,7 +152,7 @@ const AdminSidebar = ({ children }: any) => {
                   className="flex items-center w-full p-2 text-base text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   onClick={() => toggleSubMenu("categories")}
                 >
-                  <BiListCheck />
+                  <BiListCheck size={20} />
                   <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
                     Categories
                   </span>
@@ -196,7 +203,7 @@ const AdminSidebar = ({ children }: any) => {
                   className="flex items-center w-full p-2 text-base text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   onClick={() => toggleSubMenu("cylinder")}
                 >
-                  <BiCylinder />
+                  <BiCylinder size={20} />
                   <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
                     Cylinder
                   </span>
@@ -245,7 +252,7 @@ const AdminSidebar = ({ children }: any) => {
                   className="flex items-center w-full p-2 text-base text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   onClick={() => toggleSubMenu("connections")}
                 >
-                  <FaExpandArrowsAlt/>
+                  <FaExpandArrowsAlt size={20} />
                   <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
                     Connections
                   </span>
@@ -276,91 +283,46 @@ const AdminSidebar = ({ children }: any) => {
                         href="/admin/Connection"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
-                        New Connections
+                        New
                       </a>
                     </li>
-                    <li>
-                      <a
-                        href="/admin/Connection/OnHoldConnections"
-                        className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                      >
-                        On Hold Connections
-                      </a>
-                    </li>
+
                     <li>
                       <a
                         href="/admin/Connection/ApprovedConnections"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
-                        Approved Connections
+                        Approved
                       </a>
                     </li>
                     <li>
                       <a
                         href="/admin/Connection/RejectedConnections"
-                        className="flex items-center w-full p-2 v transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                        className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
-                        Rejected Connections
+                        Rejected
                       </a>
                     </li>
                   </ul>
                 )}
               </li>
               <li>
-                <button
-                  type="button"
-                  className="flex items-center w-full p-2 text-base text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  onClick={() => toggleSubMenu("bookings")}
+              <a
+                  href="/admin/Booking"
+                  className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
-                 <FaMoneyBillAlt/>
+                  <FaMoneyBillAlt size={20} />
                   <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
                     Bookings
                   </span>
-                  <svg
-                    className={`w-3 h-3 ml-auto ${
-                      expandedMenu === "bookings" ? "transform rotate-180" : ""
-                    }`}
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 10 6"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="m1 1 4 4 4-4"
-                    />
-                  </svg>
-                </button>
-                {expandedMenu === "bookings" && (
-                  <ul className="py-2 space-y-2">
-                    <li>
-                      <a
-                        href="#"
-                        className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                      >
-                        Add Bookings
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="/admin/Booking/ManageBooking"
-                        className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                      >
-                        Manage Bookings
-                      </a>
-                    </li>
-                  </ul>
-                )}
+                </a>
               </li>
               <li>
                 <a
                   href="/admin/Reports"
                   className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
-                  <FaRegChartBar/>
+                  <FaRegChartBar size={20} />
                   <span className="flex-1 ms-3 whitespace-nowrap">Reports</span>
                 </a>
               </li>
@@ -370,7 +332,7 @@ const AdminSidebar = ({ children }: any) => {
                   className="flex items-center w-full p-2 text-base text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   onClick={() => toggleSubMenu("settings")}
                 >
-                  <FaCog/>
+                  <FaCog size={20} />
                   <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
                     Settings
                   </span>

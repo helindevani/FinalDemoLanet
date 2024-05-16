@@ -25,8 +25,7 @@ const Header: React.FC = () => {
     <>
       <header
         className={
-          "fixed top-0 w-full z-50 bg-white transition-all border-b" +
-          (scrollActive ? " shadow-md pt-0" : " pt-3")
+          "fixed top-0 w-full z-50 bg-white transition-all border-b"
         }
       >
         <nav className="max-w-screen-xl px-6 sm:px-8 lg:px-16 mx-auto grid grid-flow-col py-3 sm:py-4">

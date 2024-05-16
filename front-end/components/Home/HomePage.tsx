@@ -1,25 +1,15 @@
-import SendRequest from "../SendRequest";
+import  background  from "../../public/Background.jpg";
 import React from 'react';
 import NotificationAlert from "./NotificationAlert";
-import PersonalDetails from "../Connection/PersonalDetails";
-import RequieredDocument from "../Connection/RequieredDocument";
-import OtherDetails from "../Connection/OtherDetails";
-import Declaration from "../Connection/Declaration";
-import ConnectionHeader from "../Connection/Connection";
-import Connection from "../Connection/Connection";
+import Image from "next/image";
 
 const MainPage = () => {
-
-
-
-  
   return (
     <>
-    <div className="p-4">
-      <div className="mb-4">
+    <div >
+      <div className="top-[85px]">
         <NotificationAlert/>
-        <SendRequest/>
-        <Connection/>
+        <Image src={background} alt="background" style={{ width: '100%', height:'100%' }} ></Image>
       </div>
     </div>
     </>

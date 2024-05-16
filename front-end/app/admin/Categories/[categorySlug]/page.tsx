@@ -59,7 +59,7 @@ const EditCategory = () => {
       ToastSuccess("Category Updated Successfully!!");
       router.push("/admin/Categories/ManageCategories");
     } catch (error) {
-      console.error("Error creating brand:", error);
+      console.error("Error creating Category:", error);
       ToastError("Category Not Updated!!");
     }
   };

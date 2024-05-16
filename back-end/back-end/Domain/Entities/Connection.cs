@@ -38,7 +38,6 @@ namespace back_end.Domain.Entities
         [ForeignKey("Product")]
         public Guid ProductId { get; set; }
 
-        [JsonIgnore]
         public Product? Product { get; set; }
 
         public string EmailId { get; set; }

@@ -13,7 +13,7 @@ export default function Declaration({onChange} : changeType) {
 
   return (
     <>
-      <div>
+      <div className="border">
         <b className="text-2xl py-5">Declaration </b>
         <div>
           <b>

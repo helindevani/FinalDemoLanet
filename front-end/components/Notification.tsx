@@ -67,7 +67,7 @@ const Notification: React.FC = () => {
     <aside
       ref={notificationRef}
       id="notification-sidebar"
-      className={`fixed top-[100px] right-0 z-10 h-screen transition-transform translate-x-full sm:translate-x-0 flex-col-2 w-64 bg-gray-50 dark:bg-gray-800 ${showUnreadHighlight ? "block" : "hidden"}`}
+      className={`fixed top-0 right-0 z-50 h-screen transition-transform translate-x-full sm:translate-x-0 flex-col-2 w-64 bg-gray-50 dark:bg-gray-800 ${showUnreadHighlight ? "block" : "hidden"}`}
       aria-label="Notification Sidebar"
     >
       <div className="h-full px-3 py-12 overflow-y-auto">

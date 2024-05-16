@@ -1,89 +1,191 @@
 'use client';
-import AdminSidebar from "@/components/AdminSidebar";
-import React, { useState } from "react";
+import AdminSidebar from '@/components/AdminSidebar';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+import { ToastError, ToastSuccess } from '@/components/ToastError';
+import { addStaff } from '@/store/staffSlice';
 
-interface Staff {
-  id: number;
-  name: string;
-  role: string;
-}
+const AddStaff = () => {
+  const [name,setName]=useState<string>();
+  const [gender,setGender]=useState<string>();
+  const [aadharNo,setAadharNo]=useState<string>();
+  const [address,setAddress]=useState<string>();
+  const [phoneNo,setPhoneNo]=useState<string>();
+  const [status,setStatus]=useState<string>();
+  const [joinDate,setJoinDate] = useState<string>();
+  const [error, setError] = useState<any>('');
+  const router = useRouter();
 
-const DeliveryStaffManagement: React.FC = () => {
-  const [staffList, setStaffList] = useState<Staff[]>([]);
-  const [newStaff, setNewStaff] = useState<Staff>({ id: 0, name: "", role: "" });
+  const dispatch = useDispatch<any>();
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setNewStaff({ ...newStaff, [name]: value });
+  const handleSubmit = async (e: any) => {
+      e.preventDefault();
+      const token = Cookies.get('token');
+
+      if (!token) {
+          setError('JWT token not found');
+          return;
+      }
+
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const userName = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+
+      const data: any = {
+        StaffName: name,
+        Gender: gender,
+        AadharCardNo: aadharNo,
+        PhoneNumber: phoneNo,
+        Address : address,
+        JoiningDate: joinDate,
+        Status: status,
+        CreatedBy: userName,
+      };
+
+      try {
+          const response = await dispatch(addStaff(data));
+          console.log('Category created successfully:', response.payload);
+          ToastSuccess("Category Added Successfully!!")
+          router.push("/admin/DeliveryStaff/ManageStaff");
+      } catch (error) {
+          console.error('Error creating brand:', error);
+          ToastError("Category Not Added Successfully")
+      }
   };
 
-  const addStaff = () => {
-    // Generate a unique ID for the new staff member
-    const id = staffList.length > 0 ? staffList[staffList.length - 1].id + 1 : 1;
-    setNewStaff({ ...newStaff, id });
-    setStaffList([...staffList, newStaff]);
-    setNewStaff({ id: 0, name: "", role: "" }); // Reset the input fields after adding staff
-  };
+    return (
+      <AdminSidebar>
+        <div className="page-wrapper">
+          <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
+            <h3 className="text-xl text-blue-800 font-semibold text-primary">
+              Add Staff
+            </h3>
+            <nav className="flex items-center space-x-2">
+              <a href="#" className="text-gray-400 hover:text-blue-800">
+                Home
+              </a>
+              <span className="text-gray-400">{`>`}</span>
+              <span className="text-gray-600">Add Staff</span>
+            </nav>
+          </div>
 
-  const updateStaff = (id: number, updatedStaff: Staff) => {
-    const updatedList = staffList.map(staff => (staff.id === id ? updatedStaff : staff));
-    setStaffList(updatedList);
-  };
-
-  return (
-    <AdminSidebar>
-        <div className="bg-white px-6 py-8 sm:px-8">
-      <h2 className="text-3xl font-bold text-gray-900 mb-6">Delivery Staff Management</h2>
-      <div className="mb-4">
-        <input
-          type="text"
-          name="name"
-          value={newStaff.name}
-          onChange={handleInputChange}
-          placeholder="Enter staff name"
-          className="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-        />
-        <input
-          type="text"
-          name="role"
-          value={newStaff.role}
-          onChange={handleInputChange}
-          placeholder="Enter staff role"
-          className="ml-2 px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-        />
-        <button onClick={addStaff} className="ml-2 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">
-          Add Staff
-        </button>
-      </div>
-      <table className="w-full border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border border-gray-300 px-4 py-2">ID</th>
-            <th className="border border-gray-300 px-4 py-2">Name</th>
-            <th className="border border-gray-300 px-4 py-2">Role</th>
-            <th className="border border-gray-300 px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {staffList.map(staff => (
-            <tr key={staff.id}>
-              <td className="border border-gray-300 px-4 py-2">{staff.id}</td>
-              <td className="border border-gray-300 px-4 py-2">{staff.name}</td>
-              <td className="border border-gray-300 px-4 py-2">{staff.role}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                <button onClick={() => updateStaff(staff.id, { ...staff, name: "Updated Name" })} className="bg-blue-500 text-white py-1 px-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">
-                  Update
-                </button>
-                {/* Add delete functionality here */}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-    </AdminSidebar>
-    
-  );
+          <div className="container m-auto">
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-white shadow-md rounded px-8 pt-6 pb-15 m-10 w-auto h-auto">
+                <form className="space-y-4 pb-5" onSubmit={handleSubmit}>
+                  <div className="flex items-center">
+                    <label className="w-1/4 text-gray-700" htmlFor="name">
+                      Name
+                    </label>
+                    <input
+                      className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="name"
+                      type="text"
+                      placeholder="Name"
+                      value={name}
+                      onChange={(e)=>{setName(e.target.value)}}
+                    />
+                  </div>
+                  <div className="flex items-center">
+                    <label className="w-1/4 text-gray-700" htmlFor="gender">
+                      Gender
+                    </label>
+                    <select
+                      className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="gender"
+                      value={gender}
+                      onChange={(e)=>{setGender(e.target.value)}}
+                    >
+                      <option >----SELECT----</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center">
+                    <label className="w-1/4 text-gray-700" htmlFor="mob_no">
+                      Mobile No
+                    </label>
+                    <input
+                      className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="mob_no"
+                      type="text"
+                      placeholder="Mobile No"
+                      value={phoneNo}
+                      onChange={(e)=>{setPhoneNo(e.target.value)}}
+                    />
+                  </div>
+                  <div className="flex items-center">
+                    <label className="w-1/4 text-gray-700" htmlFor="AadharCardNo">
+                      Aadhar Card Number
+                    </label>
+                    <input
+                      className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="AadharCardNo"
+                      type="text"
+                      placeholder="ID Proof Number"
+                      value={aadharNo}
+                      onChange={(e)=>{setAadharNo(e.target.value)}}
+                    />
+                  </div>
+                  <div className="flex items-center">
+                    <label className="w-1/4 text-gray-700" htmlFor="AadharCardNo">
+                      Joining Date
+                    </label>
+                    <input
+                      className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="AadharCardNo"
+                      type="date"
+                      value={joinDate}
+                      onChange={(e)=>{setJoinDate(e.target.value)}}
+                    />
+                  </div>
+                  <div className="flex items-center">
+                    <label className="w-1/4 text-gray-700" htmlFor="address">
+                      Address
+                    </label>
+                    <textarea
+                      className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="address"
+                      placeholder="Address"
+                      style={{ height: "100px" }}
+                      value={address}
+                      onChange={(e)=>{setAddress(e.target.value)}}
+                    ></textarea>
+                  </div>
+                  <div className="flex items-center">
+                    <label className="w-1/4 text-gray-700" htmlFor="status">
+                      Status
+                    </label>
+                    <select
+                      className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="status"
+                      name="status"
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value)}
+                    >
+                      <option value="">--SELECT--</option>
+                      <option value="Available">Available</option>
+                      <option value="NotAvailable">Not Available</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <button
+                      type="submit"
+                      name="create"
+                      id="createProductBtn"
+                      className="bg-blue-800 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </AdminSidebar>
+    );
 };
 
-export default DeliveryStaffManagement;
+export default AddStaff;
