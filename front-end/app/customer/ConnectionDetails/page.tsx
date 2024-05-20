@@ -10,19 +10,25 @@ const ConnectionDetails: React.FC = () => {
   const [apiResponse, setApiResponse] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
+  const [data, setData] = useState<any>();
+  const token = Cookies.get("token");
 
-  // useEffect(() => {
-  //   const token = Cookies.get("token");
-
-  //   if (!token) {
-  //     console.error("JWT token not found");
-  //     return;
-  //   }
-
-  //   const decodedToken = JSON.parse(atob(token.split(".")[1]));
-  //   const userId = decodedToken ? decodedToken.sub : null;
-  //   setUserId(userId);
-  // }, []);
+  useEffect(() => {
+    if (token) {
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
+      const userId = decodedToken.sub;
+      const response = axios
+        .get(`http://localhost:5057/api/Bookings/Details/${userId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => setData(response.data))
+        .catch((error) => console.error("Error fetching data:", error));
+        setUserId(userId);
+    }
+  }, [token]);
 
   // console.log(userId);
 
@@ -58,6 +64,31 @@ const ConnectionDetails: React.FC = () => {
   //   fetchData();
   // }, [userId, router]);
 
+  const getStatus=(value : number) : string =>{
+    switch(value){
+        case 0:
+            return "Pending";
+        case 1:
+            return "Approved";
+        case 2:
+            return "Rejected";
+        default :
+            return "";
+    }
+  };
+
+  
+  const getSubsidyStatus = (value: boolean): string => {
+    switch (value) {
+        case true:
+            return "Yes";
+        case false:
+            return "No";
+        default:
+            return "";
+    }
+};
+
   return (
     <Sidebar>
             <div className="page-wrapper">
@@ -91,6 +122,7 @@ const ConnectionDetails: React.FC = () => {
                             type="text"
                             name="LpgNo"
                             id="LpgNo"
+                            value={data ? data.approvedConnection.lpgNo : ""}
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             disabled
                             />
@@ -108,6 +140,7 @@ const ConnectionDetails: React.FC = () => {
                             type="text"
                             name="FirstName"
                             id="FirstName"
+                            value={data ? data.approvedConnection.firstName : ""}
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             disabled
                             />
@@ -127,6 +160,7 @@ const ConnectionDetails: React.FC = () => {
                             type="text"
                             name="LastName"
                             id="LastName"
+                            value={data ? data.approvedConnection.lastName : ""}
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             disabled
                             />
@@ -144,6 +178,7 @@ const ConnectionDetails: React.FC = () => {
                             type="text"
                             name="RationCardNumber"
                             id="RationCardNumber"
+                            value={data ? data.approvedConnection.rationCardNumber : ""}
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             disabled
                             />
@@ -163,6 +198,7 @@ const ConnectionDetails: React.FC = () => {
                         id="Address"
                         rows={2}
                         disabled
+                        value={data ? data.approvedConnection.address : ""}
                         className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         ></textarea>
                     </div>
@@ -180,6 +216,7 @@ const ConnectionDetails: React.FC = () => {
                             type="text"
                             name="IsGovScheme"
                             id="IsGovScheme"
+                            value={data ? getSubsidyStatus(data.approvedConnection.isGovScheme) : ""}
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             disabled
                             />
@@ -197,6 +234,7 @@ const ConnectionDetails: React.FC = () => {
                             type="text"
                             name="AadharCardNumber"
                             id="AadharCardNumber"
+                            value={data ? data.approvedConnection.aadharCardNumber : ""}
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             disabled
                             />
@@ -216,6 +254,7 @@ const ConnectionDetails: React.FC = () => {
                             type="text"
                             name="POAName"
                             id="POAName"
+                            value={data ? data.approvedConnection.poaName : ""}
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             disabled
                             />
@@ -233,6 +272,7 @@ const ConnectionDetails: React.FC = () => {
                             type="text"
                             name="POANo"
                             id="POANo"
+                            value={data ? data.approvedConnection.poaNo : ""}
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             disabled
                             />
@@ -252,6 +292,7 @@ const ConnectionDetails: React.FC = () => {
                             type="text"
                             name="POIName"
                             id="POIName"
+                            value={data ? data.approvedConnection.poiName : ""}
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             disabled
                             />
@@ -269,6 +310,7 @@ const ConnectionDetails: React.FC = () => {
                             type="text"
                             name="POINo"
                             id="POINo"
+                            value={data ? data.approvedConnection.poiNo : ""}
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             disabled
                             />
@@ -288,6 +330,7 @@ const ConnectionDetails: React.FC = () => {
                             type="text"
                             name="Status"
                             id="Status"
+                            value={data ? getStatus(data.approvedConnection.status)  : ""}
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             disabled
                             />
@@ -306,7 +349,8 @@ const ConnectionDetails: React.FC = () => {
                             name="Product"
                             id="Product"
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            disabled
+                            value={data ? data.approvedConnection.product.productName + "-" + data.approvedConnection.product.brand.brandName : ""}
+                    disabled
                             />
                         </div>
                         </div>
@@ -324,6 +368,7 @@ const ConnectionDetails: React.FC = () => {
                             type="text"
                             name="EmailId"
                             id="EmailId"
+                            value={data ? data.approvedConnection.emailId : ""}
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             disabled
                             />
@@ -341,6 +386,7 @@ const ConnectionDetails: React.FC = () => {
                             type="text"
                             name="PhoneNumber"
                             id="PhoneNumber"
+                            value={data ? data.approvedConnection.phoneNumber : ""}
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             disabled
                             />

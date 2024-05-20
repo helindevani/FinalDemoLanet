@@ -2,23 +2,22 @@
 import AdminSidebar from '@/components/AdminSidebar';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaDeleteLeft } from 'react-icons/fa6';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 
-const ApproveConnection = () => {
-  const [consumers, setConsumers] = useState([]);
+const BookingDetails = () => {
+  const [bookings, setBookings] = useState([]);
   const token= Cookies.get('token');
 
   useEffect(() => {
-    const response=axios.get('http://localhost:5057/api/Connections/Reject',{
+    const response=axios.get('http://localhost:5057/api/Bookings',{
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(response => setConsumers(response.data))
+      .then(response => setBookings(response.data))
       .catch(error => console.error('Error fetching data:', error));
   }, [token]);
 
@@ -35,10 +34,10 @@ const ApproveConnection = () => {
 
     return (
       <AdminSidebar>
-      <div className="page-wrapper">
-        <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
+      <div className="page-wrapper  overflow-scroll">
+        <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
-            New Connection
+            Booking Details
           </h3>
           <nav className="flex items-center space-x-2">
             <a href="#" className="text-gray-400 hover:text-blue-800">
@@ -51,7 +50,7 @@ const ApproveConnection = () => {
 
         <div className="container m-auto h-screen">
           <div className="w-auto">
-            <div className="bg-white shadow-md rounded px-8 pt-14 pb-15 m-10 w-auto h-auto">
+            <div className="bg-white shadow-md rounded px-8 pt-14 pb-15 m-10 w-auto h-auto ">
               <div className="flex justify-between items-center">
                 <div className="dataTables_length">
                   <label className="mr-3">
@@ -93,19 +92,19 @@ const ApproveConnection = () => {
                         LPG No
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        Consumer Name
+                        Booking Date
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        Subsidy Applied
+                        Product
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        Mobile NO
+                        Price
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        Ration Card No
+                        Payment Type
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        Product Name
+                        Payment Status
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
                         Action
@@ -113,31 +112,31 @@ const ApproveConnection = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {consumers.map((consumer: any, index) => ( 
+                    {bookings.map((booking: any, index) => ( 
                       <tr
-                        key={consumer.lpgNo}
+                        key={booking.bookingId}
                         className="border-b border border-gray-300 bg-gray-100"
                       >
                         <td className="p-3 border border-b border-gray-300">
                           {index + 1}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                         {consumer.lpgNo}
+                         {booking.lpgNo}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                        {consumer.firstName} {consumer.lastName}
+                        {}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          {getSubsidyStatus(consumer.isGovScheme)}
+                          {/* {booking.product.productName} {booking.product.brand.brandName} */}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          {consumer.phoneNumber}
+                          {booking.price}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          {consumer.rationCardNumber}
+                          {booking.paymentType}
                         </td>
                         <td className="p-3  border border-b border-gray-300">
-                          {consumer.product.productName} {consumer.product.brand.brandName}
+                          {booking.paymentStatus}
                         </td>
                         <td className="p-3   border-gray-300 flex justify-end">
                           <div className="m-1">
@@ -180,4 +179,4 @@ const ApproveConnection = () => {
     );
 };
 
-export default ApproveConnection;
+export default BookingDetails;

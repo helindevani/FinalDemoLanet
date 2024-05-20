@@ -64,7 +64,7 @@ const Header: React.FC = () => {
     <>
       <header
         className={
-          "fixed top-0 w-full z-50 bg-white transition-all border-b" 
+          "fixed top-0 w-full z-50 bg-white transition-all border" 
         }
       >
         

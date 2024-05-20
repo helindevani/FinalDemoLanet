@@ -24,7 +24,6 @@ namespace back_end.DatabaseContext
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<OrderItem> OrderItems { get; set; }
         public virtual DbSet<Connection> Connections { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
         public virtual DbSet<Staff> Staffs { get; set; }

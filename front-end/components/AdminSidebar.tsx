@@ -26,7 +26,7 @@ const AdminSidebar = ({ children }: any) => {
       <div className="flex border z-40">
         <aside
           id="sidebar-multi-level-sidebar"
-          className="sticky top-[85px] left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 flex-col-2"
+          className="sticky top-[85px] left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 flex-col-2 border"
           aria-label="Sidebar"
         >
           <div className="h-full px-3 py-4 overflow-y-auto bg-gray-100 dark:bg-gray-800 ">

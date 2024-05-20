@@ -13,6 +13,15 @@ namespace back_end.Domain.Entities
         public string LpgNo { get; set; }
 
         [Required]
+        public string ConsumerName {  get; set; }
+
+        [Required]
+        public string PhoneNumber { get; set; }
+
+        [Required]
+        public string EmailId { get; set; }
+
+        [Required]
         [ForeignKey("Product")]
         public Guid ProductID { get; set; }
 
@@ -28,17 +37,18 @@ namespace back_end.Domain.Entities
         [Required]
         public PaymentType PaymentType { get; set; }
 
-        [Required]
+        public DateTime? PaymentDate {  get; set; } 
+
         public string? PaymentId { get; set; }
 
         [Required]
         public string ShippingAddress { get; set; }
 
         [Required]
-        public Status Status { get; set; }
+        public BookingStatus Status { get; set; } = BookingStatus.Pending;
 
         [Required]
-        public PaymentStatus PaymrntStaus { get; set;}
+        public PaymentStatus? PaymentStatus { get; set;}
 
         [Required]
         public DateTime CreateDate {  get; set; }= DateTime.UtcNow;

@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using back_end.ServiceContracts.Repository;
 using back_end.Services.Repository;
 using back_end.Domain.Entities;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GasRefill"));
 
 });
+
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 builder.Services.AddCors(options =>
 {

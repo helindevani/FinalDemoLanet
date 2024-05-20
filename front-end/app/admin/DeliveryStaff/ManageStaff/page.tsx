@@ -21,7 +21,7 @@ const ViewStaff = () => {
     return () => dispatch(fetchStaffs());
   }, [dispatch, token]);
 
-  const handleDeleteCategory = (staffId: string) => {
+  const handleDeleteStaff = (staffId: string) => {
     if (window.confirm("Are you sure to delete this category?")) {
       dispatch(deleteStaff(staffId));
     }
@@ -183,7 +183,7 @@ const ViewStaff = () => {
                           <div className="m-1">
                             <button
                               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded flex items-center"
-                             
+                             onClick={()=>handleDeleteStaff(staff.staffId)}
                             >
                               <FaTrash />
                             </button>
