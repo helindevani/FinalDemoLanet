@@ -2,7 +2,6 @@
 import AdminSidebar from '@/components/AdminSidebar';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaDeleteLeft } from 'react-icons/fa6';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
@@ -38,14 +37,14 @@ const ApproveConnection = () => {
       <div className="page-wrapper">
         <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
-            New Connection
+            Approved Connections
           </h3>
           <nav className="flex items-center space-x-2">
             <a href="#" className="text-gray-400 hover:text-blue-800">
               Home
             </a>
             <span className="text-gray-400">{`>`}</span>
-            <span className="text-gray-600">NewConnection</span>
+            <span className="text-gray-600">ApprovedConnection</span>
           </nav>
         </div>
 

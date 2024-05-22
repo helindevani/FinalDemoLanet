@@ -5,32 +5,51 @@ import axios from 'axios';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
+import { ToastError, ToastSuccess } from '@/components/ToastError';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteBooking, fetchBookings } from '@/store/bookingSlice';
 
 const BookingDetails = () => {
-  const [bookings, setBookings] = useState([]);
+  const dispatch= useDispatch<any>();
+  const bookings:any = useSelector(
+    (state: any) => state.booking.bookings
+  );
+  // const [bookings, setBookings] = useState([]);
   const token= Cookies.get('token');
 
-  useEffect(() => {
-    const response=axios.get('http://localhost:5057/api/Bookings',{
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => setBookings(response.data))
-      .catch(error => console.error('Error fetching data:', error));
-  }, [token]);
+  useEffect(() =>  {
+    return () => dispatch(fetchBookings());
+  }, [dispatch,token]);
 
-  const getSubsidyStatus = (value: boolean): string => {
-    switch (value) {
-        case true:
-            return "Yes";
-        case false:
-            return "No";
-        default:
-            return "";
+  const handleDeleteProduct = (bookingID: string) => {
+    if (window.confirm("Are you sure to delete this category?")) {
+      dispatch(deleteBooking(bookingID))
     }
-};
+  };
+
+  const getPaymentStatus = (value: number): string => {
+    switch (value) {
+      case 0:
+        return "Pending";
+      case 1:
+        return "Success";
+      case 2:
+        return "Failed";
+      default:
+        return "";
+    }
+  };
+
+  const getPaymentMode = (value: number): string => {
+    switch (value) {
+      case 0:
+        return "Online";
+      case 1:
+        return "CashOnDelivery";
+      default:
+        return "";
+    }
+  };
 
     return (
       <AdminSidebar>
@@ -44,7 +63,7 @@ const BookingDetails = () => {
               Home
             </a>
             <span className="text-gray-400">{`>`}</span>
-            <span className="text-gray-600">NewConnection</span>
+            <span className="text-gray-600">BookingDetails</span>
           </nav>
         </div>
 
@@ -82,6 +101,7 @@ const BookingDetails = () => {
               </div>
 
               <div className="table-responsive justify-between mt-3">
+              <div className="overflow-x-auto">
                 <table className="w-full border border-gray-300">
                   <thead className="bg-white">
                     <tr>
@@ -112,7 +132,7 @@ const BookingDetails = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {bookings.map((booking: any, index) => ( 
+                    {bookings.map((booking: any, index : any) => ( 
                       <tr
                         key={booking.bookingId}
                         className="border-b border border-gray-300 bg-gray-100"
@@ -124,24 +144,24 @@ const BookingDetails = () => {
                          {booking.lpgNo}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                        {}
+                        {booking.bookingDate}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          {/* {booking.product.productName} {booking.product.brand.brandName} */}
+                          {booking.product.productName} {booking.product.brand.brandName}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
                           {booking.price}
                         </td>
                         <td className="p-3 border border-b border-gray-300">
-                          {booking.paymentType}
+                          {getPaymentMode(booking.paymentType)}
                         </td>
                         <td className="p-3  border border-b border-gray-300">
-                          {booking.paymentStatus}
+                          {getPaymentStatus(booking.paymentStatus)}
                         </td>
                         <td className="p-3   border-gray-300 flex justify-end">
                           <div className="m-1">
                             <Link
-                              href="#"
+                              href="/admin/Booking/Order"
                               className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center"
                             >
                               <FaEdit />
@@ -150,9 +170,9 @@ const BookingDetails = () => {
                           <div className="m-1">
                             <button
                               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded flex items-center"
-                              // onClick={() =>
-                              //   handleDeleteCategory(category.categoryId)
-                              // }
+                              onClick={() =>
+                                handleDeleteProduct(booking.bookingId)
+                              }
                             >
                               <FaTrash />
                             </button>
@@ -162,6 +182,7 @@ const BookingDetails = () => {
                      ))}
                   </tbody>
                 </table>
+                </div>
                 <div className="flex justify-between items-center">
                   <div>Showing 1 Of 1 Entries</div>
                   <div className="flex p-3">

@@ -9,6 +9,7 @@ import { addStaff } from '@/store/staffSlice';
 
 const AddStaff = () => {
   const [name,setName]=useState<string>();
+  const [email,setEmail]=useState<string>();
   const [gender,setGender]=useState<string>();
   const [aadharNo,setAadharNo]=useState<string>();
   const [address,setAddress]=useState<string>();
@@ -34,6 +35,7 @@ const AddStaff = () => {
 
       const data: any = {
         StaffName: name,
+        EmailId:email,
         Gender: gender,
         AadharCardNo: aadharNo,
         PhoneNumber: phoneNo,
@@ -85,6 +87,19 @@ const AddStaff = () => {
                       placeholder="Name"
                       value={name}
                       onChange={(e)=>{setName(e.target.value)}}
+                    />
+                  </div>
+                  <div className="flex items-center">
+                    <label className="w-1/4 text-gray-700" htmlFor="name">
+                      Email Id
+                    </label>
+                    <input
+                      className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="email"
+                      type="text"
+                      placeholder="email"
+                      value={email}
+                      onChange={(e)=>{setEmail(e.target.value)}}
                     />
                   </div>
                   <div className="flex items-center">

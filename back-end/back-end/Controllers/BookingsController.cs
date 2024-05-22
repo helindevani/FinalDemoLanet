@@ -24,45 +24,40 @@ namespace back_end.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Booking>>> GetBookings([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        public async Task<ActionResult<IEnumerable<Booking>>> GetBookings()
         {
             if (_context.Bookings == null)
             {
                 return NotFound();
             }
 
-            var totalRecords = await _context.Bookings.CountAsync();
-            var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
 
             var bookings = await _context.Bookings
                 .Include(r => r.Product)
                 .Include(r => r.Product.Brand)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
+                .Where(r=>r.Status == BookingStatus.Pending)
                 .ToListAsync();
-
-            Response.Headers.Add("X-Total-Count", totalRecords.ToString());
-            Response.Headers.Add("X-Total-Pages", totalPages.ToString());
 
             return Ok(bookings);
         }
 
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Booking>> GetBooking(Guid id)
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<IEnumerable<Booking>>> GetBooking(string userId)
         {
           if (_context.Bookings == null)
           {
               return NotFound();
           }
-            var booking = await _context.Bookings.FindAsync(id);
+            var booking = await _context.Bookings.Include(r=>r.Product).Include(s=>s.Product.Brand).FirstOrDefaultAsync(r=>r.CreatedBy==userId);
+            var staff = await _context.Staffs.ToListAsync();
 
             if (booking == null)
             {
                 return NotFound();
             }
 
-            return booking;
+            return Ok(new {staff,booking});
         }
 
         [HttpPut("{id}")]
@@ -222,34 +217,24 @@ namespace back_end.Controllers
                     },
                 },
                 Mode = "payment",
-                SuccessUrl = "http://localhost:3000/success",
+                SuccessUrl = "http://localhost:3000/",
                 CancelUrl = "http://localhost:3000/cancel",
                 CustomerEmail = booking.EmailId,
-                ClientReferenceId = booking.BookingId
+                ClientReferenceId = booking.BookingId,
+                Metadata = new Dictionary<string, string>
+        {
+            { "ConsumerName", booking.ConsumerName },
+            { "LpgNo", booking.LpgNo },
+            { "PhoneNumber", booking.PhoneNumber },
+            { "ProductID", booking.ProductID },
+            { "CreatedBy", booking.CreatedBy },
+            { "ShippingAddress", booking.ShippingAddress },
+            { "Price", booking.Price.ToString() }
+        }
             };
 
             var service = new SessionService();
             Session session = await service.CreateAsync(options);
-
-            var bookingEntity = new Booking
-            {
-                BookingId=Guid.Parse(booking.BookingId),
-                ConsumerName = booking.ConsumerName,
-                LpgNo = booking.LpgNo,
-                EmailId = booking.EmailId,
-                PhoneNumber = booking.PhoneNumber,
-                ProductID = Guid.Parse(booking.ProductID),
-                CreatedBy = booking.CreatedBy,
-                ShippingAddress = booking.ShippingAddress,
-                Price = booking.Price.ToString(),
-                PaymentType = PaymentType.Online,
-                PaymentStatus = PaymentStatus.Pending,
-                PaymentDate = DateTime.UtcNow,
-                PaymentId = session.Id
-            };
-
-            _context.Bookings.Add(bookingEntity);
-            await _context.SaveChangesAsync();
 
             return Ok(new { url = session.Url });
         }

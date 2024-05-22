@@ -32,9 +32,9 @@ const Layout = ({ children }: { children: any }): JSX.Element => {
   return (
     <>
       {isLoggedIn ? <AdminHeader /> : <Header />}
-      <div className="mt-[85px]">
+      {/* <div className="mt-[85px]"> */}
         {children}
-      </div>
+      {/* </div> */}
       <Footer />
     </>
   );

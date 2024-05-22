@@ -4,8 +4,6 @@
     {
         Pending,
         Confirmed,
-        ONTheWay,
-        Delivered,
         Cancelled
     }
 }

@@ -2,5 +2,10 @@
 {
     public enum OrderStatus
     {
+        Placed,
+        Confirmed,
+        OnTheWay,
+        Delivered,
+        Rejected
     }
 }

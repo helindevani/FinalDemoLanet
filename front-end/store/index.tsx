@@ -16,6 +16,8 @@ import categoryReducer from "./categorySlice";
 import brandReducer from "./supplierSlice";
 import productReducer from "./productSlice";
 import staffReducer from "./staffSlice";
+import bookingReducer from "./bookingSlice";
+import orderReducer from "./orderSlice";
 
 const persistConfig = {
   key: "root",
@@ -32,6 +34,8 @@ export const store = configureStore({
     brand : brandReducer,
     product : productReducer,
     staff : staffReducer,
+    booking:bookingReducer,
+    order : orderReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -42,3 +46,6 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

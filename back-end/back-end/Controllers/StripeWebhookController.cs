@@ -1,4 +1,5 @@
 ﻿using back_end.DatabaseContext;
+using back_end.Domain.Entities;
 using back_end.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +15,10 @@ namespace back_end.Controllers
     public class StripeWebhookController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IConfiguration _configuration;
 
-        public StripeWebhookController(ApplicationDbContext context, IConfiguration configuration)
+        public StripeWebhookController(ApplicationDbContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
 
         [HttpPost("webhook")]
@@ -43,15 +42,25 @@ namespace back_end.Controllers
                 {
                     var session = stripeEvent.Data.Object as Session;
 
-                    // Find the booking using the client reference ID (ProductID)
-                    var bookingId = Guid.Parse(session.ClientReferenceId);
-                    var booking = await _context.Bookings.FindAsync(bookingId);
-                    if (booking != null)
+                    var booking = new Booking
                     {
-                        booking.PaymentStatus = PaymentStatus.Success;
-                        await _context.SaveChangesAsync();
-                    }
+                        BookingId = Guid.Parse(session.ClientReferenceId),
+                        ConsumerName = session.Metadata["ConsumerName"],
+                        LpgNo = session.Metadata["LpgNo"],
+                        EmailId = session.CustomerEmail,
+                        PhoneNumber = session.Metadata["PhoneNumber"],
+                        ProductID = Guid.Parse(session.Metadata["ProductID"]),
+                        CreatedBy = session.Metadata["CreatedBy"],
+                        ShippingAddress = session.Metadata["ShippingAddress"],
+                        Price = session.Metadata["Price"],
+                        PaymentType = PaymentType.Online,
+                        PaymentStatus = PaymentStatus.Success,
+                        PaymentDate = DateTime.UtcNow,
+                        PaymentId = session.Id
+                    };
 
+                    _context.Bookings.Add(booking);
+                    await _context.SaveChangesAsync();
                     return Ok();
                 }
 

@@ -1,29 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using back_end.DatabaseContext;
 using back_end.Domain.Entities;
 using back_end.DTO;
 using back_end.Enums;
+using back_end.ServiceContracts.Repository;
+using back_end.Domain.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using back_end.ServiceContracts;
+using Stripe.Climate;
 
 namespace back_end.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class StaffsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public StaffsController(ApplicationDbContext context)
+        private readonly IUserRepository _userRepository;
+
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        private readonly IEmailSenderService _emailSender;
+
+        public StaffsController(ApplicationDbContext context, IUserRepository userRepository, UserManager<ApplicationUser> userManager, IEmailSenderService emailSender)
         {
             _context = context;
+            _userRepository = userRepository;
+            _userManager = userManager;
+            _emailSender = emailSender;
         }
 
-        // GET: api/Staffs
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Staff>>> GetStaffs()
         {
@@ -34,7 +44,6 @@ namespace back_end.Controllers
             return await _context.Staffs.ToListAsync();
         }
 
-        // GET: api/Staffs/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Staff>> GetStaff(Guid id)
         {
@@ -52,8 +61,6 @@ namespace back_end.Controllers
             return staff;
         }
 
-        // PUT: api/Staffs/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutStaff(Guid id, StaffDTO staffDTO)
         {
@@ -99,8 +106,6 @@ namespace back_end.Controllers
             return NoContent();
         }
 
-        // POST: api/Staffs
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Staff>> PostStaff([FromBody]StaffDTO staffDTO)
         {
@@ -112,8 +117,30 @@ namespace back_end.Controllers
             {
                 return BadRequest("Invalid brand status.");
             }
+
+            var registerDTO = new RegisterDTO
+            {
+                Name = staffDTO.StaffName,
+                Email = staffDTO.EmailId,
+                MobaileNo = staffDTO.PhoneNumber,
+                Password = $"{staffDTO.StaffName}@{staffDTO.PhoneNumber}",
+                ConfirmPassword = $"{staffDTO.StaffName}@{staffDTO.PhoneNumber}",
+                Roles = new string[] { "Staff" }
+            };
+
+            await _userRepository.UserRegisterRequest(registerDTO);
+
+            ApplicationUser user= await _userManager.FindByEmailAsync(staffDTO.EmailId);
+
+            string emailContent = $"Your Staff Id Data:<br><br>" +
+                                 $"UserName: {staffDTO.EmailId}<br>" +
+                                 $"Password : {staffDTO.StaffName}@{staffDTO.PhoneNumber}<br>";
+
+            await _emailSender.SendEmailAsync(staffDTO.EmailId, "You Staff Id Details", emailContent);
+
             var staff = new Staff
             {
+                StaffId=user.Id,
                 StaffName = staffDTO.StaffName,
                 PhoneNumber = staffDTO.PhoneNumber,
                 AadharCardNo= staffDTO.AadharCardNo,
@@ -122,6 +149,7 @@ namespace back_end.Controllers
                 Status= (Status)status,
                 JoiningDate = staffDTO.JoiningDate,
                 CreatedBy = staffDTO.CreatedBy,
+                EmailId=staffDTO.EmailId
             };
 
             _context.Staffs.Add(staff);
@@ -131,7 +159,6 @@ namespace back_end.Controllers
             return CreatedAtAction("GetStaff", new { id = staff.StaffId }, staff);
         }
 
-        // DELETE: api/Staffs/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStaff(Guid id)
         {

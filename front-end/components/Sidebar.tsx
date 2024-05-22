@@ -26,7 +26,7 @@ const Sidebar = ({ showName,children }: any) => {
 
   return (
     <>
-      <div className="flex border z-40">
+      <div className="flex border z-40 mt-[85px]">
         <aside
           id="sidebar-multi-level-sidebar"
           className="sticky top-[85px] left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 flex-col-2 border"

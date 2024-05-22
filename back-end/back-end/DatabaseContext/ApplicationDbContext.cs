@@ -66,9 +66,17 @@ namespace back_end.DatabaseContext
 
             var AdminId = "7DBD5480-1224-4288-AEE8-1249F8A94E1A";
             var UserId = "3AC53885-3553-4B1C-93D2-4DECA3B4CB54";
+            var StaffId = "BB8D11C0-9F1A-42D9-ACEB-718B0A679F2B";
 
             var roles = new List<ApplicationRole>
             {
+                new ApplicationRole
+                {
+                    Id = Guid.Parse(StaffId),
+                    ConcurrencyStamp = StaffId,
+                    Name = "Staff",
+                    NormalizedName = "Staff".ToUpper()
+                },
                 new ApplicationRole
                 {
                     Id = Guid.Parse(AdminId),

@@ -6,7 +6,7 @@ namespace back_end.DTO
     {
         public string? StaffId { get; set; }
         public string StaffName { get; set; }
-
+        public string EmailId { get; set; }
         public string Gender { get; set; }
 
         public string AadharCardNo { get; set; }

@@ -6,10 +6,13 @@ namespace back_end.Domain.Entities
     public class Staff
     {
         [Key]
-        public Guid StaffId { get; set; }= Guid.NewGuid();
+        public Guid StaffId { get; set; }
 
         [Required]
         public string StaffName { get; set; }
+
+        [Required]
+        public string EmailId { get; set; }
 
         [Required]
         public string Gender { get; set; }

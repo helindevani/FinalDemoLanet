@@ -1,5 +1,6 @@
 ﻿using back_end.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace back_end.Domain.Entities
 {
@@ -12,28 +13,34 @@ namespace back_end.Domain.Entities
         public DateTime Orderdate { get; set; } = DateTime.UtcNow;
 
         [Required]
+        public string LpgNo { get; set; }
+
+        [Required]
         public string ClientName {  get; set; }
 
         [Required]
         public string ClientContact { get; set; }
 
         [Required]
-        public string DeliveryStaff { get; set; }
+        public string ClientEmail { get; set; }
 
         [Required]
-        public DeliveryStatus DeliveryStatus { get; set; }
+        public string Address { get; set; }
 
         [Required]
-        public string SubTotal {  get; set; }
+        [ForeignKey("Staff")]
+        public Guid StaffId { get; set; }
+
+        public Staff? Staff { get; set; }
 
         [Required]
-        public string Tax { get; set; }
+        [ForeignKey("Booking")]
+        public Guid BookingId { get; set; }
+
+        public Booking? Booking { get; set; }
 
         [Required]
-        public string? Subsidy { get; set; }
-
-        [Required]
-        public string TotalAmount { get; set; }
+        public string Amount { get; set; }
 
         [Required]
         public PaymentType PaymentType { get; set; }
@@ -42,13 +49,15 @@ namespace back_end.Domain.Entities
         public PaymentStatus PaymentStatus { get; set; }
 
         [Required]
-        public DateTime PaymentDate { get; set; }
-
-        [Required]
         public OrderStatus OrderStatus {  get; set; }
 
+        public bool? IsStaffAccepted {  get; set; }
+
         [Required]
-        public Guid UserId { get; set; }
+        public Guid CreatedBy { get; set; }
+
+        [Required]
+        public Guid UpdatedBy { get; set; }
 
         public DateTime CreateDate { get; set; } = DateTime.UtcNow;
 

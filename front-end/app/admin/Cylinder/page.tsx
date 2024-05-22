@@ -259,10 +259,6 @@ const AddProduct = () => {
           </div>
         </div>
       </div>
-
-      {/* <footer className="text-center text-sm text-gray-600 mt-8">
-                Author Name- Mayuri K. For any PHP, Codeignitor, Laravel OR Python work contact me at mayuri.infospace@gmail.com Visit website - www.mayurik.com
-            </footer> */}
     </AdminSidebar>
   );
 };

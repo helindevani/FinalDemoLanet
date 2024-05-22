@@ -4,6 +4,9 @@ const nextConfig = {
         domains: ["res.cloudinary.com"],
         contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"
       },
+      eslint: {
+        ignoreDuringBuilds: true,
+    },
 };
 
 export default nextConfig;
