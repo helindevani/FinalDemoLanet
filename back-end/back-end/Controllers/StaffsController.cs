@@ -123,8 +123,8 @@ namespace back_end.Controllers
                 Name = staffDTO.StaffName,
                 Email = staffDTO.EmailId,
                 MobaileNo = staffDTO.PhoneNumber,
-                Password = $"{staffDTO.StaffName}@{staffDTO.PhoneNumber}",
-                ConfirmPassword = $"{staffDTO.StaffName}@{staffDTO.PhoneNumber}",
+                Password = $"Staff@{staffDTO.PhoneNumber}",
+                ConfirmPassword = $"Staff@{staffDTO.PhoneNumber}",
                 Roles = new string[] { "Staff" }
             };
 

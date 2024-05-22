@@ -67,6 +67,13 @@ const OrderDetails: React.FC = () => {
     }));
   };
 
+  const handlePaymentStatusChange = (value: string) => {
+    setFormValues(prevValues => ({
+      ...prevValues,
+      PaymentStatus: value
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -314,14 +321,28 @@ const OrderDetails: React.FC = () => {
                           Payment Status
                         </label>
                         <div className="mt-2.5">
-                          <input
-                            type="text"
-                            name="PaymentStatus"
-                            id="PaymentStatus"
-                            value={formValues.PaymentStatus}
-                            className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            disabled
-                          />
+                        {formValues.PaymentType !== "online" ? (
+        <select
+          name="PaymentStatus"
+          id="PaymentStatus"
+          value={formValues.PaymentStatus}
+          onChange={(e) => handlePaymentStatusChange(e.target.value)}
+          className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        >
+          <option value="pending">Pending</option>
+          <option value="completed">Completed</option>
+          <option value="failed">Failed</option>
+        </select>
+      ) : (
+        <input
+          type="text"
+          name="PaymentStatus"
+          id="PaymentStatus"
+          value={formValues.PaymentStatus}
+          className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          disabled
+        />
+      )}
                         </div>
                       </div>
                       <div className="pr-4 w-1/2">

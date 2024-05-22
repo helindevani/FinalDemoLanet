@@ -24,23 +24,33 @@ namespace back_end.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Booking>>> GetBookings()
+        public async Task<ActionResult<IEnumerable<Booking>>> GetBookings([FromQuery]bool history)
         {
             if (_context.Bookings == null)
             {
                 return NotFound();
             }
-
-
-            var bookings = await _context.Bookings
+            List<Booking> bookings;
+            if (history)
+            {
+                bookings = await _context.Bookings
+               .Include(r => r.Product)
+               .Include(r => r.Product.Brand)
+               .Where(r => r.Status == BookingStatus.Confirmed || r.Status == BookingStatus.Cancelled)
+               .ToListAsync();
+            }
+            else
+            {
+                bookings = await _context.Bookings
                 .Include(r => r.Product)
                 .Include(r => r.Product.Brand)
-                .Where(r=>r.Status == BookingStatus.Pending)
+                .Where(r => r.Status == BookingStatus.Pending)
                 .ToListAsync();
+            }
+
 
             return Ok(bookings);
         }
-
 
         [HttpGet("{userId}")]
         public async Task<ActionResult<IEnumerable<Booking>>> GetBooking(string userId)

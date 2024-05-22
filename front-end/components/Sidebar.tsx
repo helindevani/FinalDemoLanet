@@ -36,7 +36,7 @@ const Sidebar = ({ showName,children }: any) => {
           <ul className="space-y-2 font-medium">
               <li>
               <a
-                  href="/customer/Dashboard"
+                  href="/customer"
                   className={`flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white group ${
                     isMenuItemSelected("dashboard")
                       ? "bg-gray-200 dark:bg-gray-700"
@@ -50,7 +50,7 @@ const Sidebar = ({ showName,children }: any) => {
               </li>
               <li>
                 <a
-                  href="/customer/NewConnection"
+                  href="/customer/newConnection"
                   className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <FaExpandArrowsAlt size={20}/>
@@ -59,7 +59,7 @@ const Sidebar = ({ showName,children }: any) => {
               </li>
               <li>
                 <a
-                  href="/customer/ConnectionDetails"
+                  href="/customer/connectionDetails"
                   className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <IoInformationCircleSharp size={20} /> 

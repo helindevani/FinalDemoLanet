@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { FaRegChartBar, FaUser } from "react-icons/fa6";
 import { BiCylinder, BiListCheck } from "react-icons/bi";
+import { IoReceiptSharp } from "react-icons/io5";
 
 const AdminSidebar = ({ children }: any) => {
   const [expandedMenu, setExpandedMenu] = useState("");
@@ -33,7 +34,7 @@ const AdminSidebar = ({ children }: any) => {
             <ul className="space-y-2 font-medium">
               <li>
                 <a
-                  href="/admin/AdminDasboard"
+                  href="/admin"
                   className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <FaTachometerAlt size={20} />
@@ -72,7 +73,7 @@ const AdminSidebar = ({ children }: any) => {
                   <ul className="py-2 space-y-2">
                     <li>
                       <a
-                        href="/admin/DeliveryStaff"
+                        href="/admin/staff"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Add Staff
@@ -80,7 +81,7 @@ const AdminSidebar = ({ children }: any) => {
                     </li>
                     <li>
                       <a
-                        href="/admin/DeliveryStaff/ManageStaff"
+                        href="/admin/staff/manage"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Manage Staff
@@ -121,7 +122,7 @@ const AdminSidebar = ({ children }: any) => {
                   <ul className="py-2 space-y-2">
                     <li>
                       <a
-                        href="/admin/Supplier"
+                        href="/admin/supplier"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Add Supplier
@@ -129,7 +130,7 @@ const AdminSidebar = ({ children }: any) => {
                     </li>
                     <li>
                       <a
-                        href="/admin/Supplier/ManageSupplier"
+                        href="/admin/supplier/manage"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Manage Supplier
@@ -137,7 +138,7 @@ const AdminSidebar = ({ children }: any) => {
                     </li>
                     <li>
                       <a
-                        href="/admin/Supplier/ImportSupplier"
+                        href="/admin/supplier/import"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Import Supplier
@@ -180,7 +181,7 @@ const AdminSidebar = ({ children }: any) => {
                   <ul className=" py-2 space-y-2">
                     <li>
                       <a
-                        href="/admin/Categories"
+                        href="/admin/categories"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Add Categories
@@ -188,7 +189,7 @@ const AdminSidebar = ({ children }: any) => {
                     </li>
                     <li>
                       <a
-                        href="/admin/Categories/ManageCategories"
+                        href="/admin/categories/manage"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Manage Categories
@@ -229,7 +230,7 @@ const AdminSidebar = ({ children }: any) => {
                   <ul className="py-2 space-y-2">
                     <li>
                       <a
-                        href="/admin/Cylinder"
+                        href="/admin/cylinder"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Add Cylinder
@@ -237,7 +238,7 @@ const AdminSidebar = ({ children }: any) => {
                     </li>
                     <li>
                       <a
-                        href="/admin/Cylinder/ManageCylinders"
+                        href="/admin/cylinder/manage"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Manage Cylinders
@@ -280,7 +281,7 @@ const AdminSidebar = ({ children }: any) => {
                   <ul className=" py-2 space-y-2">
                     <li>
                       <a
-                        href="/admin/Connection"
+                        href="/admin/connection"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         New
@@ -289,7 +290,7 @@ const AdminSidebar = ({ children }: any) => {
 
                     <li>
                       <a
-                        href="/admin/Connection/ApprovedConnections"
+                        href="/admin/connection/approved"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Approved
@@ -297,7 +298,7 @@ const AdminSidebar = ({ children }: any) => {
                     </li>
                     <li>
                       <a
-                        href="/admin/Connection/RejectedConnections"
+                        href="/admin/connection/rejected"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Rejected
@@ -307,38 +308,20 @@ const AdminSidebar = ({ children }: any) => {
                 )}
               </li>
               <li>
-              <a
-                  href="/admin/Booking"
-                  className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                <button
+                  type="button"
+                  className="flex items-center w-full p-2 text-base text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  onClick={() => toggleSubMenu("bookings")}
                 >
                   <FaMoneyBillAlt size={20} />
                   <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
                     Bookings
                   </span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/admin/Reports"
-                  className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                >
-                  <FaRegChartBar size={20} />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Reports</span>
-                </a>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  className="flex items-center w-full p-2 text-base text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                  onClick={() => toggleSubMenu("settings")}
-                >
-                  <FaCog size={20} />
-                  <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
-                    Settings
-                  </span>
                   <svg
                     className={`w-3 h-3 ml-auto ${
-                      expandedMenu === "settings" ? "transform rotate-180" : ""
+                      expandedMenu === "bookings"
+                        ? "transform rotate-180"
+                        : ""
                     }`}
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
@@ -354,34 +337,88 @@ const AdminSidebar = ({ children }: any) => {
                     />
                   </svg>
                 </button>
-                {expandedMenu === "settings" && (
-                  <ul className="py-2 space-y-2">
+                {expandedMenu === "bookings" && (
+                  <ul className=" py-2 space-y-2">
                     <li>
                       <a
-                        href="#"
+                        href="/admin/booking"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
-                        Products
+                        Active
                       </a>
                     </li>
+
                     <li>
                       <a
-                        href="#"
+                        href="/admin/booking/history"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
-                        Billing
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                      >
-                        Invoice
+                        Booking History
                       </a>
                     </li>
                   </ul>
                 )}
+              </li>
+              <li>
+                <button
+                  type="button"
+                  className="flex items-center w-full p-2 text-base text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  onClick={() => toggleSubMenu("orders")}
+                >
+                    <IoReceiptSharp size={20} /> 
+                  <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                    Orders
+                  </span>
+                  <svg
+                    className={`w-3 h-3 ml-auto ${
+                      expandedMenu === "orders"
+                        ? "transform rotate-180"
+                        : ""
+                    }`}
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
+                </button>
+                {expandedMenu === "orders" && (
+                  <ul className=" py-2 space-y-2">
+                    <li>
+                      <a
+                        href="/admin/orders"
+                        className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                      >
+                        Active
+                      </a>
+                    </li>
+
+                    <li>
+                      <a
+                        href="/admin/orders/history"
+                        className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                      >
+                        Order History
+                      </a>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li>
+                <a
+                  href="/admin/reports"
+                  className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                >
+                  <FaRegChartBar size={20} />
+                  <span className="flex-1 ms-3 whitespace-nowrap">Reports</span>
+                </a>
               </li>
             </ul>
           </div>

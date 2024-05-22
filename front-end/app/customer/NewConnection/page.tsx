@@ -7,7 +7,7 @@ export default function NewConnection() {
   const router=useRouter();
 
   const handelSubmit=()=>{
-    router.push("/customer/NewConnection/KycForm");
+    router.push("/customer/NewConnection/kycForm");
   }
   return (
     <>

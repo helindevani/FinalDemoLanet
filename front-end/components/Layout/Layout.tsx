@@ -35,7 +35,6 @@ const Layout = ({ children }: { children: any }): JSX.Element => {
       {/* <div className="mt-[85px]"> */}
         {children}
       {/* </div> */}
-      <Footer />
     </>
   );
 };

@@ -1,13 +1,13 @@
 'use client';
 import AdminSidebar from '@/components/AdminSidebar';
-import { useEffect, useState } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
-import Link from 'next/link';
+import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteBooking, fetchBookings } from '@/store/bookingSlice';
+import { fetchBookings } from '@/store/bookingSlice';
+import Link from 'next/link';
+import { FaEye } from 'react-icons/fa';
 
-const BookingDetails = () => {
+const BookingHistory = () => {
   const dispatch= useDispatch<any>();
   const bookings:any = useSelector(
     (state: any) => state.booking.bookings
@@ -15,14 +15,9 @@ const BookingDetails = () => {
   const token= Cookies.get('token');
 
   useEffect(() =>  {
-    return () => dispatch(fetchBookings(false));
+    return () => dispatch(fetchBookings(true));
   }, [dispatch,token]);
 
-  const handleDeleteProduct = (bookingID: string) => {
-    if (window.confirm("Are you sure to delete this category?")) {
-      dispatch(deleteBooking(bookingID))
-    }
-  };
 
   const getPaymentStatus = (value: number): string => {
     switch (value) {
@@ -48,6 +43,19 @@ const BookingDetails = () => {
     }
   };
 
+  
+  const getBookingStatus = (value: number): string => {
+    switch (value) {
+      case 0:
+        return "Pending";
+      case 1:
+        return "Confirmed";
+        case 2:
+        return "Rejected";
+      default:
+        return "";
+    }
+  };
 
   function convertToLocalDate(dateString: string): string {
     const date = new Date(dateString);
@@ -56,12 +64,13 @@ const BookingDetails = () => {
     const year = date.getFullYear(); 
     return `${day}-${month}-${year}`;
   }
+
     return (
       <AdminSidebar>
       <div className="page-wrapper  overflow-scroll">
         <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
-            Booking Details
+            Booking History
           </h3>
           <nav className="flex items-center space-x-2">
             <a href="#" className="text-gray-400 hover:text-blue-800">
@@ -132,8 +141,12 @@ const BookingDetails = () => {
                         Payment Status
                       </th>
                       <th className="p-3 border border-b border-gray-300 text-gray-700">
-                        Action
+                        Booking Status
                       </th>
+                      <th className="p-3 border border-b border-gray-300 text-gray-700">
+                        View Details
+                      </th>
+
                     </tr>
                   </thead>
                   <tbody>
@@ -142,47 +155,40 @@ const BookingDetails = () => {
                         key={booking.bookingId}
                         className="border-b border border-gray-300 bg-gray-100"
                       >
-                        <td className="p-3 border border-b border-gray-300">
+                        <td className="p-3 border border-b border-gray-300 text-center">
                           {index + 1}
                         </td>
-                        <td className="p-3 border border-b border-gray-300">
+                        <td className="p-3 border border-b border-gray-300 text-center">
                          {booking.lpgNo}
                         </td>
-                        <td className="p-3 border border-b border-gray-300">
+                        <td className="p-3 border border-b border-gray-300 text-center">
                         {convertToLocalDate(booking.bookingDate)}
                         </td>
-                        <td className="p-3 border border-b border-gray-300">
+                        <td className="p-3 border border-b border-gray-300 text-center">
                           {booking.product.productName} {booking.product.brand.brandName}
                         </td>
-                        <td className="p-3 border border-b border-gray-300">
+                        <td className="p-3 border border-b border-gray-300 text-center">
                           {booking.price}
                         </td>
-                        <td className="p-3 border border-b border-gray-300">
+                        <td className="p-3 border border-b border-gray-300 text-center">
                           {getPaymentMode(booking.paymentType)}
                         </td>
-                        <td className="p-3  border border-b border-gray-300">
+                        <td className="p-3  border border-b border-gray-300 text-center">
                           {getPaymentStatus(booking.paymentStatus)}
                         </td>
-                        <td className="p-3   border-gray-300 flex justify-end">
+                        <td className="p-3  border border-b border-gray-300 text-center">
+                          {getBookingStatus(booking.status)}
+                        </td>
+                        <td className="p-3   border-gray-300 flex justify-center text-center">
                           <div className="m-1">
                             <Link
-                              href="/admin/booking/order"
+                              href={`/admin/booking/history/${booking.bookingId}`}
                               className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center"
                             >
-                              <FaEdit />
+                              <FaEye />
                             </Link>
                           </div>
-                          <div className="m-1">
-                            <button
-                              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded flex items-center"
-                              onClick={() =>
-                                handleDeleteProduct(booking.bookingId)
-                              }
-                            >
-                              <FaTrash />
-                            </button>
-                          </div>
-                        </td>
+                          </td>
                       </tr>
                      ))}
                   </tbody>
@@ -205,4 +211,4 @@ const BookingDetails = () => {
     );
 };
 
-export default BookingDetails;
+export default BookingHistory;

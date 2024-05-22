@@ -2,6 +2,27 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+interface Booking {
+  bookingDate: string;
+  bookingId: string;
+  consumerName: string;
+  createDate: string;
+  createdBy: string;
+  emailId: string;
+  lpgNo: string;
+  paymentDate: string;
+  paymentId: string;
+  paymentStatus: number;
+  paymentType: number;
+  phoneNumber: string;
+  price: string;
+  product: any; 
+  productID: string;
+  shippingAddress: string;
+  status: number;
+  updateDate: string;
+}
+
 const apiBooking = 'http://localhost:5057/api/Bookings';
 
 const getToken = () => Cookies.get('token');
@@ -20,11 +41,11 @@ export const deleteBooking = createAsyncThunk<string, string>(
     }
   );
 
-  export const fetchBookings = createAsyncThunk<any>(
+  export const fetchBookings = createAsyncThunk<Booking[], boolean>(
     'Booking/fetchBookings',
-    async () => {
+    async (history: boolean) => {
       const token = getToken();
-      const response = await axios.get<any>(apiBooking, {
+      const response = await axios.get<any>(`${apiBooking}?history=${history}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -33,7 +54,6 @@ export const deleteBooking = createAsyncThunk<string, string>(
       return response.data;
     }
   );
-
   const bookingSlice = createSlice({
     name: 'booking',
     initialState: {

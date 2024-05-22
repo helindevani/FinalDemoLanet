@@ -26,13 +26,32 @@ namespace back_end.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrders([FromQuery]bool history)
         {
           if (_context.Orders == null)
           {
               return NotFound();
           }
-            return await _context.Orders.ToListAsync();
+
+            List<Order> orders;
+            if (history)
+            {
+                orders = await _context.Orders
+               .Include(r => r.Booking)
+               .Include(s => s.Staff)
+               .Where(r => r.OrderStatus == OrderStatus.Delivered || r.OrderStatus == OrderStatus.Rejected)
+               .ToListAsync();
+            }
+            else
+            {
+                orders = await _context.Orders
+                .Include(r => r.Booking)
+                .Include(s => s.Staff)
+                .Where(r => r.OrderStatus == OrderStatus.Placed || r.OrderStatus == OrderStatus.Confirmed || r.OrderStatus == OrderStatus.OnTheWay)
+                .ToListAsync();
+            }
+
+            return Ok(orders);
         }
 
         [HttpGet("{id}")]
@@ -201,7 +220,7 @@ namespace back_end.Controllers
                                   $"Order ID: {order.OrderId}<br>" +
                                   $"LPG No : {order.LpgNo}<br>" +
                                   $"Booking Date: {order.Booking.BookingDate}<br>" +
-                                  $"Order Date: {order.Orderdate}<br>" +
+                                  $"Order Date: {order.OrderDate}<br>" +
                                   $"Customer Address: {order.Address}<br>";
 
             await _emailSender.SendEmailAsync(order.ClientEmail, "You Order Placed Successfully", emailContent);

@@ -10,7 +10,7 @@ namespace back_end.Domain.Entities
         public Guid OrderId { get; set; }= Guid.NewGuid();
 
         [Required]
-        public DateTime Orderdate { get; set; } = DateTime.UtcNow;
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
         [Required]
         public string LpgNo { get; set; }

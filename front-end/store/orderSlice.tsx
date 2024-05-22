@@ -4,26 +4,62 @@ import Cookies from "js-cookie";
 
 type AppDispatch = (arg: any) => any;
 
+interface Booking {
+  bookingDate: string;
+  bookingId: string;
+  consumerName: string;
+  createDate: string;
+  createdBy: string;
+  emailId: string;
+  lpgNo: string;
+  paymentDate: string;
+  paymentId: string;
+  paymentStatus: number;
+  paymentType: number;
+  phoneNumber: string;
+  price: string;
+  product: any; 
+  productID: string;
+  shippingAddress: string;
+  status: number;
+  updateDate: string;
+}
+
+interface Staff {
+  aadharCardNo: string;
+  address: string;
+  createdBy: string;
+  createdDate: string;
+  emailId: string;
+  gender: string;
+  joiningDate: string;
+  phoneNumber: string;
+  staffId: string;
+  staffName: string;
+  status: number;
+  updatedDate: string;
+}
+
 export type Order = {
   address: string;
   amount: string;
-  booking: any; // You might want to replace 'any' with a specific type if you know the structure of booking
+  booking: Booking; 
   bookingId: string;
   clientContact: string;
   clientEmail: string;
   clientName: string;
-  createDate: string; // Consider using Date type if you're parsing it to a Date object
+  createDate: string; 
   createdBy: string;
   isStaffAccepted: boolean | null;
   lpgNo: string;
   orderId: string;
   orderStatus: number;
-  orderdate: string; // Consider using Date type if you're parsing it to a Date object
+  orderDate: string; 
   paymentStatus: number;
   paymentType: number;
-  staff: any; // You might want to replace 'any' with a specific type if you know the structure of staff
+  staff: Staff;
   staffId: string;
-  updateDate: string; // Consider using Date type if you're parsing it to a Date object
+  updateDate: string; 
   updatedBy: string;
 };
 
@@ -48,6 +84,20 @@ interface OrderState {
 const apiUrl = "http://localhost:5057/api/Orders";
 
 const getToken = () => Cookies.get("token");
+
+export const fetchOrdersAdmin = createAsyncThunk<Order[],boolean>(
+  "order/fetchOrdersAdmin",
+  async (history) => {
+    const token = getToken();
+    const response = await axios.get<Order[]>(`${apiUrl}?history=${history}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  }
+);
 
 export const fetchOrdersStaff = createAsyncThunk<Order[]>(
   "order/fetchOrdersStaff",
@@ -156,6 +206,9 @@ const orderSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+    .addCase(fetchOrdersAdmin.fulfilled, (state, action) => {
+      state.orders = action.payload;
+    })
       .addCase(fetchOrdersStaff.fulfilled, (state, action) => {
         state.orders = action.payload;
       })

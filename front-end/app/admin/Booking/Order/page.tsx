@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Sidebar from "@/components/Sidebar";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import AdminSidebar from "@/components/AdminSidebar";
