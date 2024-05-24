@@ -56,7 +56,7 @@ namespace back_end.Controllers
                         PaymentType = PaymentType.Online,
                         PaymentStatus = PaymentStatus.Success,
                         PaymentDate = DateTime.UtcNow,
-                        PaymentId = session.Id
+                        PaymentId = session.PaymentIntentId
                     };
 
                     _context.Bookings.Add(booking);

@@ -25,12 +25,9 @@ const AdminSidebar = ({ children }: any) => {
   return (
     <>
       <div className="flex border z-40 mt-[85px]">
-        <aside
-          id="sidebar-multi-level-sidebar"
-          className="sticky top-[85px] left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 flex-col-2 border"
-          aria-label="Sidebar"
+        <aside className="sm:w-56"
         >
-          <div className="h-full px-3 py-4 overflow-y-auto bg-gray-100 dark:bg-gray-800 ">
+          <div className="h-full px-3 w-14 sm:w-56 py-4 overflow-y-auto bg-gray-100 dark:bg-gray-800 ">
             <ul className="space-y-2 font-medium">
               <li>
                 <a
@@ -38,7 +35,7 @@ const AdminSidebar = ({ children }: any) => {
                   className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <FaTachometerAlt size={20} />
-                  <span className="ms-3">Dashboard</span>
+                  <span className="ms-3 hidden sm:block">Dashboard</span>
                 </a>
               </li>
               <li>
@@ -48,7 +45,7 @@ const AdminSidebar = ({ children }: any) => {
                   onClick={() => toggleSubMenu("consumer")}
                 >
                   <FaUser size={20} />
-                  <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                  <span className="flex-1 ms-3 text-left hidden sm:block rtl:text-right whitespace-nowrap">
                     Delivery Staff
                   </span>
                   <svg
@@ -97,7 +94,7 @@ const AdminSidebar = ({ children }: any) => {
                   onClick={() => toggleSubMenu("supplier")}
                 >
                   <FaUserFriends size={20} />
-                  <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                  <span className="flex-1 ms-3 hidden sm:block text-left rtl:text-right whitespace-nowrap">
                     Supplier
                   </span>
                   <svg
@@ -154,7 +151,7 @@ const AdminSidebar = ({ children }: any) => {
                   onClick={() => toggleSubMenu("categories")}
                 >
                   <BiListCheck size={20} />
-                  <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                  <span className="flex-1 ms-3 hidden sm:block text-left rtl:text-right whitespace-nowrap">
                     Categories
                   </span>
                   <svg
@@ -205,7 +202,7 @@ const AdminSidebar = ({ children }: any) => {
                   onClick={() => toggleSubMenu("cylinder")}
                 >
                   <BiCylinder size={20} />
-                  <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                  <span className="flex-1 ms-3 hidden sm:block text-left rtl:text-right whitespace-nowrap">
                     Cylinder
                   </span>
                   <svg
@@ -254,7 +251,7 @@ const AdminSidebar = ({ children }: any) => {
                   onClick={() => toggleSubMenu("connections")}
                 >
                   <FaExpandArrowsAlt size={20} />
-                  <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                  <span className="flex-1 ms-3 hidden sm:block text-left rtl:text-right whitespace-nowrap">
                     Connections
                   </span>
                   <svg
@@ -314,7 +311,7 @@ const AdminSidebar = ({ children }: any) => {
                   onClick={() => toggleSubMenu("bookings")}
                 >
                   <FaMoneyBillAlt size={20} />
-                  <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                  <span className="flex-1 ms-3 hidden sm:block text-left rtl:text-right whitespace-nowrap">
                     Bookings
                   </span>
                   <svg
@@ -366,7 +363,7 @@ const AdminSidebar = ({ children }: any) => {
                   onClick={() => toggleSubMenu("orders")}
                 >
                     <IoReceiptSharp size={20} /> 
-                  <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                  <span className="flex-1 ms-3 hidden sm:block text-left rtl:text-right whitespace-nowrap">
                     Orders
                   </span>
                   <svg
@@ -417,7 +414,7 @@ const AdminSidebar = ({ children }: any) => {
                   className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <FaRegChartBar size={20} />
-                  <span className="flex-1 ms-3 whitespace-nowrap">Reports</span>
+                  <span className="flex-1 ms-3 hidden sm:block whitespace-nowrap">Reports</span>
                 </a>
               </li>
             </ul>

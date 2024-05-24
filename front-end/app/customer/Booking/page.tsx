@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
+import { useRouter } from "next/navigation";
 
 const stripePromise = loadStripe(
   "pk_test_51PHNghSJ9wEfpjx5wXi25pxsX2zIg30sO9fFPA1xyIeJ01SqEazYAi8SmKUCPkY4OrJ1Z5mRp84SUZ6T03LcDqJr00Vs5XSeZD"
@@ -13,6 +14,7 @@ export default function Booking() {
   const [data, setData] = useState<any>();
   const [paymentType, setPaymentType] = useState<string>();
   const token = Cookies.get("token");
+  const router = useRouter();
 
   useEffect(() => {
     if (token) {
@@ -85,6 +87,7 @@ export default function Booking() {
     
           if(response.status==201){
             console.log("Booking Request Add Successfully!!");
+            router.push('/customer/orders');
           }
         } catch (error) {
           console.error("Error creating Stripe Checkout session:", error);

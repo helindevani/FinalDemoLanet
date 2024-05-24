@@ -29,7 +29,7 @@ namespace back_end.Domain.Entities
 
         [Required]
         [ForeignKey("Staff")]
-        public Guid StaffId { get; set; }
+        public Guid? StaffId { get; set; }
 
         public Staff? Staff { get; set; }
 
@@ -51,6 +51,7 @@ namespace back_end.Domain.Entities
         [Required]
         public OrderStatus OrderStatus {  get; set; }
 
+        public DateTime? DeliveryDate {  get; set; }
         public bool? IsStaffAccepted {  get; set; }
 
         [Required]

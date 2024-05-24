@@ -1,27 +1,113 @@
+"use client";
 import Sidebar from "@/components/Sidebar";
+import { AppDispatch, RootState } from "@/store";
+import { Order, fetchOrdersAdmin } from "@/store/orderSlice";
+import axios from "axios";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function History() {
+const ViewOrders = () => {
+const dispatch = useDispatch<AppDispatch>();
+const orders : Order[] = useSelector((state: RootState) => state.order.orders);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      dispatch(fetchOrdersAdmin(true));
+    };
+    fetchOrders();
+  }, [dispatch]); 
+
+  function convertToLocalDate(dateString: string): string {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0'); 
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear(); 
+    return `${day}-${month}-${year}`;
+  }
+
+
   return (
     <Sidebar>
-      <div className="page-wrapper">
-        <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
-          <h3 className="text-xl text-blue-800 font-semibold text-primary">
-            Booking History
-          </h3>
-          <nav className="flex items-center space-x-2">
-            <a href="#" className="text-gray-400 hover:text-blue-800">
-              Home
-            </a>
-            <span className="text-gray-400">{`>`}</span>
-            <span className="text-gray-600">Booking History</span>
-          </nav>
-        </div>
-        <div className="container m-auto h-screen">
-          <div className="w-auto">
-            <div className="bg-white shadow-md rounded px-8 pt-14 pb-16 m-10 w-auto h-auto"></div>
+      <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
+        <h3 className="sm:text-xl text-blue-800 font-semibold text-primary">
+          Order History
+        </h3>
+        <nav className="flex items-center space-x-2">
+          <a href="#" className="text-gray-400 hover:text-blue-800">
+            Home
+          </a>
+          <span className="text-gray-400">{`>`}</span>
+          <span className="text-gray-600">Order History</span>
+        </nav>
+      </div>
+
+      <div className="bg-white shadow-md rounded p-10 m-10 w-auto border-b ">
+        <ul>
+        {orders.map((order) => (
+            <li key={order.orderId}>
+              <Link href={`/customer/booking/history/${order.orderId}`}>
+              <div className="sm:flex p-2  bg-slate-100 shadow-lg">
+          <div className=" w-1/4 flex justify-center items-center">
+            <Image
+              src={order.booking.product.productImage}
+              alt="Product Image"
+              height={100}
+              width={100}
+              className="border"
+            ></Image>
+          </div>
+          <div className="w-2/4 flex justify-center items-center">
+            <div className="w-full p-4">
+              <table className="w-full text-left">
+                <tbody>
+                  <tr>
+                    <td className="px-4 py-2">Product Name :</td>
+                    <td className="px-4 py-2">{order.booking.product.productName}-{order.booking.product.brand.brandName}</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2">Order Id :</td>
+                    <td className="px-4 py-2">{order.orderId}</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2">Booking Id:</td>
+                    <td className="px-4 py-2">{order.bookingId}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="w-2/4 flex justify-center items-center">
+          <div className="w-full p-4">
+              <table className="w-full text-left">
+                <tbody>
+                  <tr>
+                    <td className="px-4 py-2">Booking Date :</td>
+                    <td className="px-4 py-2">{convertToLocalDate(order.booking.bookingDate)}</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2">Order Date :</td>
+                    <td className="px-4 py-2">{convertToLocalDate(order.orderDate)}</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2">Delivery Date:</td>
+                    <td className="px-4 py-2">{convertToLocalDate(order.booking.bookingDate)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
+              </Link>
+          
+          </li>
+        ))}
+        </ul>
+        
       </div>
     </Sidebar>
   );
-}
+};
+
+export default ViewOrders;

@@ -2,7 +2,7 @@
 import { useEffect , useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {  FaEdit,  FaTrash } from "react-icons/fa";
-import { fetchOrdersAdmin,Order, staffActionOrder } from "@/store/orderSlice";
+import { deleteOrder, fetchOrdersAdmin,Order, staffActionOrder } from "@/store/orderSlice";
 import { AppDispatch, RootState } from "@/store";
 import AdminSidebar from "@/components/AdminSidebar";
 import Link from "next/link";
@@ -19,21 +19,11 @@ const ViewOrders = () => {
       .catch((error: any) => console.error("Error fetching data:", error));
   }, [dispatch]);
 
-  const handleAcceptOrder = (orderId: string) => {
-    if (window.confirm("Are you sure to Accept this Order?")) {
-      dispatch(staffActionOrder({ orderId, status: true }))
-      .then(() => {
-        console.log("Order accepted successfully.");
-      })
-      .catch((error: any) => {
-        console.error("Error accepting order:", error);
-      });
-    }
-  };
 
-  const handleRejectOrder = (orderId: string) => {
-    if (window.confirm("Are you sure to Reject this Order?")) {
-      dispatch(staffActionOrder({ orderId, status: false }))
+
+  const handleDeleteOrder = (orderId: string) => {
+    if (window.confirm("Are you sure to Delete this Order?")) {
+      dispatch(deleteOrder( orderId ))
       .then(() => {
         console.log("Order accepted successfully.");
       })
@@ -44,17 +34,18 @@ const ViewOrders = () => {
   };
 
 
-  const getStatusString = (value: number): string => {
+  const getStatusString = (value: number, isAccepted: boolean): string => {
+    if (isAccepted === false) return "Not Accepted";
     switch (value) {
       case 0:
         return "Placed";
       case 1:
         return "Confirmed";
-        case 2:
+      case 2:
         return "OnTheWay";
-        case 3:
+      case 3:
         return "Delivered";
-        case 4:
+      case 4:
         return "Rejected";
       default:
         return "";
@@ -181,15 +172,17 @@ const ViewOrders = () => {
                         {order.staff.staffName}
                         </td>
                         <td className="p-1 border border-b border-gray-300 text-center">
-                          <span className="rounded bg-green-500 text-white px-2 py-1">
-                            {getStatusString(order.orderStatus)}
+                        <span className={`rounded px-2 py-1 ${
+                            order.isStaffAccepted===null || order.isStaffAccepted ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                          }`}>
+                            {getStatusString(order.orderStatus, order.isStaffAccepted)}
                           </span>
                         </td>
 
                         <td className="p-1   border-gray-300 flex justify-end">
                           <div className="m-1">
                             <Link
-                              href="#"
+                              href={`/admin/orders/${order.orderId}`}
                               className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center"
                             >
                               <FaEdit />
@@ -198,9 +191,9 @@ const ViewOrders = () => {
                           <div className="m-1">
                             <button
                               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded flex items-center"
-                              // onClick={() =>
-                              //   handleDeleteCategory(category.categoryId)
-                              // }
+                              onClick={() =>
+                                handleDeleteOrder(order.orderId)
+                              }
                             >
                               <FaTrash />
                             </button>

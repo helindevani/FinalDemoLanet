@@ -3,30 +3,36 @@ import { useEffect , useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaCheck, FaEdit, FaTimes } from "react-icons/fa";
 import StaffSidebar from "@/components/Sidebar/StaffSidebar";
-import { fetchOrderAdmin,Order, staffActionOrder } from "@/store/orderSlice";
+import { fetchOrdersStaff,Order, staffActionOrder } from "@/store/orderSlice";
 import { AppDispatch, RootState } from "@/store";
+import Link from "next/link";
 
 const ViewOrders = () => {
-  const [isAccepted, setIsAccepted] = useState<boolean | null>(null);
+  const [orderStatus, setOrderStatus] = useState<{ [key: string]: boolean | null }>({});
   const dispatch = useDispatch<AppDispatch>();
 
   const ordersData : Order[] = useSelector((state: RootState) => state.order.orders);
 
   useEffect(() => {
-    dispatch(fetchOrderAdmin())
-      .then((response: any) => {
-        if (response.payload.length > 0) {
-          setIsAccepted(response.payload[0].isStaffAccepted);
-        }
-      })
-      .catch((error: any) => console.error("Error fetching data:", error));
+    dispatch(fetchOrdersStaff())
+    .then((response: any) => {
+      const initialStatus = response.payload.reduce((acc: any, order: Order) => {
+        acc[order.orderId] = order.isStaffAccepted;
+        return acc;
+      }, {});
+      setOrderStatus(initialStatus);
+    })
+    .catch((error: any) => console.error("Error fetching data:", error));
   }, [dispatch]);
 
   const handleAcceptOrder = (orderId: string) => {
     if (window.confirm("Are you sure to Accept this Order?")) {
       dispatch(staffActionOrder({ orderId, status: true }))
       .then(() => {
-        console.log("Order accepted successfully.");
+        setOrderStatus((prevState) => ({
+          ...prevState,
+          [orderId]: true,
+        }));
       })
       .catch((error: any) => {
         console.error("Error accepting order:", error);
@@ -38,7 +44,10 @@ const ViewOrders = () => {
     if (window.confirm("Are you sure to Reject this Order?")) {
       dispatch(staffActionOrder({ orderId, status: false }))
       .then(() => {
-        console.log("Order accepted successfully.");
+        setOrderStatus((prevState) => ({
+          ...prevState,
+          [orderId]: false,
+        }));
       })
       .catch((error: any) => {
         console.error("Error accepting order:", error);
@@ -208,8 +217,8 @@ const ViewOrders = () => {
                           </span>
                         </td>
 
-                        <td className="p-3  border border-b border-gray-300 flex justify-end">
-                          {isAccepted ===null && (
+                        <td className="p-3  border-gray-300 flex justify-end">
+                          {orderStatus[order.orderId] === null && (
                             <>
                             <div className="m-1">
                           <button
@@ -233,15 +242,13 @@ const ViewOrders = () => {
                           </div>
                             </>
                           )}
-                          {isAccepted && <div className="m-1">
-                          <button
+                          {orderStatus[order.orderId]  && <div className="m-1">
+                          <Link
                               className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center" 
-                              onClick={() =>
-                                handleAcceptOrder(order.OrderId)
-                              }
+                              href={`/staff/orders/${order.orderId}`}
                             >
                               <FaEdit />
-                            </button>
+                            </Link>
                             </div>}
                         </td>
                       </tr>

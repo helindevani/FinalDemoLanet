@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using back_end.ServiceContracts.Repository;
 using back_end.Services.Repository;
-using back_end.Domain.Entities;
 using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);

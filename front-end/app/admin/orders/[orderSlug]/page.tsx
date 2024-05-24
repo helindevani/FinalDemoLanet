@@ -2,17 +2,38 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import AdminSidebar from "@/components/AdminSidebar";
+
+interface OrderFormValues {
+  OrderId: string;
+  LpgNo: string;
+  ClientName: string;
+  ClientContact: string;
+  ClientEmail: string;
+  StaffId: string;
+  BookingId: string;
+  Amount: string;
+  PaymentType: string;
+  PaymentStatus: string;
+  CreatedBy: string;
+  Address: string;
+  ProductId: string;
+  OrderStatus: string;
+  IsStaffAccepted: boolean | null;
+}
 
 const Order: React.FC = () => {
   const [staffs, setStaffs] = useState<any>();
-  const [userId, setUserId] = useState<string | null>(null);
+  const [isStaffAccepted, setIsStaffAccepted] = useState<boolean>(true); 
   const router = useRouter();
   const [data, setData] = useState<any>();
   const token = Cookies.get("token");
+  const pathname = usePathname();
+  const orderId = pathname.split("/")[3];
 
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<OrderFormValues>({
+    OrderId:"",
     LpgNo: "",
     ClientName: "",
     ClientContact: "",
@@ -24,15 +45,15 @@ const Order: React.FC = () => {
     PaymentStatus: "",
     CreatedBy: "",
     Address: "",
-    ProductId : ""
+    ProductId : "",
+    OrderStatus :"",
+    IsStaffAccepted: null
   });
 
   useEffect(() => {
     if (token) {
-      const decodedToken = JSON.parse(atob(token.split(".")[1]));
-      const userId = decodedToken.sub;
       axios
-        .get(`http://localhost:5057/api/Bookings/${userId}`, {
+        .get(`http://localhost:5057/api/Orders/${orderId}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -42,7 +63,8 @@ const Order: React.FC = () => {
           setData(response.data);
           setStaffs(response.data.staff);
           setFormValues({
-            LpgNo: response.data.booking.lpgNo,
+            OrderId:orderId,
+            LpgNo: response.data.lpgNo,
             ClientName: response.data.booking.consumerName,
             ClientContact: response.data.booking.phoneNumber,
             ClientEmail: response.data.booking.emailId,
@@ -53,14 +75,28 @@ const Order: React.FC = () => {
             PaymentStatus: getPaymentStatus(response.data.booking.paymentStatus),
             CreatedBy: response.data.booking.createdBy,
             Address: response.data.booking.shippingAddress,
-            ProductId : response.data.booking.productID
+            ProductId : response.data.booking.productID,
+            OrderStatus :"",
+            IsStaffAccepted : null
           });
+          setIsStaffAccepted(response.data.isStaffAccepted);
+          axios
+            .get(`http://localhost:5057/api/Staffs`, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((staffResponse) => {
+              setStaffs(staffResponse.data);
+            })
+            .catch((error) => console.error("Error fetching staff data:", error));
         })
         .catch((error) => console.error("Error fetching data:", error));
-      setUserId(userId);
-      
     }
-  }, [token]);
+
+    
+  }, [orderId,token]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -69,23 +105,29 @@ const Order: React.FC = () => {
       [name]: value,
     }));
   };
+  console.log(formValues)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:5057/api/Orders", formValues, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("Order created successfully:", response.data);
-      router.push("/admin/orders")
-    } catch (error) {
-      console.error("Error creating order:", error);
-      // Handle error response, show error message
+    if(!isStaffAccepted){
+        formValues.OrderStatus="Placed";
+        formValues.IsStaffAccepted = true;
     }
-  };
+
+    try {
+        const response = await axios.put(`http://localhost:5057/api/Orders/${orderId}`, formValues, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        console.log("Order updated successfully:", response.data);
+        router.push("/admin/orders");
+    } catch (error) {
+        console.error("Error updating order:", error);
+        // Handle error response, show error message
+    }
+};
 
   const getPaymentStatus = (value: number): string => {
     switch (value) {
@@ -265,33 +307,52 @@ const Order: React.FC = () => {
                       </div>
                     </div>
                     <div className="flex ">
-                      <div className="pr-4 w-1/2">
+                      {isStaffAccepted === true && <div className="pr-4 w-1/2">
                         <label
-                          htmlFor="StaffId"
+                          htmlFor="OrderStatus"
                           className="block text-sm font-semibold leading-6 text-gray-900"
                         >
-                          Assign Delivery Staff
+                          Order Status
                         </label>
                         <div className="mt-2.5">
                           <select
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="StaffId"
-                            name="StaffId"
-                            value={formValues.StaffId}
+                            name="OrderStatus"
+                            value={formValues.OrderStatus}
                             onChange={handleChange}
                           >
                             <option value="">---SELECT---</option>
-                            {staffs?.map((staff: any) => (
-                              <option
-                                key={staff.staffId}
-                                value={staff.staffId}
-                              >
-                                {staff.staffName}
-                              </option>
-                            ))}
+                            <option value="OnTheWay">On The Way</option>
+                            <option value="Rejected">Rejected</option>
                           </select>
                         </div>
-                      </div>
+                      </div>}
+                      {isStaffAccepted === false && (
+                        <div className="pr-4 w-1/2">
+                          <label
+                            htmlFor="StaffId"
+                            className="block text-sm font-semibold leading-6 text-gray-900"
+                          >
+                            Assign Delivery Staff
+                          </label>
+                          <div className="mt-2.5">
+                            <select
+                              className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                              id="StaffId"
+                              name="StaffId"
+                              value={formValues.StaffId}
+                              onChange={handleChange}
+                            >
+                              <option value="">---SELECT---</option>
+                              {staffs?.map((staff : any) => (
+                                <option key={staff.staffId} value={staff.staffId}>
+                                  {staff.staffName}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                      )}
                       <div className="pr-4 w-1/2">
                         <label
                           htmlFor="PaymentType"
@@ -356,7 +417,7 @@ const Order: React.FC = () => {
                       id="createProductBtn"
                       className="bg-blue-800 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
-                      Create Order
+                      Update Order
                     </button>
                   </div>
                 </div>

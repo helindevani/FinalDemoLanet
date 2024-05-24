@@ -7,12 +7,39 @@
       "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\controllers\\stripewebhookcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\controllers\\stripewebhookcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\enums\\orderstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\enums\\orderstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\dto\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\dto\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\controllers\\staffscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\controllers\\staffscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\controllers\\connectionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\controllers\\connectionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\controllers\\bookingscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\controllers\\bookingscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\domain\\entities\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\domain\\entities\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__ProjectModels/GasMarkPro/True/SqlTable/dbo.Products.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\enums\\paymenttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\enums\\paymenttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +49,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,28 +61,90 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Order.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\Order.cs",
-              "RelativeDocumentMoniker": "back-end\\Domain\\Entities\\Order.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\Order.cs",
-              "RelativeToolTip": "back-end\\Domain\\Entities\\Order.cs",
-              "ViewState": "AQIAABwAAAAAAAAAAAAkwAwAAAAeAAAA",
+              "DocumentIndex": 4,
+              "Title": "StaffsController.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\StaffsController.cs",
+              "RelativeDocumentMoniker": "back-end\\Controllers\\StaffsController.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\StaffsController.cs",
+              "RelativeToolTip": "back-end\\Controllers\\StaffsController.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAABMAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-21T07:50:54.782Z",
+              "WhenOpened": "2024-05-24T07:02:46.074Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "OrderStatus.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Enums\\OrderStatus.cs",
+              "RelativeDocumentMoniker": "back-end\\Enums\\OrderStatus.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Enums\\OrderStatus.cs",
+              "RelativeToolTip": "back-end\\Enums\\OrderStatus.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-24T06:36:17.472Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ConnectionsController.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\ConnectionsController.cs",
+              "RelativeDocumentMoniker": "back-end\\Controllers\\ConnectionsController.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\ConnectionsController.cs",
+              "RelativeToolTip": "back-end\\Controllers\\ConnectionsController.cs",
+              "ViewState": "AQIAABQAAAAAAAAAAAAUwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-24T06:27:16.343Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "BookingsController.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\BookingsController.cs",
-              "RelativeDocumentMoniker": "back-end\\Controllers\\BookingsController.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\BookingsController.cs",
-              "RelativeToolTip": "back-end\\Controllers\\BookingsController.cs",
-              "ViewState": "AQIAABUAAAAAAAAAAAAkwDAAAAANAAAA",
+              "Title": "StripeWebhookController.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\StripeWebhookController.cs",
+              "RelativeDocumentMoniker": "back-end\\Controllers\\StripeWebhookController.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\StripeWebhookController.cs",
+              "RelativeToolTip": "back-end\\Controllers\\StripeWebhookController.cs",
+              "ViewState": "AQIAABEAAAAAAAAAAAAUwBkAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-21T06:09:36.906Z",
+              "WhenOpened": "2024-05-22T17:13:06.101Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Program.cs",
+              "RelativeDocumentMoniker": "back-end\\Program.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Program.cs",
+              "RelativeToolTip": "back-end\\Program.cs",
+              "ViewState": "AQIAACEAAAAAAAAAAAAAAAUAAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-22T17:04:38.534Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "dbo.Products [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__ProjectModels/GasMarkPro/True/SqlTable/dbo.Products.sql",
+              "ToolTip": "dbo.Products [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-05-22T12:33:04.054Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "OrderDTO.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\DTO\\OrderDTO.cs",
+              "RelativeDocumentMoniker": "back-end\\DTO\\OrderDTO.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\DTO\\OrderDTO.cs",
+              "RelativeToolTip": "back-end\\DTO\\OrderDTO.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAABUAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-22T12:04:28.367Z",
               "EditorCaption": ""
             },
             {
@@ -64,12 +153,37 @@
               "Title": "OrdersController.cs",
               "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\OrdersController.cs",
               "RelativeDocumentMoniker": "back-end\\Controllers\\OrdersController.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\OrdersController.cs*",
-              "RelativeToolTip": "back-end\\Controllers\\OrdersController.cs*",
-              "ViewState": "AQIAACEAAAAAAAAAAAAuwCsAAAANAAAA",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\OrdersController.cs",
+              "RelativeToolTip": "back-end\\Controllers\\OrdersController.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAIAzwD4AAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-20T06:06:25.306Z",
+              "WhenOpened": "2024-05-22T11:38:47.301Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BookingsController.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\BookingsController.cs",
+              "RelativeDocumentMoniker": "back-end\\Controllers\\BookingsController.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\BookingsController.cs",
+              "RelativeToolTip": "back-end\\Controllers\\BookingsController.cs",
+              "ViewState": "AQIAAHwAAAAAAAAAAAAywLYAAAA5AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-22T10:39:58.207Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "PaymentType.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Enums\\PaymentType.cs",
+              "RelativeDocumentMoniker": "back-end\\Enums\\PaymentType.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Enums\\PaymentType.cs",
+              "RelativeToolTip": "back-end\\Enums\\PaymentType.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-22T10:39:08.424Z"
             }
           ]
         }

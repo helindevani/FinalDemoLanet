@@ -78,11 +78,17 @@ export default function Connection() {
     UserId: "",
   });
 
+  const steps = [
+    { name: "Personal Details", status: "completed" },
+    { name: "Required Documents", status: "completed" },
+    { name: "Other Details", status: "active" },
+    { name: "Declaration", status: "upcoming" },
+  ];
+
   const handleFormChange: any = (data: any) => {
     setFormData((prev: any) => ({ ...prev, ...data }));
   };
 
-  console.log(formData);
 
   const renderComponent = () => {
     switch (step) {
@@ -213,48 +219,49 @@ export default function Connection() {
             <div className="w-auto">
               <div className="bg-white shadow-md rounded px-8 pt-14 pb-15 m-10 w-auto h-auto">
                 <div className="relative flex items-center justify-center space-x-6 m-10">
-                  <div className="relative flex flex-col items-center">
-                    <button
-                      className={`w-10 h-10 z-10 ${
-                        step === 1 ? "bg-orange-500" : "bg-blue-500"
-                      } rounded-full flex text-white items-center justify-center focus:outline-none`}
-                    >
-                      1
-                    </button>
-                    <div className="mt-1">Personal Details</div>
-                  </div>
-                  <div className="relative flex flex-col items-center">
-                    <button
-                      className={`w-10 h-10 z-10 ${
-                        step === 2 ? "bg-orange-500" : "bg-blue-500"
-                      } rounded-full flex text-white items-center justify-center focus:outline-none`}
-                    >
-                      2
-                    </button>
-                    <div className="mt-1">Documents</div>
-                  </div>
-                  <div className="relative flex flex-col items-center">
-                    <button
-                      className={`w-10 h-10 z-10 ${
-                        step === 3 ? "bg-orange-500" : "bg-blue-500"
-                      } rounded-full flex text-white items-center justify-center focus:outline-none`}
-                    >
-                      3
-                    </button>
-                    <div className="mt-1">Other Details</div>
-                  </div>
-                  <div className="relative flex flex-col items-center">
-                    <button
-                      className={`w-10 h-10 z-10 ${
-                        step === 4 ? "bg-orange-500" : "bg-blue-500"
-                      } rounded-full flex items-center text-white justify-center focus:outline-none`}
-                    >
-                      {" "}
-                      4
-                    </button>
-                    <div className="mt-1">Declaration</div>
-                  </div>
-                  <span className="absolute h-[2px] bg-black w-80 top-5 left-[233px]"></span>
+
+                     <ul className="flex justify-between items-center w-full relative">
+                {steps.map((step, index) => (
+                  <li key={index} className="flex-1 text-center relative">
+                    <div className="relative flex items-center justify-center">
+                      {index !== 0 && (
+                        <div
+                          className={`absolute left-0 w-1/2 h-0.5 ${
+                            steps[index - 1].status === "completed"
+                              ? "bg-green-500"
+                              : "bg-slate-200"
+                          } transform -translate-y-1/2`}
+                        ></div>
+                      )}
+                      {/* Line after the bullet */}
+                      {index !== steps.length - 1 && (
+                        <div
+                          className={`absolute right-0 w-1/2 h-0.5 ${
+                            step.status === "completed"
+                              ? "bg-green-500"
+                              : "bg-slate-200"
+                          } transform -translate-y-1/2`}
+                        ></div>
+                      )}
+                      {/* Bullet */}
+                      <div
+                        className={`relative w-10 h-10 rounded-full ${
+                          step.status === "completed"
+                            ? "bg-green-500"
+                            : "bg-slate-200"
+                        } flex items-center justify-center`}
+                      >
+                        {step.status === "completed" && (
+                          <span className="text-white text-xl">&#x2713;</span>
+                        )}
+                      </div>
+                    </div>
+                    <span className="block text-xs md:text-xs mt-2">{step.name}</span>
+                  </li>
+                ))}
+              </ul>
+                  {/* </div> */}
+                  {/* <span className="absolute h-[2px] bg-black w-80 top-5 left-[233px]"></span> */}
                 </div>
                 {renderComponent()}
 

@@ -3,6 +3,6 @@
     public enum PaymentType
     {
         Online,
-        CashOnDelivery
+        COD
     }
 }

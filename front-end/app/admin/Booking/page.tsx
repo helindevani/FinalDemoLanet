@@ -18,8 +18,8 @@ const BookingDetails = () => {
     return () => dispatch(fetchBookings(false));
   }, [dispatch,token]);
 
-  const handleDeleteProduct = (bookingID: string) => {
-    if (window.confirm("Are you sure to delete this category?")) {
+  const handleDeleteBooking = (bookingID: string) => {
+    if (window.confirm("Are you sure to delete this booking?")) {
       dispatch(deleteBooking(bookingID))
     }
   };
@@ -176,7 +176,7 @@ const BookingDetails = () => {
                             <button
                               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded flex items-center"
                               onClick={() =>
-                                handleDeleteProduct(booking.bookingId)
+                                handleDeleteBooking(booking.bookingId)
                               }
                             >
                               <FaTrash />

@@ -183,17 +183,17 @@ export const updateOrder = createAsyncThunk<
   return response.data;
 });
 
-export const deleteCategory = createAsyncThunk<string, string>(
-  "category/deleteCategory",
-  async (categoryId) => {
+export const deleteOrder = createAsyncThunk<string, string>(
+  "order/deleteOrder",
+  async (orderId) => {
     const token = getToken();
-    const response = await axios.delete(`${apiUrl}/${categoryId}`, {
+    const response = await axios.delete(`${apiUrl}/${orderId}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-    return categoryId;
+    return orderId;
   }
 );
 
@@ -213,18 +213,23 @@ const orderSlice = createSlice({
         state.orders = action.payload;
       })
       .addCase(staffActionOrder.fulfilled, (state, action) => {
+        const updatedOrder = action.payload;
         const index = state.orders.findIndex(
           (order) => order.orderId === action.meta.arg.orderId
         );
         if (index !== -1) {
-          state.orders[index] = action.payload;
+          state.orders[index] = {
+            ...state.orders[index],
+            ...action.payload,
+            isStaffAccepted: action.meta.arg.status,
+          };
         }
       })
       .addCase(fetchOrderById.fulfilled, (state, action) => {
-        state.selectedOrder = action.payload; // Update selectedOrder state with the fetched order
+        state.selectedOrder = action.payload; 
       })
       .addCase(postOrder.fulfilled, (state, action) => {
-        state.orders.push(action.payload); // Add the new order to the orders array
+        state.orders.push(action.payload);
       })
       .addCase(addCategory.fulfilled, (state, action) => {
         state.orders.push(action.payload);
@@ -237,7 +242,7 @@ const orderSlice = createSlice({
           state.orders[index] = action.payload;
         }
       })
-      .addCase(deleteCategory.fulfilled, (state, action) => {
+      .addCase(deleteOrder.fulfilled, (state, action) => {
         state.orders = state.orders.filter(
           (order) => order.orderId !== action.payload
         );

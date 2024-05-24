@@ -427,6 +427,32 @@
   },
   {
     "ContainingType": "back_end.Controllers.BookingsController",
+    "Method": "GetBooking",
+    "RelativePath": "api/Bookings/b{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "back_end.Domain.Entities.Booking",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "back_end.Controllers.BookingsController",
     "Method": "CreateCheckoutSession",
     "RelativePath": "api/Bookings/checkout",
     "HttpMethod": "POST",
@@ -1067,12 +1093,22 @@
         "IsRequired": true
       },
       {
-        "Name": "order",
-        "Type": "back_end.Domain.Entities.Order",
+        "Name": "orderDTO",
+        "Type": "back_end.DTO.OrderDTO",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "back_end.Domain.Entities.Order",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "back_end.Controllers.OrdersController",

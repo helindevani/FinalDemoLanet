@@ -27,12 +27,9 @@ const Sidebar = ({ showName,children }: any) => {
   return (
     <>
       <div className="flex border z-40 mt-[85px]">
-        <aside
-          id="sidebar-multi-level-sidebar"
-          className="sticky top-[85px] left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 flex-col-2 border"
-          aria-label="Sidebar"
+        <aside className="sm:w-56"
         >
-          <div className="h-full px-3 py-4 overflow-y-auto bg-gray-100 dark:bg-gray-800 ">
+          <div className="h-full px-3 w-14 sm:w-56 py-4 overflow-y-auto bg-gray-100 dark:bg-gray-800 border">
           <ul className="space-y-2 font-medium">
               <li>
               <a
@@ -45,7 +42,7 @@ const Sidebar = ({ showName,children }: any) => {
                   onClick={() => selectMenuItem("dashboard")}
                 >
                   <FaTachometerAlt size={20}/>
-                  {/* {showName &&*/} <span className="ms-3">Dashboard</span>{/* {} */}
+                  {/* {showName &&*/} <span className="ms-3 hidden sm:block" >Dashboard</span>{/* {} */}
                 </a>
               </li>
               <li>
@@ -54,7 +51,7 @@ const Sidebar = ({ showName,children }: any) => {
                   className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <FaExpandArrowsAlt size={20}/>
-                  <span className="ms-3">New Connection</span>
+                  <span className="ms-3 hidden sm:block">New Connection</span>
                 </a>
               </li>
               <li>
@@ -63,7 +60,7 @@ const Sidebar = ({ showName,children }: any) => {
                   className="flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 >
                   <IoInformationCircleSharp size={20} /> 
-                  <span className="ms-3">Connection Details</span>
+                  <span className="ms-3 hidden sm:block">Connection Details</span>
                 </a>
               </li>
               <li>
@@ -73,7 +70,7 @@ const Sidebar = ({ showName,children }: any) => {
                   onClick={() => toggleSubMenu("bookings")}
                 >
                   <BsCalendar size={20} />
-                  <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                  <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap hidden sm:block">
                     Bookings 
                   </span>
                   <svg
@@ -98,23 +95,16 @@ const Sidebar = ({ showName,children }: any) => {
                   <ul className="py-2 space-y-2">
                     <li>
                       <a
-                        href="/customer/Booking"
+                        href="/customer/booking"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Book Cylinder
                       </a>
                     </li>
+                    
                     <li>
                       <a
-                        href="/customer/Booking/LastBooking"
-                        className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                      >
-                        Last Booking
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="/customer/Booking/History"
+                        href="/customer/booking/history"
                         className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                       >
                         Booking History
@@ -125,14 +115,14 @@ const Sidebar = ({ showName,children }: any) => {
               </li>
               <li>
               <a
-                  href="/customer/OrderSummary"
+                  href="/customer/orders"
                   type="button"
                   className="flex items-center w-full p-2 text-base text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                  
                 >
                   <IoReceiptSharp size={20} /> 
-                  <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
-                    Orders
+                  <span className="flex-1 ms-3 hidden sm:block text-left rtl:text-right whitespace-nowrap">
+                    Track Booking
                   </span>
                 </a>
               </li>

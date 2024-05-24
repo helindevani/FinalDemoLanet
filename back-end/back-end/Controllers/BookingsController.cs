@@ -6,6 +6,7 @@ using back_end.DTO;
 using back_end.Enums;
 using Stripe.Checkout;
 using Microsoft.AspNetCore.Authorization;
+using Stripe;
 
 namespace back_end.Controllers
 {
@@ -50,6 +51,27 @@ namespace back_end.Controllers
 
 
             return Ok(bookings);
+        }
+
+        [HttpGet("b{id}")]
+        public async Task<ActionResult<Booking>> GetBooking(Guid id)
+        {
+            if (_context.Bookings == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.Bookings
+                .Include (r => r.Product)
+                .Include(b=>b.Product.Brand)
+                .FirstOrDefaultAsync(i => i.BookingId == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return order;
         }
 
         [HttpGet("{userId}")]
@@ -118,7 +140,7 @@ namespace back_end.Controllers
                 CreatedBy = bookingDTO.CreatedBy,
                 ShippingAddress = bookingDTO.ShippingAddress,
                 Price = bookingDTO.Price.ToString(),
-                PaymentType = PaymentType.CashOnDelivery,
+                PaymentType = PaymentType.COD,
                 PaymentStatus=PaymentStatus.Pending,
             };
            
@@ -135,10 +157,39 @@ namespace back_end.Controllers
             {
                 return NotFound();
             }
+
             var booking = await _context.Bookings.FindAsync(id);
             if (booking == null)
             {
                 return NotFound();
+            }
+
+            // Check if the payment type was online and payment status was success
+            if (booking.PaymentType ==PaymentType.Online && booking.PaymentStatus == PaymentStatus.Success)
+            {
+
+                var paymentIntentId = booking.PaymentId;
+                if (!string.IsNullOrEmpty(paymentIntentId))
+                {
+                    var refundService = new RefundService();
+                    var refundOptions = new RefundCreateOptions
+                    {
+                        PaymentIntent = paymentIntentId
+                    };
+
+                    try
+                    {
+                        var refund = await refundService.CreateAsync(refundOptions);
+                        if (refund.Status != "succeeded")
+                        {
+                            return StatusCode(StatusCodes.Status500InternalServerError, "Refund failed.");
+                        }
+                    }
+                    catch (Exception ex)
+                    { 
+                        return StatusCode(StatusCodes.Status500InternalServerError, $"Refund failed: {ex.Message}");
+                    }
+                }
             }
 
             _context.Bookings.Remove(booking);
@@ -146,6 +197,7 @@ namespace back_end.Controllers
 
             return NoContent();
         }
+
 
         [HttpGet("Details/{userId}")]
         public async Task<ActionResult<IEnumerable<Connection>>> GetApprovedConnections(string userId)

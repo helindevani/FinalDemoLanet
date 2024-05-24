@@ -36,6 +36,9 @@ export default function RequieredDocument({ onChange } : changeType) {
               <option value="EC">Voter Id Card</option>
             </select>
           </div>
+          <div className="mt-2.5">
+            <ImagePicker label="POI" name="POI" onImageChange={setPoi}/>
+          </div>
           <label htmlFor="POINo" className="w-1/4  text-gray-700 ">
             Proof Of Identity Number
           </label>
@@ -49,9 +52,7 @@ export default function RequieredDocument({ onChange } : changeType) {
               className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
-          <div className="mt-2.5">
-            <ImagePicker label="POI" name="POI" onImageChange={setPoi}/>
-          </div>
+          
         </div>
         <div>
           <label htmlFor="POA" className="w-1/4  text-gray-700 ">
@@ -72,6 +73,9 @@ export default function RequieredDocument({ onChange } : changeType) {
               <option value="EC">Ration Card</option>
             </select>
           </div>
+          <div className="mt-2.5">
+            <ImagePicker label="POA" name="POA" onImageChange={setPoa}/>
+          </div>
           <label htmlFor="POANo" className="w-1/4  text-gray-700 ">
             Proof Of Address Number 
           </label>
@@ -85,9 +89,7 @@ export default function RequieredDocument({ onChange } : changeType) {
               className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
-          <div className="mt-2.5">
-            <ImagePicker label="POA" name="POA" onImageChange={setPoa}/>
-          </div>
+          
         </div>
       </div>
     </>

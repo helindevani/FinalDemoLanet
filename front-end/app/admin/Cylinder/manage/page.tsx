@@ -178,7 +178,7 @@ const ViewCylinder = () => {
                         <td className="p-3 h-44 flex pt-16 justify-end">
                           <div className="m-1 align-middle">
                             <Link
-                              href={`/admin/Cylinder/${product.productId}`}
+                              href={`/admin/cylinder/${product.productId}`}
                               className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center"
                             >
                               <FaEdit />
