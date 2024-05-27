@@ -24,7 +24,7 @@ const AdminSidebar = ({ children }: any) => {
   };
   return (
     <>
-      <div className="flex border z-40 mt-[85px]">
+      <div className="flex border z-40 mt-[80px]">
         <aside className="sm:w-56"
         >
           <div className="h-full px-3 w-14 sm:w-56 py-4 overflow-y-auto bg-gray-100 dark:bg-gray-800 ">

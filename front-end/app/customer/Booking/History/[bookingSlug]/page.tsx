@@ -60,8 +60,8 @@ console.log(order)
         </nav>
       </div>
 
-      <div className=" bg-white shadow-md rounded p-10 m-10 w-auto h-screen border-b ">
-        <div className="flex  h-1/3 p-3">
+      <div className=" bg-white shadow-md rounded sm:p-10 m-10 w-auto  border-b ">
+        <div className="sm:flex p-3">
           <div className=" h-full p-1 m-2 w-1/2">
             <h4 className="text-lg font-bold underline">Delivery Address</h4>
             <table className="mt-2 w-full">
@@ -120,7 +120,7 @@ console.log(order)
             </table>
           </div>
         </div>
-        <div className="flex  h-2/3 p-3 m-1">
+        <div className="sm:flex w-full p-3 m-1">
           <div className="h-full p-1 m-1 w-1/2">
             <h4 className="text-lg font-bold underline">Order Details</h4>
             <table className="mt-2 w-full">
@@ -152,8 +152,8 @@ console.log(order)
               </tbody>
             </table>
           </div>
-          <div className="h-full p-1 m-5 w-1/2">
-            <div className=" h-1/2 p-1 m-1 w-full">
+          <div className="h-full p-1 sm:m-5 w-full sm:w-1/2">
+            <div className=" p-1 m-1 w-full">
               <h4 className="text-lg font-bold underline m-1">
                 Tracking Order
               </h4>
@@ -194,16 +194,16 @@ console.log(order)
                         )}
                       </div>
                     </div>
-                    <span className="block mt-2">{step.name}</span>
+                    <span className="block text-xs md:text-xs mt-2">{step.name}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="h-1/2 p-1 m-1 w-full flex items-center">
+            <div className="h-1/2 p-1 m-1 w-full sm:flex items-center">
               <div className="flex-1">
                 <StarRating onChange={handleRatingChange} size="4xl" />
               </div>
-              <div className="flex-1 flex justify-end items-center">
+              <div className="flex-1 flex sm:justify-end items-center">
                 <p className="ml-2 text-xl">Need Help</p>
                 <span className="ml-2">
                   <TbHelpSquareRounded size={30} />
@@ -213,6 +213,7 @@ console.log(order)
           </div>
         </div>
       </div>
+
     </Sidebar>
   );
 };

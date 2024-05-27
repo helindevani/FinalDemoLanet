@@ -186,16 +186,12 @@ const BookingDetails = () => {
                 ))}
               </ul>
             </div>
-            <div className="h-1/2 p-1 m-1 w-full sm:flex items-center">
-              <div className="flex-1">
-                <StarRating onChange={handleRatingChange} size="4xl" />
-              </div>
-              <div className="flex-1 flex sm:justify-end items-center">
+            <div className="h-1/2 p-1 m-5 w-full sm:flex items-center">
                 <p className="ml-2 text-xl">Need Help</p>
                 <span className="ml-2">
                   <TbHelpSquareRounded size={30} />
                 </span>
-              </div>
+              
             </div>
           </div>
         </div>

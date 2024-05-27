@@ -80,6 +80,42 @@ namespace back_end.Controllers
             return order;
         }
 
+        [HttpGet("TrackOrder")]
+        public async Task<ActionResult<Order>> GetLatestOrder()
+        {
+            if (_context.Orders == null)
+            {
+                return NotFound();
+            }
+
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
+            var userId = userIdClaim.Value;
+
+            var booking = await _context.Bookings
+        .Where(b => b.CreatedBy == userId && b.Status == BookingStatus.Confirmed)
+        .OrderByDescending(b => b.BookingDate)
+        .FirstOrDefaultAsync();
+
+            var order = await _context.Orders
+                .Include(r => r.Booking)
+                    .ThenInclude(b => b.Product)
+                        .ThenInclude(p => p.Brand)
+                .FirstOrDefaultAsync(i => i.BookingId == booking.BookingId);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return order;
+        }
+
 
         [HttpPost("{id}")]
         public async Task<ActionResult<Order>> StaffAction(Guid id,bool status)

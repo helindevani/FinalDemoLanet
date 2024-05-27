@@ -70,11 +70,13 @@ const Header: React.FC = () => {
         
         <nav className="flex justify-between items-center p-4">
         <div className="flex items-center ">
-        <button className="p-2">
+        <button className="p-2 m-1">
         <TfiAlignJustify />
           </button>
          
-            <Image src={LogoVPN} alt="LogoImage" height={100} width={100} />
+            <Image src={LogoVPN} alt="LogoImage" height={50} width={50} />
+
+            <span className="text-4xl p-1 m-1 text-gray-800">Refill Smart</span>
           </div>
 
           <div className="flex space-x-4">
