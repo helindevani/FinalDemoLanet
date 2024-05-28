@@ -51,7 +51,7 @@ namespace back_end.Controllers
                 .Include(p => p.Booking.Product)
                 .Include(p => p.Booking.Product.Brand)
                 .Include(s => s.Staff)
-                .Where(r => r.OrderStatus == OrderStatus.Placed || r.OrderStatus == OrderStatus.Confirmed || r.OrderStatus == OrderStatus.OnTheWay)
+                .Where(r => r.OrderStatus == OrderStatus.Placed || r.OrderStatus == OrderStatus.Confirmed || r.OrderStatus == OrderStatus.OnTheWay || r.OrderStatus==OrderStatus.StaffRejected)
                 .ToListAsync();
             }
 
@@ -79,43 +79,6 @@ namespace back_end.Controllers
 
             return order;
         }
-
-        [HttpGet("TrackOrder")]
-        public async Task<ActionResult<Order>> GetLatestOrder()
-        {
-            if (_context.Orders == null)
-            {
-                return NotFound();
-            }
-
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
-            if (userIdClaim == null)
-            {
-                return Unauthorized("User ID not found in token.");
-            }
-
-            var userId = userIdClaim.Value;
-
-            var booking = await _context.Bookings
-        .Where(b => b.CreatedBy == userId && b.Status == BookingStatus.Confirmed)
-        .OrderByDescending(b => b.BookingDate)
-        .FirstOrDefaultAsync();
-
-            var order = await _context.Orders
-                .Include(r => r.Booking)
-                    .ThenInclude(b => b.Product)
-                        .ThenInclude(p => p.Brand)
-                .FirstOrDefaultAsync(i => i.BookingId == booking.BookingId);
-
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            return order;
-        }
-
 
         [HttpPost("{id}")]
         public async Task<ActionResult<Order>> StaffAction(Guid id,bool status)
@@ -146,6 +109,7 @@ namespace back_end.Controllers
             else
             {
                 order.IsStaffAccepted = false;
+                order.OrderStatus = OrderStatus.StaffRejected;
                 order.UpdatedBy = Guid.Parse(userId);
             }
             _context.Orders.Update(order);
@@ -165,7 +129,7 @@ namespace back_end.Controllers
 
             var userId = userIdClaim.Value;
 
-            var orders = await _context.Orders.Where(o => o.StaffId.ToString() == userId).Where(o=>o.IsStaffAccepted != false).ToListAsync();
+            var orders = await _context.Orders.Where(o => o.StaffId.ToString() == userId).Where(o=>o.OrderStatus != OrderStatus.StaffRejected || o.OrderStatus != OrderStatus.StaffRejected).ToListAsync();
 
             if (orders == null || orders.Count == 0)
             {
@@ -217,7 +181,7 @@ namespace back_end.Controllers
             existingOrder.StaffId = Guid.Parse(orderDTO.StaffId);
             if(orderDTO.IsStaffAccepted != null)
             {
-                existingOrder.IsStaffAccepted = true;
+                existingOrder.IsStaffAccepted = orderDTO.IsStaffAccepted;
             }
             if(orderDTO.OrderStatus == "Delivered")
             {

@@ -17,14 +17,33 @@ const BookingDetails = () => {
     state.order.orders.find((order) => order.orderId=== orderId)
   );
 
-console.log(order)
 
-  const steps = [
-    { name: "Placed", status: "completed" },
-    { name: "Confirmed", status: "completed" },
-    { name: "On The Way", status: "active" },
-    { name: "Delivered", status: "upcoming" },
-  ];
+  const allSteps = ["Placed", "Confirmed", "On The Way", "Delivered"];
+
+  const getOrderStatus = (value: number): string => {
+    switch (value) {
+      case 0:
+        return "Placed";
+        case 1:
+        return "Confirmed";
+        case 2:
+        return "On The Way";
+      case 3:
+        return "Delivered";
+        case 4:
+          return "Canceled"
+      default:
+        return "";
+    }
+  };
+  
+  const steps = allSteps.map((step, index) => ({
+    name: step,
+    status:
+      order?.orderStatus && allSteps.indexOf(getOrderStatus(order.orderStatus)) >= index
+        ? "completed"
+        : "upcoming",
+  }));
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -37,7 +56,10 @@ console.log(order)
     setStaffRating(value);
   };
 
-  function convertToLocalDate(dateString: string): string {
+  function convertToLocalDate(dateString: string | undefined): string | null {
+    if (typeof dateString === 'undefined') {
+      return null;
+    }
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0'); 
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -90,10 +112,10 @@ console.log(order)
               <tbody>
                 <tr>
                   <td className="py-1 pr-2 font-semibold">
-                    Booking Date : {order?.booking?.bookingDate}
+                    Booking Date : {convertToLocalDate(order?.booking.bookingDate )}
                   </td>
                   <td className="py-1 pr-2 font-semibold">
-                    Order Date : {order?.orderDate}
+                    Order Date : {convertToLocalDate(order?.orderDate )}
                   </td>
                 </tr>
               </tbody>
@@ -165,7 +187,7 @@ console.log(order)
                       {index !== 0 && (
                         <div
                           className={`absolute left-0 w-1/2 h-0.5 ${
-                            steps[index - 1].status === "completed"
+                            steps[index ].status === "completed"
                               ? "bg-green-500"
                               : "bg-slate-200"
                           } transform -translate-y-1/2`}
@@ -194,7 +216,7 @@ console.log(order)
                         )}
                       </div>
                     </div>
-                    <span className="block text-xs md:text-xs mt-2">{step.name}</span>
+                    <span className="block text-xs md:text-lg mt-2">{step.name}</span>
                   </li>
                 ))}
               </ul>

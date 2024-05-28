@@ -43,9 +43,7 @@ const Sidebar = ({ showName, children }: any) => {
                   }`}
                 >
                   <FaTachometerAlt size={20} />
-                  {/* {showName &&*/}{" "}
                   <span className="ms-3 hidden sm:block">Dashboard</span>
-                  {/* {} */}
                 </a>
               </li>
               <li>

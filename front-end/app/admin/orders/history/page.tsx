@@ -189,7 +189,7 @@ const ViewOrders = () => {
                         <td className="p-1   border-gray-300 flex justify-end">
                           <div className="m-1">
                             <Link
-                              href="#"
+                              href={`/admin/orders/history/${order.bookingId}`}
                               className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center"
                             >
                               <FaEye />

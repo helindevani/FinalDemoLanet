@@ -155,19 +155,6 @@ export const staffActionOrder = createAsyncThunk<Order, { orderId: string, statu
       return response.data;
     }
   );
-export const addCategory = createAsyncThunk<Order, Order>(
-  "category/addCategory",
-  async (inputData) => {
-    const token = getToken();
-    const response = await axios.post<Order>(apiUrl, inputData, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  }
-);
 
 export const updateOrder = createAsyncThunk<
   Order,
@@ -220,7 +207,7 @@ const orderSlice = createSlice({
         if (index !== -1) {
           state.orders[index] = {
             ...state.orders[index],
-            ...action.payload,
+            ...updatedOrder,
             isStaffAccepted: action.meta.arg.status,
           };
         }
@@ -229,9 +216,6 @@ const orderSlice = createSlice({
         state.selectedOrder = action.payload; 
       })
       .addCase(postOrder.fulfilled, (state, action) => {
-        state.orders.push(action.payload);
-      })
-      .addCase(addCategory.fulfilled, (state, action) => {
         state.orders.push(action.payload);
       })
       .addCase(updateOrder.fulfilled, (state, action) => {

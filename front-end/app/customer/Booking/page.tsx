@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
 import { useRouter } from "next/navigation";
+import { ToastError } from "@/components/ToastError";
+import { ToastContainer } from "react-toastify";
 
 const stripePromise = loadStripe(
   "pk_test_51PHNghSJ9wEfpjx5wXi25pxsX2zIg30sO9fFPA1xyIeJ01SqEazYAi8SmKUCPkY4OrJ1Z5mRp84SUZ6T03LcDqJr00Vs5XSeZD"
@@ -84,11 +86,18 @@ export default function Booking() {
               },
             }
           );
-    
+
           if(response.status==201){
             console.log("Booking Request Add Successfully!!");
             router.push('/customer/orders');
           }
+          else if (response.status === 200 && response.data === "Last booking is pending.") {
+            ToastError("Last booking is pending.");
+        }
+        else if (response.status === 200 && response.data === "Order is placed. Please wait for delivery.") {
+          ToastError("Your Last Booking Will Be Confirmed Please Wait For Delivery Of Your Order.");
+          router.push('/customer/orders');
+      }
         } catch (error) {
           console.error("Error creating Stripe Checkout session:", error);
         }
@@ -98,6 +107,7 @@ export default function Booking() {
 
   return (
     <Sidebar>
+      <ToastContainer/>
       <div className="page-wrapper">
         <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">

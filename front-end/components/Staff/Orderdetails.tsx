@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
-import AdminSidebar from "@/components/AdminSidebar";
+import StaffSidebar from "@/components/Sidebar/StaffSidebar";
 
 interface OrderFormValues {
   OrderId: string;
@@ -20,17 +20,19 @@ interface OrderFormValues {
   Address: string;
   ProductId: string;
   OrderStatus: string;
-  IsStaffAccepted: boolean | null;
+  IsStaffAccepted: string;
 }
 
-const Order: React.FC = () => {
+interface StaffActionProps {
+    orderId: string;
+  }
+
+const OrderDetails: React.FC<StaffActionProps> = ({orderId}) => {
   const [staffs, setStaffs] = useState<any>();
   const [isStaffAccepted, setIsStaffAccepted] = useState<boolean>(true); 
   const router = useRouter();
   const [data, setData] = useState<any>();
   const token = Cookies.get("token");
-  const pathname = usePathname();
-  const orderId = pathname.split("/")[3];
 
   const [formValues, setFormValues] = useState<OrderFormValues>({
     OrderId:"",
@@ -47,7 +49,7 @@ const Order: React.FC = () => {
     Address: "",
     ProductId : "",
     OrderStatus :"",
-    IsStaffAccepted: null
+    IsStaffAccepted: ""
   });
 
   useEffect(() => {
@@ -63,12 +65,12 @@ const Order: React.FC = () => {
           setData(response.data);
           setStaffs(response.data.staff);
           setFormValues({
-            OrderId:orderId,
+            OrderId:response.data.orderId,
             LpgNo: response.data.lpgNo,
             ClientName: response.data.booking.consumerName,
             ClientContact: response.data.booking.phoneNumber,
             ClientEmail: response.data.booking.emailId,
-            StaffId: "", 
+            StaffId: response.data.staffId, 
             BookingId: response.data.booking.bookingId,
             Amount: response.data.booking.price,
             PaymentType: getPaymentMode(response.data.booking.paymentType),
@@ -77,7 +79,7 @@ const Order: React.FC = () => {
             Address: response.data.booking.shippingAddress,
             ProductId : response.data.booking.productID,
             OrderStatus :"",
-            IsStaffAccepted : response.data.isStaffAccepted,
+            IsStaffAccepted : response.data.isStaffAccepted
           });
           setIsStaffAccepted(response.data.isStaffAccepted);
           axios
@@ -94,6 +96,8 @@ const Order: React.FC = () => {
         })
         .catch((error) => console.error("Error fetching data:", error));
     }
+
+    
   }, [orderId,token]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -103,16 +107,15 @@ const Order: React.FC = () => {
       [name]: value,
     }));
   };
-  console.log(formValues)
+
+  console.log(formValues);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if(!isStaffAccepted){
         formValues.OrderStatus="Placed";
     }
-    if(isStaffAccepted){
-      formValues.StaffId=data.staffId;
-  }
+
     try {
         const response = await axios.put(`http://localhost:5057/api/Orders/${orderId}`, formValues, {
             headers: {
@@ -121,7 +124,7 @@ const Order: React.FC = () => {
             },
         });
         console.log("Order updated successfully:", response.data);
-        router.push("/admin/orders");
+        router.push("/staff/orders");
     } catch (error) {
         console.error("Error updating order:", error);
         // Handle error response, show error message
@@ -153,23 +156,7 @@ const Order: React.FC = () => {
   };
 
   return (
-    <AdminSidebar>
-      <div className="page-wrapper">
-        <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
-          <h3 className="text-xl text-blue-800 font-semibold text-primary">
-            Order Creation
-          </h3>
-          <nav className="flex items-center space-x-2">
-            <a href="#" className="text-gray-400 hover:text-blue-800">
-              Home
-            </a>
-            <span className="text-gray-400">{`>`}</span>
-            <span className="text-gray-600">Order Creation</span>
-          </nav>
-        </div>
-        <div className="container m-auto h-screen">
-          <div className="w-auto">
-            <div className="bg-white shadow-md rounded px-8 pt-14 pb-16 m-10 w-auto h-auto">
+    
               <form onSubmit={handleSubmit}>
                 <div className="border">
                   <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 p-5">
@@ -306,7 +293,7 @@ const Order: React.FC = () => {
                       </div>
                     </div>
                     <div className="flex ">
-                      {isStaffAccepted === true && <div className="pr-4 w-1/2">
+                    <div className="pr-4 w-1/2">
                         <label
                           htmlFor="OrderStatus"
                           className="block text-sm font-semibold leading-6 text-gray-900"
@@ -321,37 +308,11 @@ const Order: React.FC = () => {
                             onChange={handleChange}
                           >
                             <option value="">---SELECT---</option>
-                            <option value="OnTheWay">On The Way</option>
+                            <option value="Delivered">Delivered</option>
                             <option value="Rejected">Rejected</option>
                           </select>
                         </div>
-                      </div>}
-                      {isStaffAccepted === false && (
-                        <div className="pr-4 w-1/2">
-                          <label
-                            htmlFor="StaffId"
-                            className="block text-sm font-semibold leading-6 text-gray-900"
-                          >
-                            Assign Delivery Staff
-                          </label>
-                          <div className="mt-2.5">
-                            <select
-                              className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                              id="StaffId"
-                              name="StaffId"
-                              value={formValues.StaffId}
-                              onChange={handleChange}
-                            >
-                              <option value="">---SELECT---</option>
-                              {staffs?.map((staff : any) => (
-                                <option key={staff.staffId} value={staff.staffId}>
-                                  {staff.staffName}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
-                      )}
+                      </div>
                       <div className="pr-4 w-1/2">
                         <label
                           htmlFor="PaymentType"
@@ -421,12 +382,8 @@ const Order: React.FC = () => {
                   </div>
                 </div>
               </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </AdminSidebar>
+
   );
 };
 
-export default Order;
+export default OrderDetails;

@@ -7,6 +7,7 @@ using back_end.Enums;
 using Stripe.Checkout;
 using Microsoft.AspNetCore.Authorization;
 using Stripe;
+using System.Security.Claims;
 
 namespace back_end.Controllers
 {
@@ -52,6 +53,66 @@ namespace back_end.Controllers
 
             return Ok(bookings);
         }
+
+        [HttpGet("BookingDetails")]
+        public async Task<IActionResult> GetLatestBookingDetails()
+        {
+            if (_context.Bookings == null)
+            {
+                return NotFound("Bookings context is null.");
+            }
+
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
+            var userId = userIdClaim.Value;
+
+            var booking = await _context.Bookings
+                .Where(b => b.CreatedBy == userId)
+                .OrderByDescending(b => b.BookingDate)
+                .FirstOrDefaultAsync();
+
+            if (booking == null)
+            {
+                return NotFound("No bookings found for the user.");
+            }
+
+            if (booking.Status == BookingStatus.Confirmed)
+            {
+                var order = await _context.Orders
+                .Include(r => r.Booking)
+                    .ThenInclude(b => b.Product)
+                        .ThenInclude(p => p.Brand)
+                .FirstOrDefaultAsync(i => i.BookingId == booking.BookingId);
+
+                if (order == null)
+                {
+                    return NotFound("No orders found for the booking.");
+                }
+
+                if (order.OrderStatus == OrderStatus.Delivered)
+                {
+                    return Ok(new { Message= "No active orders for your account.",});
+                }
+                return Ok(new { Message="Order Successfully Places",Order = order });
+            }
+
+            if (booking.Status == BookingStatus.Pending)
+            {
+                return Ok(new
+                {
+                    Message = "Order not placed.",
+                    Booking = booking
+                });
+            }
+
+            return BadRequest("Unhandled booking status.");
+        }
+
 
         [HttpGet("b{id}")]
         public async Task<ActionResult<Booking>> GetBooking(Guid id)
@@ -129,6 +190,36 @@ namespace back_end.Controllers
               return Problem("Entity set 'ApplicationDbContext.Bookings'  is null.");
           }
 
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
+            var userId = userIdClaim.Value;
+            var latestBooking = await _context.Bookings
+        .Where(b => b.CreatedBy == userId)
+        .OrderByDescending(b => b.BookingDate)
+        .FirstOrDefaultAsync();
+
+            if (latestBooking != null)
+            {
+                if (latestBooking.Status == BookingStatus.Pending)
+                {
+                    return Ok("Last booking is pending.");
+                }
+
+                if (latestBooking.Status == BookingStatus.Confirmed)
+                {
+                    var relatedOrder = await _context.Orders
+                        .FirstOrDefaultAsync(o => o.BookingId == latestBooking.BookingId);
+
+                    if (relatedOrder != null && relatedOrder.OrderStatus != OrderStatus.Delivered)
+                    {
+                        return Ok("Order is placed. Please wait for delivery.");
+                    }
+                }
+            }
             var booking = new Booking
             {
                 BookingId= Guid.NewGuid(),
@@ -137,7 +228,7 @@ namespace back_end.Controllers
                 EmailId = bookingDTO.EmailId,
                 PhoneNumber = bookingDTO.PhoneNumber,
                 ProductID  = Guid.Parse(bookingDTO.ProductID),
-                CreatedBy = bookingDTO.CreatedBy,
+                CreatedBy = userId,
                 ShippingAddress = bookingDTO.ShippingAddress,
                 Price = bookingDTO.Price.ToString(),
                 PaymentType = PaymentType.COD,

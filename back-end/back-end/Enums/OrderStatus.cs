@@ -6,6 +6,7 @@
         Confirmed,
         OnTheWay,
         Delivered,
+        StaffRejected,
         Rejected
     }
 }

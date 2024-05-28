@@ -49,7 +49,7 @@ const orders : Order[] = useSelector((state: RootState) => state.order.orders);
             <li key={order.orderId}>
               <Link href={`/customer/booking/history/${order.orderId}`}>
               <div className="sm:flex p-2  bg-slate-100 shadow-lg">
-          <div className=" w-1/4 flex justify-center items-center">
+          <div className="w-full sm:w-1/6 flex justify-center items-center">
             <Image
               src={order.booking.product.productImage}
               alt="Product Image"
@@ -58,7 +58,7 @@ const orders : Order[] = useSelector((state: RootState) => state.order.orders);
               className="border"
             ></Image>
           </div>
-          <div className="w-2/4 flex justify-center items-center">
+          <div className=" w-full sm:w-3/6 text-xs sm:text-base flex justify-center items-center">
             <div className="w-full p-4">
               <table className="w-full text-left">
                 <tbody>
@@ -78,13 +78,12 @@ const orders : Order[] = useSelector((state: RootState) => state.order.orders);
               </table>
             </div>
           </div>
-          <div className="w-2/4 flex justify-center items-center">
-          <div className="w-full p-4">
+          <div className="w-full sm:w-2/6 p-4 text-xs sm:text-base justify-center">
               <table className="w-full text-left">
                 <tbody>
                   <tr>
                     <td className="px-4 py-2">Booking Date :</td>
-                    <td className="px-4 py-2">{convertToLocalDate(order.booking.bookingDate)}</td>
+                    <td className="px-4 py-2 ">{convertToLocalDate(order.booking.bookingDate)}</td>
                   </tr>
                   <tr>
                     <td className="px-4 py-2">Order Date :</td>
@@ -96,7 +95,6 @@ const orders : Order[] = useSelector((state: RootState) => state.order.orders);
                   </tr>
                 </tbody>
               </table>
-            </div>
           </div>
         </div>
               </Link>

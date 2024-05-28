@@ -34,8 +34,7 @@ const ViewOrders = () => {
   };
 
 
-  const getStatusString = (value: number, isAccepted: boolean): string => {
-    if (isAccepted === false) return "Not Accepted";
+  const getStatusString = (value: number): string => {
     switch (value) {
       case 0:
         return "Placed";
@@ -46,7 +45,9 @@ const ViewOrders = () => {
       case 3:
         return "Delivered";
       case 4:
-        return "Rejected";
+        return "Staff Rejected";
+      case 5:
+          return "Rejected";
       default:
         return "";
     }
@@ -173,9 +174,9 @@ const ViewOrders = () => {
                         </td>
                         <td className="p-1 border border-b border-gray-300 text-center">
                         <span className={`rounded px-2 py-1 ${
-                            order.isStaffAccepted===null || order.isStaffAccepted ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                            order.isStaffAccepted===null  ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
                           }`}>
-                            {getStatusString(order.orderStatus, order.isStaffAccepted)}
+                            {getStatusString(order.orderStatus)}
                           </span>
                         </td>
 

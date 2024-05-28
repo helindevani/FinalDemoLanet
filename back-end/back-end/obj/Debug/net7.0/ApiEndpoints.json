@@ -453,6 +453,16 @@
   },
   {
     "ContainingType": "back_end.Controllers.BookingsController",
+    "Method": "GetLatestBookingDetails",
+    "RelativePath": "api/Bookings/BookingDetails",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "back_end.Controllers.BookingsController",
     "Method": "CreateCheckoutSession",
     "RelativePath": "api/Bookings/checkout",
     "HttpMethod": "POST",
