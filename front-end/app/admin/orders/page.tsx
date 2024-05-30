@@ -72,7 +72,7 @@ const ViewOrders = () => {
         <div className="w-auto">
           <div className="bg-white shadow-md rounded px-8 pt-14 pb-[15px] m-10 w-auto h-auto ">
           <div className="flex justify-between items-center pb-2">
-              <div className="flex justify-between items-center">
+            
                 <div className="dataTables_length">
                   <label className="mr-3">
                     Show{" "}
@@ -97,18 +97,6 @@ const ViewOrders = () => {
                       placeholder=""
                       value={search}
                       onChange={(e)=>(setSearch(e.target.value))}
-                    />
-                  </label>
-                </div>
-              </div>
-                <div id="myTable_filter" className="dataTables_filter">
-                  <label className="flex items-center">
-                    <span className="mr-1">Search:</span>
-                    <input
-                      type="search"
-                      className="border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
-                      placeholder=""
-                      aria-controls="myTable"
                     />
                   </label>
                 </div>

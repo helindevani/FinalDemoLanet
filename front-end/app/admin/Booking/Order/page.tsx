@@ -32,7 +32,7 @@ const Order: React.FC = () => {
       const decodedToken = JSON.parse(atob(token.split(".")[1]));
       const userId = decodedToken.sub;
       axios
-        .get(`http://localhost:5057/api/Bookings/${userId}`, {
+        .get(`http://localhost:5057/api/Bookings/User`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,

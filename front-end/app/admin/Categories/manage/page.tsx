@@ -133,7 +133,7 @@ const ViewCategories = () => {
                         <td className="p-3 border-gray-300 flex justify-end">
                           <div className="m-1">
                             <Link
-                              href={`/admin/Categories/${category.categoryId}`}
+                              href={`/admin/categories/${category.categoryId}`}
                               className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center"
                             >
                               <FaEdit />

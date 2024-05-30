@@ -28,7 +28,10 @@ export const fetchCategories = createAsyncThunk<
   { state: any }
 >("category/fetchCategories", async ({ page, pageSize, search = "" }) => {
   const token = getToken();
-  const response = await axios.get<{ data: Category[]; totalCount: number }>(
+  const response = await axios.get<{
+    pagedCategories: Category[];
+    totalCategories: number;
+  }>(
     apiUrl,
     {
       headers: {
@@ -38,7 +41,10 @@ export const fetchCategories = createAsyncThunk<
       params: { page, pageSize, search },
     }
   );
-  return response.data;
+  return {
+    data: response.data.pagedCategories,
+    totalCount: response.data.totalCategories,
+  };
 });
 
 export const addCategory = createAsyncThunk<Category, Category>(

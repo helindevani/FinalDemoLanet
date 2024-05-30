@@ -39,7 +39,10 @@ export const fetchProducts = createAsyncThunk<
   { state: any }
 >("product/fetchProducts", async ({ page, pageSize, search = "" }) => {
   const token = getToken();
-  const response = await axios.get<{ data: Product[]; totalCount: number }>(
+  const response = await axios.get<{
+    pagedProducts: Product[];
+    totalProducts: number;
+  }>(
     apiUrl,
     {
       headers: {
@@ -49,7 +52,10 @@ export const fetchProducts = createAsyncThunk<
       params: { page, pageSize, search },
     }
   );
-  return response.data;
+  return {
+    data: response.data.pagedProducts,
+    totalCount: response.data.totalProducts,
+  };
 });
 
 export const addProduct = createAsyncThunk<Product, Product>(

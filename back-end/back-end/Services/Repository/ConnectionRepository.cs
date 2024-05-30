@@ -31,28 +31,48 @@ namespace back_end.Repositories
             return await _context.Connections.ToListAsync();
         }
 
-        public async Task<IEnumerable<Connection>> GetConnectionsByStatusAsync(string status)
+        public async Task<PagedConnectionsResult<Connection>> GetConnectionsByStatusAsync(string status, int page, int pageSize, string search = null)
         {
+            IQueryable<Connection> query = _context.Connections
+    .Include(r => r.Product)
+    .Include(r => r.Product.Brand);
+
             switch (status)
             {
                 case "New":
-                    return await _context.Connections.Include(r => r.Product).Include(r => r.Product.Brand)
-                        .Where(r => r.Status == ConnectionStatus.Pending)
-                        .ToListAsync();
+                    query = query.Where(r => r.Status == ConnectionStatus.Pending);
+                    break;
 
                 case "Approve":
-                    return await _context.Connections.Include(r => r.Product).Include(r => r.Product.Brand)
-                        .Where(r => r.Status == ConnectionStatus.Approved)
-                        .ToListAsync();
+                    query = query.Where(r => r.Status == ConnectionStatus.Approved);
+                    break;
 
                 case "Reject":
-                    return await _context.Connections.Include(r => r.Product).Include(r => r.Product.Brand)
-                        .Where(r => r.Status == ConnectionStatus.Rejected)
-                        .ToListAsync();
+                    query = query.Where(r => r.Status == ConnectionStatus.Rejected);
+                    break;
 
                 default:
-                    return null; 
+                    return null;
             }
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                var searchLower = search.ToLower();
+                query = query.Where(r => r.RationCardNumber.ToLower().Contains(searchLower));
+            }
+
+            var totalConnections = await query.CountAsync();
+
+            var pagedConnections = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedConnectionsResult<Connection>
+            {
+                PagedConnections = pagedConnections,
+                TotalConnections = totalConnections
+            };
         }
 
         public async Task<Connection> UpdateConnectionAsync(string id, Connection updatedConnection)

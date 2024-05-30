@@ -55,7 +55,10 @@ export const fetchBookings = createAsyncThunk<
   'booking/fetchBookings',
   async ({ page, pageSize, history,search="" }) => {
     const token = getToken();
-    const response = await axios.get<{ data: Booking[]; totalCount: number }>(
+    const response = await axios.get<{
+      pagedBookings: Booking[];
+      totalBookings: number;
+    }>(
       `${apiBooking}`,
       {
         headers: {
@@ -65,7 +68,10 @@ export const fetchBookings = createAsyncThunk<
         params: { page, pageSize, history ,search},
       }
     );
-    return response.data;
+    return {
+      data: response.data.pagedBookings,
+      totalCount: response.data.totalBookings,
+    };
   }
 );
 

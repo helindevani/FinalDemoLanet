@@ -19,9 +19,28 @@ namespace back_end.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Category>> GetCategories()
+        public async Task<PagedCategoryResult<Category>> GetCategories(int page, int pageSize, string search = null)
         {
-            return await _context.Categories.ToListAsync();
+            IQueryable<Category> query = _context.Categories;
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                var searchLower = search.ToLower();
+                query = query.Where(category => category.CategoryName.ToLower().Contains(searchLower));
+            }
+
+            var totalCategories = await query.CountAsync();
+
+            var pagedCategories = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedCategoryResult<Category>
+            {
+                PagedCategories = pagedCategories,
+                TotalCategories = totalCategories
+            };
         }
 
         public async Task<Category> UpdateCategory(Guid id, CategoryDTO categoryDTO)

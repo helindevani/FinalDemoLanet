@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace back_end.Repositories
 {
+    public class PagedConnectionsResult<T>
+    {
+        public List<T> PagedConnections { get; set; }
+        public int TotalConnections { get; set; }
+    }
     public interface IConnectionRepository
     {
         Task<IEnumerable<Connection>> GetConnectionsAsync();
-        Task<IEnumerable<Connection>> GetConnectionsByStatusAsync(string status);
+        Task<PagedConnectionsResult<Connection>> GetConnectionsByStatusAsync(string status, int page, int pageSize, string search = null);
         Task<Connection> UpdateConnectionAsync(string id, Connection updatedConnection);
         Task<Connection> CreateConnectionAsync(ConnectionDTO connectionDTO);
         Task<bool> DeleteConnectionAsync(string id);

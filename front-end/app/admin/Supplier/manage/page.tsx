@@ -66,7 +66,7 @@ const ViewSupplier = () => {
           <div className="w-auto">
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-15 m-10 w-auto h-auto">
               <div className="mb-20">
-                <a href="/admin/Supplier">
+                <a href="/admin/supplier">
                   <button className="bg-purple-900 hover:bg-purple-950 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
                     Add Supplier
                   </button>
@@ -117,19 +117,19 @@ const ViewSupplier = () => {
                     {brands.map((brand: any, index: any) => (
                       <tr
                         key={brand.brandId}
-                        className={`${index % 2 === 0 ? 'bg-gray-300' : 'bg-white'} border-b border border-gray-300 bg-gray-100`}
+                        className="border-b border border-gray-300 bg-gray-100"
                       >
-                        <td className="p-3 border border-b border-gray-300">{index + 1}</td>
-                        <td className="p-3 border border-b border-gray-300">{brand.brandName}</td>
-                        <td className="p-3 border border-b border-gray-300">
+                        <td className="p-3 border border-b border-gray-300 justify-center">{index + 1}</td>
+                        <td className="p-3 border border-b border-gray-300 justify-center">{brand.brandName}</td>
+                        <td className="p-3 border border-b border-gray-300 justify-center">
                           <span className="rounded bg-green-500 text-white px-2 py-1">
                             {getStatusString(brand.brandStatus)}
                           </span>
                         </td>
-                        <td className="p-3 border-gray-300 flex justify-end">
+                        <td className="p-3 border-gray-300 flex justify-center">
                           <div className="m-1">
                             <Link
-                              href={`/admin/Supplier/${brand.brandId}`}
+                              href={`/admin/supplier/${brand.brandId}`}
                               className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center"
                             >
                               <FaEdit />

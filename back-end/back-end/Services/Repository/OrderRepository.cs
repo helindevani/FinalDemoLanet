@@ -19,13 +19,13 @@ namespace back_end.Services.Repository
             _context = context;
             _emailSenderService = emailSenderService;
         }
-        public async Task<IEnumerable<Order>> GetOrders(bool history)
+        public async Task<PagedOrdersResult<Order>> GetOrders(bool history, int page, int pageSize, string search = null)
         {
             IQueryable<Order> ordersQuery = _context.Orders
-                .Include(r => r.Booking)
-                .Include(p => p.Booking.Product)
-                .Include(p => p.Booking.Product.Brand)
-                .Include(s => s.Staff);
+         .Include(r => r.Booking)
+         .Include(p => p.Booking.Product)
+         .Include(p => p.Booking.Product.Brand)
+         .Include(s => s.Staff);
 
             if (history)
             {
@@ -36,7 +36,18 @@ namespace back_end.Services.Repository
                 ordersQuery = ordersQuery.Where(r => r.OrderStatus == OrderStatus.Placed || r.OrderStatus == OrderStatus.Confirmed || r.OrderStatus == OrderStatus.OnTheWay || r.OrderStatus == OrderStatus.StaffRejected);
             }
 
-            return await ordersQuery.ToListAsync();
+            var totalOrders = await ordersQuery.CountAsync();
+
+            var pagedOrders = await ordersQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedOrdersResult<Order>
+            {
+                PagedOrders = pagedOrders,
+                TotalOrders = totalOrders
+            };
         }
 
         public async Task<Order> GetOrder(Guid id)
@@ -56,7 +67,7 @@ namespace back_end.Services.Repository
         }
 
 
-        public async Task<IEnumerable<Order>> GetOrdersByStaff(bool history, ClaimsPrincipal user)
+        public async Task<PagedOrdersResult<Order>> GetOrdersByStaff(bool history, ClaimsPrincipal user, int page, int pageSize, string search = null)
         {
             var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
@@ -68,22 +79,33 @@ namespace back_end.Services.Repository
             var userId = userIdClaim.Value;
 
             IQueryable<Order> ordersQuery = _context.Orders
-                .Include(r => r.Booking)
-                    .ThenInclude(b => b.Product)
-                        .ThenInclude(p => p.Brand)
-                .Include(s => s.Staff)
-                .Where(o => o.StaffId.ToString() == userId);
+        .Include(r => r.Booking)
+            .ThenInclude(b => b.Product)
+                .ThenInclude(p => p.Brand)
+        .Include(s => s.Staff)
+        .Where(o => o.StaffId.ToString() == userId);
 
-            if (history)
-            {
-                ordersQuery = ordersQuery.Where(o => o.OrderStatus == OrderStatus.Delivered);
-            }
-            else
-            {
-                ordersQuery = ordersQuery.Where(o => o.OrderStatus != OrderStatus.Delivered && o.OrderStatus != OrderStatus.StaffRejected);
-            }
+    if (history)
+    {
+        ordersQuery = ordersQuery.Where(o => o.OrderStatus == OrderStatus.Delivered);
+    }
+    else
+    {
+        ordersQuery = ordersQuery.Where(o => o.OrderStatus != OrderStatus.Delivered && o.OrderStatus != OrderStatus.StaffRejected);
+    }
 
-            return await ordersQuery.ToListAsync();
+    var totalOrders = await ordersQuery.CountAsync();
+
+    var pagedOrders = await ordersQuery
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
+
+    return new PagedOrdersResult<Order>
+    {
+        PagedOrders = pagedOrders,
+        TotalOrders = totalOrders
+    };
         }
 
         public async Task<Order> UpdateOrder(Guid id, OrderDTO orderDTO)

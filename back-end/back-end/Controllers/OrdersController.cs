@@ -32,9 +32,9 @@ namespace back_end.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders([FromQuery]bool history)
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrders([FromQuery]bool history, int page, int pageSize, string search = null)
         {
-          var result = await _orderRepository.GetOrders(history);
+          var result = await _orderRepository.GetOrders(history,page,pageSize,search);
             return Ok(result);
         }
 
@@ -45,9 +45,9 @@ namespace back_end.Controllers
         }
 
         [HttpGet("Staff")]
-        public async Task<ActionResult<Order>> GetOrderByStaff([FromQuery] bool history)
+        public async Task<ActionResult<Order>> GetOrderByStaff([FromQuery] bool history, int page, int pageSize, string search = null)
         {
-            var result = await _orderRepository.GetOrdersByStaff(history, User);
+            var result = await _orderRepository.GetOrdersByStaff(history, User,page,pageSize,search);
 
             return Ok(result);
         }

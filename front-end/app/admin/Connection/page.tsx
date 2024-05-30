@@ -102,7 +102,7 @@ const NewConnection = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {consumers.map((consumer: any, index) => ( 
+                    {consumers?.map((consumer: any, index) => ( 
                       <tr
                         key={consumer.lpgNo}
                         className="border-b border border-gray-300 bg-gray-100"

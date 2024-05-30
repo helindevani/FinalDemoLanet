@@ -95,7 +95,10 @@ export const fetchOrdersAdmin = createAsyncThunk<
   { page: number; pageSize: number; history: boolean ;search?: string}
 >("order/fetchOrdersAdmin", async ({ page, pageSize, history,search = "" }) => {
   const token = getToken();
-  const response = await axios.get<{ data: Order[]; totalCount: number }>(
+  const response = await axios.get<{
+    pagedOrders: Order[];
+    totalOrders: number;
+  }>(
     `${apiUrl}`,
     {
       headers: {
@@ -105,7 +108,10 @@ export const fetchOrdersAdmin = createAsyncThunk<
       params: { page, pageSize, history ,search},
     }
   );
-  return response.data;
+  return {
+    data: response.data.pagedOrders,
+    totalCount: response.data.totalOrders,
+  };
 });
 
 export const fetchOrdersStaff = createAsyncThunk<
@@ -113,7 +119,10 @@ export const fetchOrdersStaff = createAsyncThunk<
   { page: number; pageSize: number; history: boolean ;search?: string }
 >("order/fetchOrdersStaff", async ({ page, pageSize, history ,search = "" }) => {
   const token = getToken();
-  const response = await axios.get<{ data: Order[]; totalCount: number }>(
+  const response = await axios.get<{
+    pagedOrders: Order[];
+    totalOrders: number;
+  }>(
     `${apiUrl}/Staff`,
     {
       headers: {
@@ -123,7 +132,10 @@ export const fetchOrdersStaff = createAsyncThunk<
       params: { page, pageSize, history ,search},
     }
   );
-  return response.data;
+  return {
+    data: response.data.pagedOrders,
+    totalCount: response.data.totalOrders,
+  };
 });
 
 export const staffActionOrder = createAsyncThunk<

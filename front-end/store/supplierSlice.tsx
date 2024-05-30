@@ -20,25 +20,34 @@ const apiUrl = 'http://localhost:5057/api/Brands';
 
 const getToken = () => Cookies.get('token');
 
-export const fetchBrands = createAsyncThunk<{ data: Brand[]; totalCount: number },
-{ page: number; pageSize: number; search?: string },
-{ state: any }>(
-  'Brand/fetchBrands',
+export const fetchBrands = createAsyncThunk<
+  { data: Brand[]; totalCount: number },
+  { page: number; pageSize: number; search?: string },
+  { state: any }
+>(
+  "Brand/fetchBrands",
   async (
     { page, pageSize, search = "" },
     { getState }
   ) => {
     const token = getToken();
-    const response = await axios.get<{ data: Brand[]; totalCount: number }>(apiUrl, {
+    const response = await axios.get<{
+      pagedBrands: Brand[];
+      totalBrands: number;
+    }>(apiUrl, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       params: { page, pageSize, search },
     });
-    return response.data;
+    return {
+      data: response.data.pagedBrands,
+      totalCount: response.data.totalBrands,
+    };
   }
 );
+
 
 export const addBrand = createAsyncThunk<Brand, Brand>(
   'Brand/addBrand',

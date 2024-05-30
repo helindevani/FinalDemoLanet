@@ -180,7 +180,7 @@ namespace back_end.Services.Repository
             return order;
         }
 
-        public async Task<PagedStaffResult<Booking>> GetBookingsAsync(bool history, int page, int pageSize, string search = null)
+        public async Task<PagedBookingResult<Booking>> GetBookingsAsync(bool history, int page, int pageSize, string search = null)
         {
             IQueryable<Booking> query = _context.Bookings
               .Include(r => r.Product)
@@ -208,7 +208,7 @@ namespace back_end.Services.Repository
                 .Take(pageSize)
                 .ToListAsync();
 
-            return new PagedStaffResult<Booking>
+            return new PagedBookingResult<Booking>
             {
                 PagedBookings = pagedBookings,
                 TotalBookings = totalBookings
