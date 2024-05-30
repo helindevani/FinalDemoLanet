@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateCategory } from "@/store/categorySlice";
 import { ToastError, ToastSuccess } from "@/components/ToastError";
 import { ToastContainer } from "react-toastify";
+import { getStatusString } from "@/components/Enums/EnumConverter";
 
 const EditCategory = () => {
   const [categoryName, setCategoryName] = useState<string>("");
@@ -57,21 +58,10 @@ const EditCategory = () => {
       const response = await dispatch(updateCategory({ categoryId, data }));
       console.log("Category Updated successfully:", response.payload);
       ToastSuccess("Category Updated Successfully!!");
-      router.push("/admin/Categories/ManageCategories");
+      router.push("/admin/categories/manage");
     } catch (error) {
       console.error("Error creating Category:", error);
       ToastError("Category Not Updated!!");
-    }
-  };
-
-  const getStatusString = (status: number) => {
-    switch (status) {
-      case 0:
-        return "Available";
-      case 1:
-        return "NotAvailable";
-      default:
-        return "";
     }
   };
 

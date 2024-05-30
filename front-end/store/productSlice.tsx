@@ -1,57 +1,64 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 type AppDispatch = (arg: any) => any;
 
- interface brand{
-  brandId:string;
-  brandName:string;
- }
+interface Brand {
+  brandId: string;
+  brandName: string;
+}
 
 export type Product = {
   productId: string;
   productName: string;
-  productImage:string;
-  brandId:string;
-  categoryId:string;
-  quantity:string;
-  unitPrice:string;
+  productImage: string;
+  brandId: string;
+  categoryId: string;
+  quantity: string;
+  unitPrice: string;
   status: string;
   createdBy: string;
-  brand:brand;
+  brand: Brand;
 };
 
-
 interface ProductState {
-    products: Product[];
+  products: Product[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
 }
 
-const apiUrl = 'http://localhost:5057/api/Products';
+const apiUrl = "http://localhost:5057/api/Products";
 
-const getToken = () => Cookies.get('token');
+const getToken = () => Cookies.get("token");
 
-export const fetchProducts = createAsyncThunk<Product[]>(
-  'product/fetchProducts',
-  async () => {
-    const token = getToken();
-    const response = await axios.get<Product[]>(apiUrl, {
+export const fetchProducts = createAsyncThunk<
+  { data: Product[]; totalCount: number },
+  { page: number; pageSize: number; search?: string },
+  { state: any }
+>("product/fetchProducts", async ({ page, pageSize, search = "" }) => {
+  const token = getToken();
+  const response = await axios.get<{ data: Product[]; totalCount: number }>(
+    apiUrl,
+    {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    });
-    return response.data;
-  }
-);
+      params: { page, pageSize, search },
+    }
+  );
+  return response.data;
+});
 
 export const addProduct = createAsyncThunk<Product, Product>(
-  'product/addProduct',
+  "product/addProduct",
   async (inputData) => {
     const token = getToken();
     const response = await axios.post<Product>(apiUrl, inputData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       },
     });
@@ -59,27 +66,27 @@ export const addProduct = createAsyncThunk<Product, Product>(
   }
 );
 
-export const updateProduct = createAsyncThunk<Product, { productId: string; data: any }>(
-  'product/updateProduct',
-  async ({data,productId}) => {
-    const token = getToken();
-    const response = await axios.put<Product>(`${apiUrl}/${productId}`, data, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  }
-);
+export const updateProduct = createAsyncThunk<
+  Product,
+  { productId: string; data: any }
+>("product/updateProduct", async ({ data, productId }) => {
+  const token = getToken();
+  const response = await axios.put<Product>(`${apiUrl}/${productId}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+});
 
 export const deleteProduct = createAsyncThunk<string, string>(
-  'product/deleteProduct',
+  "product/deleteProduct",
   async (productId) => {
     const token = getToken();
-    const response=await axios.delete(`${apiUrl}/${productId}`, {
+    await axios.delete(`${apiUrl}/${productId}`, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
@@ -88,22 +95,33 @@ export const deleteProduct = createAsyncThunk<string, string>(
 );
 
 const productSlice = createSlice({
-  name: 'product',
+  name: "product",
   initialState: {
     products: [] as Product[],
+    totalCount: 0,
+    page: 1,
+    pageSize: 5,
   } as ProductState,
-  reducers: {},
+  reducers: {
+    setPage: (state, action) => {
+      state.page = action.payload;
+    },
+    setPageSize: (state, action) => {
+      state.pageSize = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.products = action.payload;
+        state.products = action.payload.data;
+        state.totalCount = action.payload.totalCount;
       })
       .addCase(addProduct.fulfilled, (state, action) => {
         state.products.push(action.payload);
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
         const index = state.products.findIndex(
-          (product) => product.productId !== action.payload.productId
+          (product) => product.productId === action.payload.productId
         );
         if (index !== -1) {
           state.products[index] = action.payload;
@@ -116,5 +134,7 @@ const productSlice = createSlice({
       });
   },
 });
+
+export const { setPage, setPageSize } = productSlice.actions;
 
 export default productSlice.reducer;

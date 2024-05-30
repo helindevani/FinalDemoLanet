@@ -5,6 +5,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Cookies from 'js-cookie';
+import { getSubsidyStatus } from '@/components/Enums/EnumConverter';
 
 const NewConnection = () => {
   const [consumers, setConsumers] = useState([]);
@@ -20,17 +21,6 @@ const NewConnection = () => {
       .then(response => setConsumers(response.data))
       .catch(error => console.error('Error fetching data:', error));
   }, [token]);
-
-  const getSubsidyStatus = (value: boolean): string => {
-    switch (value) {
-        case true:
-            return "Yes";
-        case false:
-            return "No";
-        default:
-            return "";
-    }
-};
 
     return (
       <AdminSidebar>
@@ -174,12 +164,6 @@ const NewConnection = () => {
             </div>
           </div>
         </div>
-
-        
-
-        {/* <footer className="text-center text-sm text-gray-600 mt-8">
-                Author Name- Mayuri K. For any PHP, Codeignitor, Laravel OR Python work contact me at mayuri.infospace@gmail.com Visit website - www.mayurik.com
-            </footer> */}
       </div>
     </AdminSidebar>
     );

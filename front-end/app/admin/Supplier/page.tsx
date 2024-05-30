@@ -15,7 +15,7 @@ const AddSupplier = () => {
     const [error, setError] = useState<any>('');
     const router = useRouter();
     const dispatch = useDispatch<any>();
-
+      
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         const token = Cookies.get('token');
@@ -36,7 +36,7 @@ const AddSupplier = () => {
             setBrandName('');
             setBrandStatus('');
             ToastSuccess("Brand Added Successfully!!")
-            router.push("/admin/Supplier/ManageSupplier");
+            router.push("/admin/supplier/manage");
         } catch (error) {
             console.error('Error creating brand:', error);
             ToastError("Brand Not Added!!")

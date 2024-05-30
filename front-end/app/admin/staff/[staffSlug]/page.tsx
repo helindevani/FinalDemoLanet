@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastError, ToastSuccess } from "@/components/ToastError";
 import { ToastContainer } from "react-toastify";
 import { updateStaff } from "@/store/staffSlice";
+import { getStatusString } from "@/components/Enums/EnumConverter";
 
 const EditStaff = () => {
   const [name,setName]=useState<string>();
@@ -76,17 +77,6 @@ const EditStaff = () => {
     } catch (error) {
       console.error("Error Updating Staff:", error);
       ToastError("Staff Not Updated!!");
-    }
-  };
-
-  const getStatusString = (status: number) => {
-    switch (status) {
-      case 0:
-        return "Available";
-      case 1:
-        return "NotAvailable";
-      default:
-        return "";
     }
   };
 

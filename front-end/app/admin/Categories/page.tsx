@@ -34,7 +34,7 @@ const AddCategories = () => {
           const response = await dispatch(addCategory(data));
           console.log('Category created successfully:', response.payload);
           ToastSuccess("Category Added Successfully!!")
-          router.push("/admin/Categories/ManageCategories");
+          router.push("/admin/categories/manage");
       } catch (error) {
           console.error('Error creating brand:', error);
           ToastError("Category Not Added Successfully")

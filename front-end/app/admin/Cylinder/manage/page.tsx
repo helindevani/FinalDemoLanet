@@ -1,30 +1,40 @@
 "use client";
 import AdminSidebar from "@/components/AdminSidebar";
-import { deleteProduct, fetchProducts, Product } from "@/store/productSlice";
+import { deleteProduct, fetchProducts, setPage, setPageSize, Product } from "@/store/productSlice";
 import { useSelector, useDispatch } from "react-redux";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { ToastError, ToastSuccess } from "@/components/ToastError";
 import { ToastContainer } from "react-toastify";
 import Link from "next/link";
+import { getStatusString } from "@/components/Enums/EnumConverter";
+import debounce from "lodash.debounce";
+import { AppDispatch } from "@/store";
 
 const ViewCylinder = () => {
-  const dispatch = useDispatch<any>();
-
-  const products: Product[] = useSelector(
-    (state: any) => state.product.products
+  const dispatch = useDispatch<AppDispatch>();
+  const [search, setSearch] = useState("");
+  const { products, totalCount, page, pageSize } = useSelector(
+    (state: any) => state.product
   );
 
   const token = Cookies.get("token");
 
+  const fetchData = useCallback(
+    debounce((page, pageSize,search) => {
+      dispatch(fetchProducts({ page, pageSize ,search}));
+    }, 1500),
+    [dispatch]
+  );
+
   useEffect(() => {
-    return () => dispatch(fetchProducts());
-  }, [dispatch, token]);
+    fetchData(page, pageSize,search);
+  }, [dispatch, token, page, pageSize, fetchData,search]);
 
   const handleDeleteProduct = (productId: string) => {
-    if (window.confirm("Are you sure to delete this category?")) {
+    if (window.confirm("Are you sure to delete this product?")) {
       try {
         dispatch(deleteProduct(productId));
         ToastSuccess("Product Deleted Successfully!!");
@@ -35,16 +45,7 @@ const ViewCylinder = () => {
     }
   };
 
-  const getStatusString = (status: number) => {
-    switch (status) {
-      case 0:
-        return "Available";
-      case 1:
-        return "NotAvailable";
-      default:
-        return "";
-    }
-  };
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
     <AdminSidebar>
@@ -67,7 +68,7 @@ const ViewCylinder = () => {
           <div className="w-auto">
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-15 m-10 w-auto h-auto">
               <div className="mb-20">
-                <a href="/admin/Cylinder">
+                <a href="/admin/cylinder">
                   <button className="bg-purple-900 hover:bg-purple-950 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
                     Add Cylinder
                   </button>
@@ -80,13 +81,12 @@ const ViewCylinder = () => {
                     Show{" "}
                     <select
                       name="myTable_length"
-                      aria-controls="myTable"
+                      value={pageSize}
+                      onChange={(e) => dispatch(setPageSize(Number(e.target.value)))}
                       className="form-select border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
                     >
+                      <option value="5">5</option>
                       <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="50">50</option>
-                      <option value="100">100</option>
                     </select>{" "}
                     entries
                   </label>
@@ -98,7 +98,8 @@ const ViewCylinder = () => {
                       type="search"
                       className="border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
                       placeholder=""
-                      aria-controls="myTable"
+                      value={search}
+                      onChange={(e)=>(setSearch(e.target.value))}
                     />
                   </label>
                 </div>
@@ -200,17 +201,27 @@ const ViewCylinder = () => {
                   </tbody>
                 </table>
                 <div className="flex justify-between items-center">
-                  <div>Showing 1 Of 1 Entries</div>
+                  <div>
+                    Showing {page} of {totalPages} Pages
+                  </div>
                   <div className="flex p-3">
-                    <div className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10">
+                    <button
+                      className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10"
+                      disabled={page <= 1}
+                      onClick={() => dispatch(setPage(page - 1))}
+                    >
                       Previous
-                    </div>
+                    </button>
                     <div className="flex-1 border text-center text-white p-2 bg-blue-600 justify-between items-center w-20 h-10">
-                      1
+                      {page}
                     </div>
-                    <div className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10">
+                    <button
+                      className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10"
+                      disabled={page >= totalPages}
+                      onClick={() => dispatch(setPage(page + 1))}
+                    >
                       Next
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>

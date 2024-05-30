@@ -36,7 +36,7 @@ export default function PersonalDetails({ onChange } : changeType) {
             htmlFor="FirstName"
             className="block text-sm font-semibold leading-6 text-gray-900"
           >
-            First Name
+            First Name <span className="text-red-500">*</span>
           </label>
           <div className="mt-2.5">
             <input
@@ -53,7 +53,7 @@ export default function PersonalDetails({ onChange } : changeType) {
             htmlFor="LastName"
             className="block text-sm font-semibold leading-6 text-gray-900"
           >
-            Last Name
+            Last Name <span className="text-red-500">*</span>
           </label>
           <div className="mt-2.5">
             <input
@@ -72,7 +72,7 @@ export default function PersonalDetails({ onChange } : changeType) {
               htmlFor="Gender"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
-              Gender
+              Gender <span className="text-red-500">*</span>
             </label>
             <div className="mt-2.5">
               <select
@@ -94,7 +94,7 @@ export default function PersonalDetails({ onChange } : changeType) {
               htmlFor="MaritalStatus"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
-              Marital Status
+              Marital Status <span className="text-red-500">*</span>
             </label>
             <div className="mt-2.5">
               <select
@@ -119,7 +119,7 @@ export default function PersonalDetails({ onChange } : changeType) {
               htmlFor="Dob"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
-              Date Of Birth
+              Date Of Birth <span className="text-red-500">*</span>
             </label>
             <div className="mt-2.5">
               <input
@@ -137,7 +137,7 @@ export default function PersonalDetails({ onChange } : changeType) {
               htmlFor="Nationality"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
-              Nationality
+              Nationality <span className="text-red-500">*</span>
             </label>
             <div className="mt-2.5">
               <select
@@ -156,7 +156,7 @@ export default function PersonalDetails({ onChange } : changeType) {
         </div>
 
         <div className="col-span-2 border p-4">
-          <h2>Select Relative</h2>
+          <h2>Select Relative <span className="text-red-500">*</span></h2>
           <div className="flex items-center">
             <input
               type="radio"
@@ -185,7 +185,7 @@ export default function PersonalDetails({ onChange } : changeType) {
                 htmlFor="RelatedFirstName"
                 className="block text-sm font-semibold leading-6 text-gray-900"
               >
-                First Name
+                First Name <span className="text-red-500">*</span>
               </label>
               <div className="mt-2.5">
                 <input
@@ -203,7 +203,7 @@ export default function PersonalDetails({ onChange } : changeType) {
                 htmlFor="RelatedLastName"
                 className="block text-sm font-semibold leading-6 text-gray-900"
               >
-                Last Name
+                Last Name <span className="text-red-500">*</span>
               </label>
               <div className="mt-2.5">
                 <input
@@ -224,7 +224,7 @@ export default function PersonalDetails({ onChange } : changeType) {
             htmlFor="Address"
             className="block text-sm font-semibold leading-6 text-gray-900"
           >
-            Address
+            Address <span className="text-red-500">*</span>
           </label>
           <div className="mt-2.5">
             <textarea
@@ -243,7 +243,7 @@ export default function PersonalDetails({ onChange } : changeType) {
               htmlFor="City"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
-              City/Town/Village
+              City/Town/Village <span className="text-red-500">*</span>
             </label>
             <div className="mt-2.5">
               <input
@@ -261,7 +261,7 @@ export default function PersonalDetails({ onChange } : changeType) {
               htmlFor="PinCode"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
-              Pin Code
+              Pin Code <span className="text-red-500">*</span>
             </label>
             <div className="mt-2.5">
               <input
@@ -281,7 +281,7 @@ export default function PersonalDetails({ onChange } : changeType) {
               htmlFor="District"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
-              District
+              District <span className="text-red-500">*</span>
             </label>
             <div className="mt-2.5">
               <input
@@ -299,7 +299,7 @@ export default function PersonalDetails({ onChange } : changeType) {
               htmlFor="State"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
-              State
+              State <span className="text-red-500">*</span>
             </label>
             <div className="mt-2.5">
               <input
@@ -314,35 +314,12 @@ export default function PersonalDetails({ onChange } : changeType) {
           </div>
         </div>
         <div className="flex ">
-          {/* <div className="pr-4 w-1/2">
-            <label
-              htmlFor="BrandId"
-              className="block text-sm font-semibold leading-6 text-gray-900"
-            >
-              Supplier
-            </label>
-            <div className="mt-2.5">
-              <select
-                className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="BrandId"
-                name="BrandId"
-                onChange={handleChange}
-              >
-                <option value="">--------SELECT---------</option>
-                {brands.map((supplier: any) => (
-                      <option key={supplier.brandId} value={supplier.brandId}>
-                        {supplier.brandName}
-                      </option>
-                    ))}
-              </select>
-            </div>
-          </div> */}
           <div className="w-1/2">
             <label
               htmlFor="ProductId"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
-              Product
+              Product <span className="text-red-500">*</span>
             </label>
             <div className="mt-2.5">
               <select
@@ -370,7 +347,7 @@ export default function PersonalDetails({ onChange } : changeType) {
               htmlFor="EmailId"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
-              Email Id
+              Email Id <span className="text-red-500">*</span>
             </label>
             <div className="mt-2.5">
               <input
@@ -388,7 +365,7 @@ export default function PersonalDetails({ onChange } : changeType) {
               htmlFor="PhoneNumber"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
-              Mobaile Number
+              Mobaile Number <span className="text-red-500">*</span>
             </label>
             <div className="mt-2.5">
               <input

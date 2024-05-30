@@ -10,9 +10,10 @@ import { ToastContainer } from "react-toastify";
 import { Product, updateProduct } from "@/store/productSlice";
 import { Brand, fetchBrands } from "@/store/supplierSlice";
 import Image from "next/image";
+import { getStatusString } from "@/components/Enums/EnumConverter";
 
 interface Formdata {
-    ProductId : string;
+  ProductId : string;
   ProductName: string;
   ProductImage: File | null;
   BrandId: string;
@@ -53,8 +54,8 @@ const EditProduct = () => {
   const token = Cookies.get("token");
 
   useEffect(() => {
-    dispatch(fetchBrands());
-    dispatch(fetchCategories());
+    dispatch(fetchBrands({page:100,pageSize:100}));
+    dispatch(fetchCategories({page:100,pageSize:100}));
   }, [dispatch, token]);
 
   useEffect(() => {
@@ -127,27 +128,15 @@ const EditProduct = () => {
             formDataToSend.append("ProductImage","")
         }
       }
-      console.log(formDataToSend.get("Quantity"));
-      console.log(formDataToSend.get("quantity"));
+
       const response = await dispatch(updateProduct({productId,data:formDataToSend}));
 
       console.log("Product Updated successfully:", response.payload);
       ToastSuccess("Product Updated Successfully!!");
-      router.push("/admin/Cylinder/ManageCylinders");
+      router.push("/admin/cylinder/manage");
     } catch (error) {
       console.error("Error creating brand:", error);
       ToastError("Product Not Updated Successfully");
-    }
-  };
-
-  const getStatusString = (status: number) => {
-    switch (status) {
-      case 0:
-        return "Available";
-      case 1:
-        return "NotAvailable";
-      default:
-        return "";
     }
   };
 

@@ -15,10 +15,6 @@ import { IoReceiptSharp } from "react-icons/io5";
 const AdminSidebar = ({ children }: any) => {
   const [expandedMenu, setExpandedMenu] = useState("");
 
-  useEffect(() => {
-    console.log("Expanded menu:", expandedMenu);
-  }, [expandedMenu]);
-
   const toggleSubMenu = (menuId: string) => {
     setExpandedMenu(menuId === expandedMenu ? "" : menuId);
   };
@@ -133,14 +129,7 @@ const AdminSidebar = ({ children }: any) => {
                         Manage Supplier
                       </a>
                     </li>
-                    <li>
-                      <a
-                        href="/admin/supplier/import"
-                        className="flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                      >
-                        Import Supplier
-                      </a>
-                    </li>
+                    
                   </ul>
                 )}
               </li>

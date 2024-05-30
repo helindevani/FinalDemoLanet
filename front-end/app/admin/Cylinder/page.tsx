@@ -68,8 +68,8 @@ const AddProduct = () => {
   const token = Cookies.get("token");
 
   useEffect(() => {
-    dispatch(fetchBrands());
-    dispatch(fetchCategories());
+    dispatch(fetchBrands({page:100,pageSize:100}));
+    dispatch(fetchCategories({page:100,pageSize:100}));
   }, [dispatch, token]);
 
   const handleSubmit = async (e: any) => {
@@ -101,7 +101,7 @@ const AddProduct = () => {
 
           console.log("Product Added successfully:", response.payload);
             ToastSuccess("Product Added Successfully!!");
-            router.push('/admin/Cylinder/ManageCylinders')
+            router.push('/admin/cylinder/manage')
        
       } catch (error) {
         console.error("Error creating brand:", error);

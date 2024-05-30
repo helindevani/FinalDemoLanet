@@ -1,185 +1,98 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Identity;
-using back_end.Domain.Entities;
+﻿using back_end.DatabaseContext;
 using back_end.Domain.Identity;
-using back_end.DTO;
+using back_end.Enums;
 using back_end.ServiceContracts;
-using back_end.ServiceContracts.Repository;
-using Azure;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
-namespace back_end.Services.Repository
+namespace back_end.Services
 {
     public class UserRepository : IUserRepository
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IJwtService _jwtService;
-        private readonly IConfiguration _configuration;
         private readonly IEmailSenderService _emailService;
 
-        public UserRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IJwtService jwtService, IConfiguration configuration, IEmailSenderService emailSender)
+        public UserRepository(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IEmailSenderService emailService)
         {
+            _context = context;
             _userManager = userManager;
-            _signInManager = signInManager;
-            _jwtService = jwtService;
-            _configuration = configuration;
-            _emailService = emailSender;
+            _emailService = emailService;
         }
 
-        public async Task<bool> EmailCheckRequest(string email)
+        public async Task<IActionResult> AppliedNewConnection(ClaimsPrincipal user)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
-            if (user == null)
+            if (userIdClaim == null)
             {
-                return true;
+                return new UnauthorizedObjectResult("User ID not found in token.");
             }
-            return false;
-        }
 
-        public async Task<ForgotPasswordRequest> ForgotPasswordRequest(ForgotPasswordRequest request)
-        {
-            var user = await _userManager.FindByEmailAsync(request.Email);
-            if (user == null)
-                throw new InvalidOperationException("User not found");
+            var userId = userIdClaim.Value;
+            var appUser = await _userManager.FindByIdAsync(userId);
 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            var resetLink = $"{_configuration["AppBaseUrl"]}/resetpassword?email={request.Email}&token={WebUtility.UrlEncode(token)}";
-
-            var message = $"Please reset your password by clicking <a href='{resetLink}'>here</a>.";
-
-            await _emailService.SendEmailAsync(request.Email, "reset password Link", message);
-
-            return request;
-        }
-
-        public async Task<bool> ResetPasswordRequest(ResetPasswordRequestData request)
-        {
-            var user = await _userManager.FindByEmailAsync(request.Email);
-
-            if (user == null)
-                throw new InvalidOperationException("User not found");
-
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
-
-            if (result.Succeeded)
-                return true;
-            else
-                throw new InvalidOperationException("Failed to reset password");
-        }
-
-        public async Task<AuthenticationResponse> UserLoginRequest(LoginDTO loginDTO)
-        {
-            var result = await _signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, isPersistent: false, lockoutOnFailure: false);
-
-            if (result.Succeeded)
+            if (appUser.IsHasConnection)
             {
-                var user = await _userManager.FindByEmailAsync(loginDTO.Email);
+                var connectionForm = _context.Connections.FirstOrDefault(r => r.UserId.ToString() == userId);
 
-                if (user == null)
-                    throw new InvalidOperationException("User not found");
-
-                var roles = await _userManager.GetRolesAsync(user);
-
-                if (roles == null)
-                    throw new InvalidOperationException("Something went wrong");
-
-                var authenticationResponse = _jwtService.CreateJwtToken(user, roles.ToList());
-
-                await _userManager.UpdateAsync(user);
-
-                return authenticationResponse;
-            }
-            else
-            {
-                throw new InvalidOperationException("Invalid email or password");
-            }
-        }
-
-        public async Task<bool> UserLogoutRequest()
-        {
-            await _signInManager.SignOutAsync();
-
-            return true;
-        }
-
-        public async Task<RegisterationResponse> UserRegisterRequest(RegisterDTO registerDTO)
-        {
-            var response = new RegisterationResponse();
-
-            var user = new ApplicationUser
-            {
-                Email = registerDTO.Email,
-                UserName = registerDTO.Email,
-                Name = registerDTO.Name,
-                PhoneNumber=registerDTO.MobaileNo
-            };
-
-            var result = await _userManager.CreateAsync(user, registerDTO.Password);
-
-            if (result.Succeeded)
-            {
-                await _userManager.AddToRolesAsync(user, registerDTO.Roles);
-                response.Success = true;
-                response.Message = "User registered successfully.";
-            }
-            else
-            {
-                response.Success = false;
-                response.Message = "User registration failed.";
-                response.Errors = new List<string>();
-                foreach (var error in result.Errors)
+                if (connectionForm.Status == ConnectionStatus.Pending)
                 {
-                    response.Errors.Add(error.Description);
+                    return new OkObjectResult(new
+                    {
+                        Status = "Pending",
+                        LPGNo = connectionForm.LpgNo
+                    });
+                }
+                else if (connectionForm.Status == ConnectionStatus.Rejected)
+                {
+                    return new OkObjectResult(new
+                    {
+                        Status = "Rejected",
+                        LPGNo = connectionForm.LpgNo
+                    });
+                }
+                else
+                {
+                    return new OkObjectResult(new
+                    {
+                        Status = "Success",
+                        LPGNo = connectionForm.LpgNo
+                    });
                 }
             }
 
-            return response;
-
+            return new NoContentResult();
         }
 
-        public async Task<bool> AddAdminRoleAsync(Guid userId)
+        public async Task<IActionResult> LinkConnection(Guid userId, string LpgNo)
         {
-            try
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var connection = _context.Connections.FirstOrDefault(r => r.LpgNo == LpgNo);
+
+            if (user.IsHasConnectionLinked)
             {
-                var user = await _userManager.FindByIdAsync(userId.ToString());
-                if (user == null)
+                return new BadRequestObjectResult("User was already linked to an account with the system.");
+            }
+
+            if (connection != null)
+            {
+                if (user.Id == connection.UserId && connection.Status == ConnectionStatus.Approved)
                 {
-                    return false; // User not found
+                    user.IsHasConnectionLinked = true;
+
+                    var message = $"Your LPG Connection No {connection.LpgNo} is linked with {user.Name} account successfully.";
+                    await _emailService.SendEmailAsync(user.Email, "Link Connection", message);
+
+                    return new OkObjectResult("User was linked successfully to his account.");
                 }
-
-                // Check if the user already has the admin role
-                if (await _userManager.IsInRoleAsync(user, "Admin"))
-                {
-                    return false; // User already has the admin role
-                }
-
-                // Add the admin role to the user
-                var result = await _userManager.AddToRoleAsync(user, "Admin");
-                return result.Succeeded;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                return false; // Failed to add admin role
-            }
-        }
-
-        public async Task<bool> IsUserInRoleAsync(ApplicationUser user, string roleName)
-        {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
             }
 
-            if (string.IsNullOrWhiteSpace(roleName))
-            {
-                throw new ArgumentException("Role name cannot be null or empty.", nameof(roleName));
-            }
-
-            return await _userManager.IsInRoleAsync(user, roleName);
+            return new BadRequestObjectResult("User was not linked with the system.");
         }
     }
 }

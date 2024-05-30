@@ -1,25 +1,32 @@
 "use client";
 import AdminSidebar from "@/components/AdminSidebar";
 import Cookies from "js-cookie";
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCategories, deleteCategory } from "@/store/categorySlice";
-import { Category } from "../../../../store/categorySlice";
+import { fetchCategories, deleteCategory, setPage, setPageSize } from "@/store/categorySlice";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Link from "next/link";
+import { getStatusString } from "@/components/Enums/EnumConverter";
+import debounce from "lodash.debounce";
+import { AppDispatch, RootState } from "@/store";
 
 const ViewCategories = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const categories: Category[] = useSelector(
-    (state: any) => state.category.categories
-  );
-
+  const { categories, totalCount, page, pageSize } = useSelector((state: RootState) => state.category);
+  const [search, setSearch] = useState("");
   const token = Cookies.get("token");
 
+  const fetchData = useCallback(
+    debounce((page, pageSize,search) => {
+      dispatch(fetchCategories({ page, pageSize ,search}));
+    }, 1500),
+    [dispatch]
+  );
+
   useEffect(() => {
-    return () => dispatch(fetchCategories());
-  }, [dispatch, token]);
+    fetchData(page, pageSize,search);
+  }, [token, page, pageSize, fetchData,search]);
 
   const handleDeleteCategory = (categoryId: string) => {
     if (window.confirm("Are you sure to delete this category?")) {
@@ -27,18 +34,10 @@ const ViewCategories = () => {
     }
   };
 
-  const getStatusString = (status: number) => {
-    switch (status) {
-      case 0:
-        return "Available";
-      case 1:
-        return "NotAvailable";
-      default:
-        return "";
-    }
-  };
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
+
     <AdminSidebar>
       <div className="page-wrapper">
         <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
@@ -58,7 +57,7 @@ const ViewCategories = () => {
           <div className="w-auto ">
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-15 m-10 w-auto h-auto">
               <div className="mb-20">
-                <a href="/admin/Categories">
+                <a href="/admin/categories">
                   <button className="bg-purple-900 hover:bg-purple-950 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
                     Add Category
                   </button>
@@ -71,13 +70,12 @@ const ViewCategories = () => {
                     Show{" "}
                     <select
                       name="myTable_length"
-                      aria-controls="myTable"
-                      className="form-select border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
+                      value={pageSize}
+                      onChange={(e) => dispatch(setPageSize(Number(e.target.value)))}
+                      className="form-select border-b-2 border-gray-500 shadow-md"
                     >
+                      <option value="5">5</option>
                       <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="50">50</option>
-                      <option value="100">100</option>
                     </select>{" "}
                     entries
                   </label>
@@ -89,7 +87,8 @@ const ViewCategories = () => {
                       type="search"
                       className="border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
                       placeholder=""
-                      aria-controls="myTable"
+                      value={search}
+                      onChange={(e)=>(setSearch(e.target.value))}
                     />
                   </label>
                 </div>
@@ -131,7 +130,7 @@ const ViewCategories = () => {
                           </span>
                         </td>
 
-                        <td className="p-3  border border-b border-gray-300 flex justify-end">
+                        <td className="p-3 border-gray-300 flex justify-end">
                           <div className="m-1">
                             <Link
                               href={`/admin/Categories/${category.categoryId}`}
@@ -143,9 +142,7 @@ const ViewCategories = () => {
                           <div className="m-1">
                             <button
                               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded flex items-center"
-                              onClick={() =>
-                                handleDeleteCategory(category.categoryId)
-                              }
+                              onClick={() => handleDeleteCategory(category.categoryId)}
                             >
                               <FaTrash />
                             </button>
@@ -156,17 +153,25 @@ const ViewCategories = () => {
                   </tbody>
                 </table>
                 <div className="flex justify-between items-center">
-                  <div>Showing 1 Of 1 Entries</div>
+                  <div>Showing {page} of {totalPages} Entries</div>
                   <div className="flex p-3">
-                    <div className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10">
+                    <button
+                      className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10"
+                      disabled={page <= 1}
+                      onClick={() => dispatch(setPage(page - 1))}
+                    >
                       Previous
-                    </div>
+                    </button>
                     <div className="flex-1 border text-center text-white p-2 bg-blue-600 justify-between items-center w-20 h-10">
-                      1
+                      {page}
                     </div>
-                    <div className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10">
+                    <button
+                      className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10"
+                      disabled={page >= totalPages}
+                      onClick={() => dispatch(setPage(page + 1))}
+                    >
                       Next
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -179,3 +184,4 @@ const ViewCategories = () => {
 };
 
 export default ViewCategories;
+                   

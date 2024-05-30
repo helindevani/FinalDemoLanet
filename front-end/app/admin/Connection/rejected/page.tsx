@@ -5,6 +5,7 @@ import axios from 'axios';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
+import { getSubsidyStatus } from '@/components/Enums/EnumConverter';
 
 const RejectConnection = () => {
   const [consumers, setConsumers] = useState([]);
@@ -20,17 +21,6 @@ const RejectConnection = () => {
       .then(response => setConsumers(response.data))
       .catch(error => console.error('Error fetching data:', error));
   }, [token]);
-
-  const getSubsidyStatus = (value: boolean): string => {
-    switch (value) {
-        case true:
-            return "Yes";
-        case false:
-            return "No";
-        default:
-            return "";
-    }
-};
 
     return (
       <AdminSidebar>

@@ -1,109 +1,38 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaCheck, FaEdit, FaTimes } from "react-icons/fa";
 import StaffSidebar from "@/components/Sidebar/StaffSidebar";
-import { fetchOrdersStaff, Order, staffActionOrder } from "@/store/orderSlice";
+import { fetchOrdersStaff, Order, setPage, setPageSize, staffActionOrder } from "@/store/orderSlice";
 import { AppDispatch, RootState } from "@/store";
 import Link from "next/link";
+import { getOrderStatus, getPaymentMode, getPaymentStatus } from "@/components/Enums/EnumConverter";
+import debounce from "lodash.debounce";
+import Cookies from "js-cookie";
 
 const ViewOrders = () => {
-  const [orderStatus, setOrderStatus] = useState<{
-    [key: string]: boolean | null;
-  }>({});
   const dispatch = useDispatch<AppDispatch>();
+  const [search, setSearch] = useState("");
+  const { orders, totalCount, page, pageSize } = useSelector(
+    (state: any) => state.order
+  );
 
-  const ordersData: Order[] = useSelector(
-    (state: RootState) => state.order.orders
+  const token = Cookies.get("token");
+
+  const fetchData = useCallback(
+    debounce((page, pageSize,search) => {
+      dispatch(fetchOrdersStaff({ page, pageSize,history:false,search }));
+    }, 1500),
+    [dispatch]
   );
 
   useEffect(() => {
-    dispatch(fetchOrdersStaff())
-      .then((response: any) => {
-        const initialStatus = response.payload.reduce(
-          (acc: any, order: Order) => {
-            acc[order.orderId] = order.isStaffAccepted;
-            return acc;
-          },
-          {}
-        );
-        setOrderStatus(initialStatus);
-      })
-      .catch((error: any) => console.error("Error fetching data:", error));
-  }, [dispatch]);
+    fetchData(page, pageSize,search);
+  }, [dispatch, token, page, pageSize, fetchData,search]);
 
-  const handleAcceptOrder = (orderId: string) => {
-    if (window.confirm("Are you sure to Accept this Order?")) {
-      dispatch(staffActionOrder({ orderId, status: true }))
-        .then(() => {
-          setOrderStatus((prevState) => ({
-            ...prevState,
-            [orderId]: true,
-          }));
-        })
-        .catch((error: any) => {
-          console.error("Error accepting order:", error);
-        });
-    }
-  };
+  const totalPages = Math.ceil(totalCount / pageSize);
 
-  const handleRejectOrder = (orderId: string) => {
-    if (window.confirm("Are you sure to Reject this Order?")) {
-      dispatch(staffActionOrder({ orderId, status: false }))
-        .then(() => {
-          setOrderStatus((prevState) => ({
-            ...prevState,
-            [orderId]: false,
-          }));
-        })
-        .catch((error: any) => {
-          console.error("Error accepting order:", error);
-        });
-    }
-  };
 
-  const getPaymentStatus = (value: number): string => {
-    switch (value) {
-      case 0:
-        return "Pending";
-      case 1:
-        return "Success";
-      case 2:
-        return "Failed";
-      default:
-        return "";
-    }
-  };
-
-  const getPaymentMode = (value: number): string => {
-    switch (value) {
-      case 0:
-        return "Online";
-      case 1:
-        return "CashOnDelivery";
-      default:
-        return "";
-    }
-  };
-
-  const getStatusString = (value: number): string => {
-    switch (value) {
-      case 0:
-        return "Placed";
-      case 1:
-        return "Confirmed";
-      case 2:
-        return "OnTheWay";
-      case 3:
-        return "Delivered";
-      case 4:
-        return "Staff Rejected";
-      case 5:
-        return "Rejected";
-      default:
-        return "";
-    }
-  };
 
   return (
     <StaffSidebar>
@@ -124,35 +53,36 @@ const ViewOrders = () => {
       <div className="container m-auto h-screen">
         <div className="w-auto">
           <div className="bg-white shadow-md rounded px-8 pt-14 pb-15 m-10 w-auto h-auto ">
-            <div className="flex justify-between items-center">
-              <div className="dataTables_length">
-                <label className="mr-3">
-                  Show{" "}
-                  <select
-                    name="myTable_length"
-                    aria-controls="myTable"
-                    className="form-select border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
-                  >
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                  </select>{" "}
-                  entries
-                </label>
+          <div className="flex justify-between items-center pb-2">
+
+                <div className="dataTables_length">
+                  <label className="mr-3">
+                    Show{" "}
+                    <select
+                      name="myTable_length"
+                      value={pageSize}
+                      onChange={(e) => dispatch(setPageSize(Number(e.target.value)))}
+                      className="form-select border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
+                    >
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                    </select>{" "}
+                    entries
+                  </label>
+                </div>
+                <div id="myTable_filter" className="dataTables_filter">
+                  <label className="flex items-center">
+                    <span className="mr-1">Search:</span>
+                    <input
+                      type="search"
+                      className="border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
+                      placeholder=""
+                      value={search}
+                      onChange={(e)=>(setSearch(e.target.value))}
+                    />
+                  </label>
+                </div>
               </div>
-              <div id="myTable_filter" className="dataTables_filter">
-                <label className="flex items-center">
-                  <span className="mr-1">Search:</span>
-                  <input
-                    type="search"
-                    className="border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
-                    placeholder=""
-                    aria-controls="myTable"
-                  />
-                </label>
-              </div>
-            </div>
 
             <div className="table-responsive justify-between mt-3">
               <div className="overflow-x-auto">
@@ -189,7 +119,7 @@ const ViewOrders = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {ordersData?.map((order: any, index: any) => (
+                    {orders?.map((order: any, index: any) => (
                       <tr
                         key={order.orderId}
                         className="border-b border border-gray-300 bg-gray-100"
@@ -221,7 +151,7 @@ const ViewOrders = () => {
                         </td>
                         <td className="p-3 border border-b border-gray-300">
                           <span className="rounded bg-green-500 text-white px-2 py-1">
-                            {getStatusString(order.orderStatus)}
+                            {getOrderStatus(order.orderStatus)}
                           </span>
                         </td>
 
@@ -241,19 +171,29 @@ const ViewOrders = () => {
                 </table>
               </div>
               <div className="flex justify-between items-center">
-                <div>Showing 1 Of 1 Entries</div>
-                <div className="flex p-3">
-                  <div className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10">
-                    Previous
+                  <div>
+                    Showing {page} of {totalPages} Pages
                   </div>
-                  <div className="flex-1 border text-center text-white p-2 bg-blue-600 justify-between items-center w-20 h-10">
-                    1
-                  </div>
-                  <div className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10">
-                    Next
+                  <div className="flex p-3">
+                    <button
+                      className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10"
+                      disabled={page <= 1}
+                      onClick={() => dispatch(setPage(page - 1))}
+                    >
+                      Previous
+                    </button>
+                    <div className="flex-1 border text-center text-white p-2 bg-blue-600 justify-between items-center w-20 h-10">
+                      {page}
+                    </div>
+                    <button
+                      className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10"
+                      disabled={page >= totalPages}
+                      onClick={() => dispatch(setPage(page + 1))}
+                    >
+                      Next
+                    </button>
                   </div>
                 </div>
-              </div>
             </div>
           </div>
         </div>

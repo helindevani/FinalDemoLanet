@@ -8,6 +8,8 @@ using Stripe.Checkout;
 using Microsoft.AspNetCore.Authorization;
 using Stripe;
 using System.Security.Claims;
+using back_end.ServiceContracts.Repository;
+using back_end.Services.Repository;
 
 namespace back_end.Controllers
 {
@@ -17,64 +19,27 @@ namespace back_end.Controllers
     public class BookingsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IConfiguration _configuration;
+        private readonly IBookingRepository _bookingRepository;
+        private readonly IStaffRepository _staffRepository;
 
-        public BookingsController(ApplicationDbContext context, IConfiguration configuration)
+        public BookingsController(ApplicationDbContext context,IBookingRepository bookingRepository, IStaffRepository staffRepository)
         {
             _context = context;
-            _configuration = configuration;
+            _bookingRepository = bookingRepository;
+            _staffRepository = staffRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Booking>>> GetBookings([FromQuery]bool history)
+        public async Task<ActionResult<IEnumerable<Booking>>> GetBookings([FromQuery]bool history, int page, int pageSize, string search = null)
         {
-            if (_context.Bookings == null)
-            {
-                return NotFound();
-            }
-            List<Booking> bookings;
-            if (history)
-            {
-                bookings = await _context.Bookings
-               .Include(r => r.Product)
-               .Include(r => r.Product.Brand)
-               .Where(r => r.Status == BookingStatus.Confirmed || r.Status == BookingStatus.Cancelled)
-               .ToListAsync();
-            }
-            else
-            {
-                bookings = await _context.Bookings
-                .Include(r => r.Product)
-                .Include(r => r.Product.Brand)
-                .Where(r => r.Status == BookingStatus.Pending)
-                .ToListAsync();
-            }
-
-
+            var bookings = await _bookingRepository.GetBookingsAsync(history,page,pageSize,search);
             return Ok(bookings);
         }
 
         [HttpGet("BookingDetails")]
         public async Task<IActionResult> GetLatestBookingDetails()
         {
-            if (_context.Bookings == null)
-            {
-                return NotFound("Bookings context is null.");
-            }
-
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
-            if (userIdClaim == null)
-            {
-                return Unauthorized("User ID not found in token.");
-            }
-
-            var userId = userIdClaim.Value;
-
-            var booking = await _context.Bookings
-                .Where(b => b.CreatedBy == userId)
-                .OrderByDescending(b => b.BookingDate)
-                .FirstOrDefaultAsync();
+            var booking = await _bookingRepository.GetLatestBookingAsync(User);
 
             if (booking == null)
             {
@@ -83,11 +48,7 @@ namespace back_end.Controllers
 
             if (booking.Status == BookingStatus.Confirmed)
             {
-                var order = await _context.Orders
-                .Include(r => r.Booking)
-                    .ThenInclude(b => b.Product)
-                        .ThenInclude(p => p.Brand)
-                .FirstOrDefaultAsync(i => i.BookingId == booking.BookingId);
+                var order = await _bookingRepository.GetOrderByBookingIdAsync(booking.BookingId);
 
                 if (order == null)
                 {
@@ -96,9 +57,10 @@ namespace back_end.Controllers
 
                 if (order.OrderStatus == OrderStatus.Delivered)
                 {
-                    return Ok(new { Message= "No active orders for your account.",});
+                    return Ok(new { Message = "No active orders for your account." });
                 }
-                return Ok(new { Message="Order Successfully Places",Order = order });
+
+                return Ok(new { Message = "Order Successfully Placed", Order = order });
             }
 
             if (booking.Status == BookingStatus.Pending)
@@ -113,19 +75,10 @@ namespace back_end.Controllers
             return BadRequest("Unhandled booking status.");
         }
 
-
-        [HttpGet("b{id}")]
-        public async Task<ActionResult<Booking>> GetBooking(Guid id)
+        [HttpGet("B/{id}")]
+        public async Task<ActionResult<Booking>> GetBookingById(Guid id)
         {
-            if (_context.Bookings == null)
-            {
-                return NotFound();
-            }
-
-            var order = await _context.Bookings
-                .Include (r => r.Product)
-                .Include(b=>b.Product.Brand)
-                .FirstOrDefaultAsync(i => i.BookingId == id);
+            var order = await _bookingRepository.GetBookingByIdAsync(id);
 
             if (order == null)
             {
@@ -135,72 +88,25 @@ namespace back_end.Controllers
             return order;
         }
 
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<IEnumerable<Booking>>> GetBooking(string userId)
+        [HttpGet("User")]
+        public async Task<ActionResult<IEnumerable<Booking>>> GetBooking()
         {
-          if (_context.Bookings == null)
-          {
-              return NotFound();
-          }
-            var booking = await _context.Bookings.Include(r=>r.Product).Include(s=>s.Product.Brand).FirstOrDefaultAsync(r=>r.CreatedBy==userId);
-            var staff = await _context.Staffs.ToListAsync();
+            var booking = await _bookingRepository.GetBookingsByUserIdAsync(User);
+            var staff = await _staffRepository.GetStaffs(1,5);
 
             if (booking == null)
             {
                 return NotFound();
             }
 
-            return Ok(new {staff,booking});
+            return Ok(new { staff, booking });
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutBooking(Guid id, Booking booking)
-        {
-            if (id != booking.BookingId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(booking).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BookingExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
+      
         [HttpPost]
         public async Task<ActionResult<Booking>> PostBooking([FromBody]BookingDTO bookingDTO)
         {
-          if (_context.Bookings == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Bookings'  is null.");
-          }
-
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-            {
-                return Unauthorized("User ID not found in token.");
-            }
-
-            var userId = userIdClaim.Value;
-            var latestBooking = await _context.Bookings
-        .Where(b => b.CreatedBy == userId)
-        .OrderByDescending(b => b.BookingDate)
-        .FirstOrDefaultAsync();
+            var latestBooking = await _bookingRepository.GetLatestBookingAsync(User);
 
             if (latestBooking != null)
             {
@@ -220,23 +126,7 @@ namespace back_end.Controllers
                     }
                 }
             }
-            var booking = new Booking
-            {
-                BookingId= Guid.NewGuid(),
-                ConsumerName = bookingDTO.ConsumerName,
-                LpgNo = bookingDTO.LpgNo,
-                EmailId = bookingDTO.EmailId,
-                PhoneNumber = bookingDTO.PhoneNumber,
-                ProductID  = Guid.Parse(bookingDTO.ProductID),
-                CreatedBy = userId,
-                ShippingAddress = bookingDTO.ShippingAddress,
-                Price = bookingDTO.Price.ToString(),
-                PaymentType = PaymentType.COD,
-                PaymentStatus=PaymentStatus.Pending,
-            };
-           
-            _context.Bookings.Add(booking);
-            await _context.SaveChangesAsync();
+            var booking = await _bookingRepository.CreateBookingAsync(bookingDTO,User);
 
             return CreatedAtAction("GetBooking", new { id = booking.BookingId }, booking);
         }
@@ -244,157 +134,41 @@ namespace back_end.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBooking(Guid id)
         {
-            if (_context.Bookings == null)
-            {
+            var success = await _bookingRepository.DeleteBookingAsync(id);
+            if (!success)
                 return NotFound();
-            }
 
-            var booking = await _context.Bookings.FindAsync(id);
-            if (booking == null)
-            {
-                return NotFound();
-            }
-
-            // Check if the payment type was online and payment status was success
-            if (booking.PaymentType ==PaymentType.Online && booking.PaymentStatus == PaymentStatus.Success)
-            {
-
-                var paymentIntentId = booking.PaymentId;
-                if (!string.IsNullOrEmpty(paymentIntentId))
-                {
-                    var refundService = new RefundService();
-                    var refundOptions = new RefundCreateOptions
-                    {
-                        PaymentIntent = paymentIntentId
-                    };
-
-                    try
-                    {
-                        var refund = await refundService.CreateAsync(refundOptions);
-                        if (refund.Status != "succeeded")
-                        {
-                            return StatusCode(StatusCodes.Status500InternalServerError, "Refund failed.");
-                        }
-                    }
-                    catch (Exception ex)
-                    { 
-                        return StatusCode(StatusCodes.Status500InternalServerError, $"Refund failed: {ex.Message}");
-                    }
-                }
-            }
-
-            _context.Bookings.Remove(booking);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok();
         }
 
 
-        [HttpGet("Details/{userId}")]
-        public async Task<ActionResult<IEnumerable<Connection>>> GetApprovedConnections(string userId)
+        [HttpGet("Details")]
+        public async Task<ActionResult<IEnumerable<Connection>>> GetApprovedConnections()
         {
-            if (!_context.Connections.Any())
+            try
             {
-                return NotFound();
-            }
+                var result = await _bookingRepository.GetApprovedConnectionsAsync(User);
 
-            var currentYear = DateTime.UtcNow.Year;
-
-            string cylinderPrice=null;
-
-            var approvedConnections = await _context.Connections
-                .Include(r => r.Product)
-                .Include(r=>r.Product.Brand)
-                .FirstOrDefaultAsync(r => r.UserId.ToString() == userId);
-
-            if (approvedConnections == null)
-            {
-                return NotFound("No approved connections found for the specified user.");
-            }
-
-            var productDetail = await _context.Products
-                .FirstOrDefaultAsync(r => r.ProductId == approvedConnections.ProductId);
-
-            if (productDetail == null)
-            {
-                return NotFound("Product details not found for the approved connection.");
-            }
-
-            if (approvedConnections.IsGovScheme)
-            {
-                var currentYearBookingsCount = await _context.Bookings
-                    .CountAsync(c => c.BookingDate.Year == currentYear);
-
-                if (currentYearBookingsCount <= 10)
+                if (result.Item1 == null || result.Item2 == null)
                 {
-                    decimal unitPriceDecimal;
-                    if (decimal.TryParse(productDetail.UnitPrice, out unitPriceDecimal))
-                    {
-                        cylinderPrice = (unitPriceDecimal * 0.90m).ToString();
-                    }
+                    return NotFound();
                 }
-                else
-                {
-                    cylinderPrice = productDetail.UnitPrice.ToString();
-                }
-                return Ok(new { CylinderPrice = cylinderPrice, ApprovedConnection = approvedConnections });
-            }
-            else
-            {
-                cylinderPrice = productDetail.UnitPrice.ToString();
 
-                return Ok(new { CylinderPrice = cylinderPrice, ApprovedConnection = approvedConnections });
+                return Ok(new { CylinderPrice = result.Item1, approvedConnection = result.Item2 });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
             }
         }
 
         [HttpPost("checkout")]
         public async Task<IActionResult> CreateCheckoutSession([FromBody] BookingDTO booking)
         {
-            var options = new SessionCreateOptions
-            {
-                PaymentMethodTypes = new List<string> { "card" },
-                LineItems = new List<SessionLineItemOptions>
-                {
-                    new SessionLineItemOptions
-                    {
-                        PriceData = new SessionLineItemPriceDataOptions
-                        {
-                            Currency = "inr",
-                            UnitAmount = (long)(booking.Price * 100), // Price in cents
-                            ProductData = new SessionLineItemPriceDataProductDataOptions
-                            {
-                                Name = $"{booking.ProductID} - LPG Cylinder",
-                            },
-                        },
-                        Quantity = 1,
-                    },
-                },
-                Mode = "payment",
-                SuccessUrl = "http://localhost:3000/",
-                CancelUrl = "http://localhost:3000/cancel",
-                CustomerEmail = booking.EmailId,
-                ClientReferenceId = booking.BookingId,
-                Metadata = new Dictionary<string, string>
-        {
-            { "ConsumerName", booking.ConsumerName },
-            { "LpgNo", booking.LpgNo },
-            { "PhoneNumber", booking.PhoneNumber },
-            { "ProductID", booking.ProductID },
-            { "CreatedBy", booking.CreatedBy },
-            { "ShippingAddress", booking.ShippingAddress },
-            { "Price", booking.Price.ToString() }
-        }
-            };
+           string stripeurl = await _bookingRepository.CreateCheckoutSessionAsync(booking);
 
-            var service = new SessionService();
-            Session session = await service.CreateAsync(options);
-
-            return Ok(new { url = session.Url });
+            return Ok(new { url = stripeurl });
         }
     
-        private bool BookingExists(Guid id)
-            {
-                return (_context.Bookings?.Any(e => e.BookingId == id)).GetValueOrDefault();
-            }
         }
 }

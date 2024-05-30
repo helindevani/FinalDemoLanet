@@ -45,6 +45,7 @@ interface FormData {
 
 export default function Connection() {
   const [step, setStep] = useState(1);
+  const [stepStatus, setStepStatus] = useState(step);
   const [formData, setFormData] = useState<any>({
     FirstName: "",
     LastName: "",
@@ -79,16 +80,15 @@ export default function Connection() {
   });
 
   const steps = [
-    { name: "Personal Details", status: "completed" },
-    { name: "Required Documents", status: "completed" },
-    { name: "Other Details", status: "active" },
-    { name: "Declaration", status: "upcoming" },
+    { name: "Personal Details", status: step > 1 ? "completed" : "active" },
+    { name: "Required Documents", status: step > 2 ? "completed" : step === 2 ? "active" : "upcoming" },
+    { name: "Other Details", status: step > 3 ? "completed" : step === 3 ? "active" : "upcoming" },
+    { name: "Declaration", status: step === 4 ? "active" : "upcoming" },
   ];
 
   const handleFormChange: any = (data: any) => {
     setFormData((prev: any) => ({ ...prev, ...data }));
   };
-
 
   const renderComponent = () => {
     switch (step) {

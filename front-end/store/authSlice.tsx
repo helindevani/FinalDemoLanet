@@ -7,6 +7,7 @@ import {
 } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import axios from "axios";
+import axiosInstance from '../Interceptor/axiosConfig';
 
 interface LoginCredentials {
   email: string;

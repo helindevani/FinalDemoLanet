@@ -1,312 +1,210 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import AdminSidebar from "@/components/AdminSidebar";
+import {
+  convertToLocalDate,
+  getBookingStatus,
+  getOrderStatus,
+  getPaymentMode,
+  getPaymentStatus,
+} from "@/components/Enums/EnumConverter";
+import { Booking } from "@/components/TypeInterface/AllType";
+import { Order } from "@/store/orderSlice";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
-import AdminSidebar from "@/components/AdminSidebar";
+import { useEffect, useState } from "react";
 
-const OrderDetails: React.FC = () => {
-  const router = useRouter();
+const OrderDetails = () => {
+  const [data, setData] = useState<Order>();
   const pathname = usePathname();
-  const bookingId = pathname.split("/")[4];
-  const [data, setData] = useState<any>();
+  const orderId = pathname.split("/")[4];
+
   const token = Cookies.get("token");
 
- useEffect(() => {
-    const fetchData = async () => {
+  useEffect(() => {
+    const fetchOrders = async () => {
       try {
-        const response = await axios.get(`http://localhost:5057/api/Bookings/b${bookingId}`, {
+        const response = await axios.get(
+          `http://localhost:5057/api/Orders/${orderId}`,
+          {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          });
-        setData(response.data);
+          }
+        );
+        if (response.status === 200) {
+          setData(response.data);
+        }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching orders:", error);
       }
     };
-    fetchData();
-  }, [token,bookingId]);
+    fetchOrders();
+  }, [orderId, token]);
 
-  const getPaymentStatus = (value: number): string => {
-    switch (value) {
-      case 0:
-        return "Pending";
-      case 1:
-        return "Success";
-      case 2:
-        return "Failed";
-      default:
-        return "";
-    }
-  };
+  const allSteps = ["Placed", "Confirmed", "On The Way", "Delivered"];
 
-  const getBookingStatus = (value: number): string => {
-    switch (value) {
-      case 0:
-        return "Pending";
-      case 1:
-        return "Confirmed";
-      case 2:
-        return "Canceled";
-      default:
-        return "";
-    }
-  };
-
-  const getPaymentMode = (value: number): string => {
-    switch (value) {
-      case 0:
-        return "Online";
-      case 1:
-        return "COD";
-      default:
-        return "";
-    }
-  };
-
-  function convertToLocalDate(dateString: string): string {
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0'); 
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear(); 
-    return `${day}-${month}-${year}`;
-  }
+  const steps = allSteps.map((step, index) => ({
+    name: step,
+    status:
+      data?.orderStatus !== undefined &&
+      data.orderStatus !== null &&
+      allSteps.indexOf(getOrderStatus(data.orderStatus)) >= index
+        ? "completed"
+        : "upcoming",
+  }));
 
   return (
     <AdminSidebar>
-      <div className="page-wrapper">
-        <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
-          <h3 className="text-xl text-blue-800 font-semibold text-primary">
-          User Booking Details
-          </h3>
-          <nav className="flex items-center space-x-2">
-            <a href="#" className="text-gray-400 hover:text-blue-800">
-              Home
-            </a>
-            <span className="text-gray-400">{`>`}</span>
-            <span className="text-gray-600">Booking Detail</span>
-          </nav>
+      <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
+        <h3 className="text-xl text-blue-800 font-semibold text-primary">
+          Order Details
+        </h3>
+        <nav className="flex items-center space-x-2">
+          <a href="#" className="text-gray-400 hover:text-blue-800">
+            Home
+          </a>
+          <span className="text-gray-400">{`>`}</span>
+          <span className="text-gray-600">Order Details</span>
+        </nav>
+      </div>
+
+      <div className=" bg-white shadow-md rounded sm:p-10 m-10 w-auto  border-b ">
+        <div className="sm:flex p-3">
+          <div className="h-full p-1 sm:m-5 text-xs sm:text-base w-full sm:w-1/2">
+            <table className="mt-2 mb-2 w-full">
+              <tbody>
+                <tr>
+                  <td className="py-1 pr-2 font-semibold">Order Date : </td>
+                  <td className="py-1 pr-2 font-semibold">
+                    {convertToLocalDate(data?.orderDate)}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-1 pr-2 font-semibold">Booking Date : </td>
+                  <td className="py-1 pr-2 font-semibold">
+                    {convertToLocalDate(data?.booking.bookingDate)}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-1 pr-2 font-semibold">Delivery Date : </td>
+                  <td className="py-1 pr-2 font-semibold">
+                    {convertToLocalDate(data?.deliveryDate)}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-1 pr-2 font-semibold">Name : </td>
+                  <td className="py-1 pr-2 font-semibold">
+                    {data?.clientName}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-1 pr-2 font-semibold">LPG NO : </td>
+                  <td className="py-1 pr-2 font-semibold">{data?.lpgNo}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className=" h-full p-1 sm:m-5 text-xs sm:text-base w-full sm:w-1/2">
+            <h4 className="text-lg font-bold underline">Delivery Address</h4>
+            <table className="mt-2 mb-2 w-full">
+              <tbody>
+                <tr>
+                  <td className="py-1 pr-2 font-semibold">
+                    Address : {data?.address}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-1 pr-2 font-semibold">
+                    Contact No. : {data?.clientContact}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div className="container m-auto h-screen">
-          <div className="w-auto">
-            <div className="bg-white shadow-md rounded px-8 pt-14 pb-16 m-10 w-auto h-auto">
-              <form >
-                <div className="border">
-                  <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 p-5">
-                    <div className="flex ">
-                      <div className="pr-4 w-1/2">
-                        <label
-                          htmlFor="LpgNo"
-                          className="block text-sm font-semibold leading-6 text-gray-900"
-                        >
-                          LPG NO.
-                        </label>
-                        <div className="mt-2.5">
-                          <input
-                            type="text"
-                            name="LpgNo"
-                            id="LpgNo"
-                            value={data ? data.lpgNo : ""}
-                            className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="pr-4 w-1/2">
-                        <label
-                          htmlFor="BookingId"
-                          className="block text-sm font-semibold leading-6 text-gray-900"
-                        >
-                          Booking Id
-                        </label>
-                        <div className="mt-2.5">
-                          <input
-                            type="text"
-                            name="BookingId"
-                            id="BookingId"
-                            value={data ? data.bookingId : ""}
-                            className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            disabled
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex ">
-                      <div className="pr-4 w-1/2">
-                        <label
-                          htmlFor="ClientContact"
-                          className="block text-sm font-semibold leading-6 text-gray-900"
-                        >
-                          Client Name
-                        </label>
-                        <div className="mt-2.5">
-                          <input
-                            type="text"
-                            name="ClientName"
-                            id="ClientName"
-                            value={data ? data.consumerName : ""}
-                            className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="pr-4 w-1/2">
-                        <label
-                          htmlFor="BookingDate"
-                          className="block text-sm font-semibold leading-6 text-gray-900"
-                        >
-                          Booking Date
-                        </label>
-                        <div className="mt-2.5">
-                          <input
-                            type="text"
-                            name="BookingDate"
-                            id="BookingDate"
-                            value={data ? convertToLocalDate(data.bookingDate) : ""}
-                            className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            disabled
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="Address"
-                        className="block text-sm font-semibold leading-6 text-gray-900"
+        <div className="sm:flex w-full p-3 m-1">
+          <div className="h-full p-1 sm:m-5 text-xs sm:text-base w-full sm:w-1/2">
+            <h4 className="text-lg font-bold underline">Order Details</h4>
+            <table className="mt-2 w-full">
+              <tbody>
+                <tr>
+                  <td className="py-1 pr-2 font-semibold">Order Id:</td>
+                  <td className="py-1">{data?.bookingId}</td>
+                </tr>
+                <tr>
+                  <td className="py-1 pr-2 font-semibold">Product Detail:</td>
+                  <td className="py-1">
+                    {data?.booking.product.productName}-
+                    {data?.booking.product.brand.brandName}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-1 pr-2 font-semibold">Payment Type:</td>
+                  <td className="py-1">{getPaymentMode(data?.paymentType)}</td>
+                </tr>
+                <tr>
+                  <td className="py-1 pr-2 font-semibold">Payment Status:</td>
+                  <td className="py-1">
+                    {getPaymentStatus(data?.paymentStatus)}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-1 pr-2 font-semibold">Amount:</td>
+                  <td className="py-1">{data?.amount}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="h-full p-1 sm:m-5 w-full text-xs sm:text-base sm:w-1/2">
+            <div className=" p-1 m-1 w-full">
+              <h4 className="text-lg font-bold underline m-1">
+                Tracking Order
+              </h4>
+              <ul className="flex justify-between items-center w-full relative">
+                {steps.map((step, index) => (
+                  <li key={index} className="flex-1 text-center relative">
+                    <div className="relative flex items-center justify-center">
+                      {/* Line before the bullet */}
+                      {index !== 0 && (
+                        <div
+                          className={`absolute left-0 w-1/2 h-0.5 ${
+                            steps[index].status === "completed"
+                              ? "bg-green-500"
+                              : "bg-slate-200"
+                          } transform -translate-y-1/2`}
+                        ></div>
+                      )}
+                      {/* Line after the bullet */}
+                      {index !== steps.length - 1 && (
+                        <div
+                          className={`absolute right-0 w-1/2 h-0.5 ${
+                            step.status === "completed"
+                              ? "bg-green-500"
+                              : "bg-slate-200"
+                          } transform -translate-y-1/2`}
+                        ></div>
+                      )}
+                      {/* Bullet */}
+                      <div
+                        className={`relative w-10 h-10 rounded-full ${
+                          step.status === "completed"
+                            ? "bg-green-500"
+                            : "bg-slate-200"
+                        } flex items-center justify-center`}
                       >
-                        Address
-                      </label>
-                      <div className="mt-2.5">
-                        <textarea
-                          name="Address"
-                          id="Address"
-                          rows={2}
-                          value={data ? data.shippingAddress : ""}
-                          className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          disabled
-                        ></textarea>
+                        {step.status === "completed" && (
+                          <span className="text-white text-xl">&#x2713;</span>
+                        )}
                       </div>
                     </div>
-                    <div className="flex ">
-                      <div className="pr-4 w-1/2">
-                        <label
-                          htmlFor="ProductId"
-                          className="block text-sm font-semibold leading-6 text-gray-900"
-                        >
-                          Product Details
-                        </label>
-                        <div className="mt-2.5">
-                          <input
-                            type="text"
-                            name="ProductId"
-                            id="ProductId"
-                            value={data ? data.product + "-" + data.product.brand.brandName : ""}
-                            className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="pr-4 w-1/2">
-                        <label
-                          htmlFor="Amount"
-                          className="block text-sm font-semibold leading-6 text-gray-900"
-                        >
-                          Amount
-                        </label>
-                        <div className="mt-2.5">
-                          <input
-                            type="text"
-                            name="Amount"
-                            id="Amount"
-                            value={data ? data.price : ""}
-                            className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            disabled
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex ">
-                      <div className="pr-4 w-1/2">
-                        <label
-                          htmlFor="BookingStatus"
-                          className="block text-sm font-semibold leading-6 text-gray-900"
-                        >
-                          Booking Status
-                        </label>
-                        <div className="mt-2.5">
-                          <input
-                            type="text"
-                            name="BookingStatus"
-                            id="BookingStatus"
-                            value={data ? getPaymentMode(data.status) : ""}
-                            className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="pr-4 w-1/2">
-                        <label
-                          htmlFor="PaymentType"
-                          className="block text-sm font-semibold leading-6 text-gray-900"
-                        >
-                          Payment Mode
-                        </label>
-                        <div className="mt-2.5">
-                          <input
-                            type="text"
-                            name="PaymentType"
-                            id="PaymentType"
-                            value={data ? getPaymentMode(data.paymentType) : ""}
-                            className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            disabled
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex ">
-                      <div className="pr-4 w-1/2">
-                        <label
-                          htmlFor="PaymentStatus"
-                          className="block text-sm font-semibold leading-6 text-gray-900"
-                        >
-                          Payment Status
-                        </label>
-                        <div className="mt-2.5">
-                          <input
-                            type="text"
-                            name="PaymentStatus"
-                            id="PaymentStatus"
-                            value={data ? getPaymentStatus(data.paymentStatus) : ""}
-                            className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            disabled
-                          />
-                        </div>
-                      </div>
-                      <div className="pr-4 w-1/2">
-                        <label
-                          htmlFor="PaymentDate"
-                          className="block text-sm font-semibold leading-6 text-gray-900"
-                        >
-                          Payment Date
-                        </label>
-                        <div className="mt-2.5">
-                          <input
-                            type="text"
-                            name="PaymentDate"
-                            id="PaymentDate"
-                            value={data ? convertToLocalDate(data.PaymentDate) : ""}
-                            className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            disabled
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                </div>
-              </form>
+                    <span className="block text-xs md:text-lg mt-2">
+                      {step.name}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

@@ -1,53 +1,43 @@
 "use client";
 import { format } from 'date-fns';
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AdminSidebar from "@/components/AdminSidebar";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { Staff, deleteStaff, fetchStaffs } from "@/store/staffSlice";
+import { Staff, deleteStaff, fetchStaffs, setPage, setPageSize } from "@/store/staffSlice";
 import Cookies from "js-cookie";
+import { getStatusClass, getStatusString } from '@/components/Enums/EnumConverter';
+import { AppDispatch, RootState } from '@/store';
+import debounce from 'lodash.debounce';
 
 const ViewStaff = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const staffs: Staff[] = useSelector(
-    (state: any) => state.staff.staffs
-  );
-
+  const { staffs, totalCount, page, pageSize } = useSelector((state: RootState) => state.staff);
+  const [search, setSearch] = useState("");
   const token = Cookies.get("token");
 
+  const fetchData = useCallback(
+    debounce((page, pageSize, search) => {
+      dispatch(fetchStaffs({ page, pageSize, search }));
+    }, 1500),
+    [dispatch]
+  );
+    
+ 
   useEffect(() => {
-    return () => dispatch(fetchStaffs());
-  }, [dispatch, token]);
+    fetchData(page, pageSize, search);
+  }, [token, page, pageSize, search,fetchData]);
 
   const handleDeleteStaff = (staffId: string) => {
-    if (window.confirm("Are you sure to delete this category?")) {
+    if (window.confirm("Are you sure to delete this staff?")) {
       dispatch(deleteStaff(staffId));
     }
   };
 
-  const getStatusString = (status: number) => {
-    switch (status) {
-      case 0:
-        return "Available";
-      case 1:
-        return "NotAvailable";
-      default:
-        return "";
-    }
-  };
+  const totalPages = Math.ceil(totalCount / pageSize);
 
-  const getStatusClass = (status: number) => {
-    switch (status) {
-      case 0:
-        return "bg-green-500"; // Available status
-      case 1:
-        return "bg-red-500"; // Not Available status
-      default:
-        return ""; // Default background color
-    }
-  };
 
   return (
     <AdminSidebar>
@@ -69,8 +59,8 @@ const ViewStaff = () => {
           <div className="w-auto">
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-15 m-10 w-auto h-auto">
               <div className="mb-20">
-                <a href="#">
-                  <button className="bg-purple-900 hover:bg-purple-950 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
+                <a href="/admin/staff">
+                  <button className="bg-blue-800 hover:bg-purple-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
                     Add Staff
                   </button>
                 </a>
@@ -82,13 +72,12 @@ const ViewStaff = () => {
                     Show{" "}
                     <select
                       name="myTable_length"
-                      aria-controls="myTable"
-                      className="form-select border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
+                      value={pageSize}
+                      onChange={(e) => dispatch(setPageSize(Number(e.target.value)))}
+                      className="form-select border-b-2 border-gray-500 shadow-md"
                     >
+                      <option value="5">5</option>
                       <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="50">50</option>
-                      <option value="100">100</option>
                     </select>{" "}
                     entries
                   </label>
@@ -100,7 +89,8 @@ const ViewStaff = () => {
                       type="search"
                       className="border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
                       placeholder=""
-                      aria-controls="myTable"
+                      value={search}
+                      onChange={(e)=>(setSearch(e.target.value))}
                     />
                   </label>
                 </div>
@@ -140,7 +130,7 @@ const ViewStaff = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {staffs.map((staff: any, index) => (
+                    {staffs.map((staff: Staff, index: number) => (
                       <tr
                         key={staff.staffId}
                         className="border-b border border-gray-300 bg-gray-100"
@@ -163,11 +153,11 @@ const ViewStaff = () => {
                         <td className="p-3 border border-b border-gray-300">
                           {staff.aadharCardNo}
                         </td>
-                        <td className="p-3  border border-b border-gray-300">
-                        {format(new Date(staff.joiningDate), 'dd-MM-yyyy')}
+                        <td className="p-3 border border-b border-gray-300">
+                          {format(new Date(staff.joiningDate), 'dd-MM-yyyy')}
                         </td>
-                        <td className="p-3  border  border-gray-300">
-                        <span className={`rounded text-white px-2 py-1 ${getStatusClass(staff.status)}`}>
+                        <td className="p-3 border border-gray-300">
+                          <span className={`rounded text-white px-2 py-1 ${getStatusClass(staff.status)}`}>
                             {getStatusString(staff.status)}
                           </span>
                         </td>
@@ -183,22 +173,36 @@ const ViewStaff = () => {
                           <div className="m-1">
                             <button
                               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded flex items-center"
-                             onClick={()=>handleDeleteStaff(staff.staffId)}
+                              onClick={() => handleDeleteStaff(staff.staffId)}
                             >
                               <FaTrash />
                             </button>
                           </div>
                         </td>
                       </tr>
-                     ))} 
+                    ))}
                   </tbody>
                 </table>
                 <div className="flex justify-between items-center">
-                  <div>Showing 1 Of 1 Entries</div>
+                  <div>Showing {page} of {totalPages} Entries</div>
                   <div className="flex p-3">
-                    <div className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10">Previous</div>
-                    <div className="flex-1 border text-center text-white p-2 bg-blue-600 justify-between items-center w-20 h-10">1</div>
-                    <div className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10">Next</div>
+                    <button
+                      className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10"
+                      disabled={page <= 1}
+                      onClick={() => dispatch(setPage(page - 1))}
+                    >
+                      Previous
+                    </button>
+                    <div className="flex-1 border text-center text-white p-2 bg-blue-600 justify-between items-center w-20 h-10">
+                      {page}
+                    </div>
+                    <button
+                      className="flex-1 text-gray-500 border p-2 justify-between items-center w-18 h-10"
+                      disabled={page >= totalPages}
+                      onClick={() => dispatch(setPage(page + 1))}
+                    >
+                      Next
+                    </button>
                   </div>
                 </div>
               </div>

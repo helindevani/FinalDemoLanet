@@ -12,6 +12,10 @@ using Microsoft.IdentityModel.Tokens;
 using back_end.ServiceContracts.Repository;
 using back_end.Services.Repository;
 using Stripe;
+using back_end.Repositories;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,7 +74,17 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 
 builder.Services.AddTransient<IJwtService, JwtService>();
 builder.Services.AddTransient<IEmailSenderService, EmailSenderService>();
-builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IAccountRepository, AccountRepository>();
+builder.Services.AddTransient<IStaffRepository, StaffRepository>();
+builder.Services.AddTransient<IBrandRepository, BrandRepository>();
+builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
+builder.Services.AddTransient<IStripeWebhookRepository, StripeWebhookService>();
+builder.Services.AddTransient<IBookingRepository, BookingRepository>();
+builder.Services.AddTransient<IConnectionRepository, ConnectionRepository>();
+builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 //Jwt

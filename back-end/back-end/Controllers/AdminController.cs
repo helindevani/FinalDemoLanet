@@ -18,11 +18,11 @@ namespace back_end.Controllers
     [AllowAnonymous]
     public class AdminController : ControllerBase
     {
-        private readonly IUserRepository _userService;
+        private readonly IAccountRepository _userService;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _usermanager;
 
-        public AdminController(IUserRepository userService, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public AdminController(IAccountRepository userService, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _userService = userService;
             _context = context;

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateBrand } from "@/store/supplierSlice";
 import { ToastError, ToastSuccess } from "@/components/ToastError";
 import { ToastContainer } from "react-toastify";
+import { getStatusString } from "@/components/Enums/EnumConverter";
 
 const EditSupplier = () => {
   const [brandName, setBrandName] = useState<string>("");
@@ -58,22 +59,11 @@ const EditSupplier = () => {
       setBrandName("");
       setBrandStatus("");
       ToastSuccess("Brand Updated Successfully!!");
-      router.push("/admin/Supplier/ManageSupplier");
+      router.push("/admin/supplier/manage");
 
     } catch (error) {
       console.error("Error creating brand:", error);
       ToastError("Brand Not Updated!!");
-    }
-  };
-
-  const getStatusString = (status: number) => {
-    switch (status) {
-      case 0:
-        return "Available";
-      case 1:
-        return "NotAvailable";
-      default:
-        return "";
     }
   };
 

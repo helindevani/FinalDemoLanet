@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using back_end.Domain.Entities;
+using back_end.DTO;
+using back_end.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using back_end.DatabaseContext;
-using back_end.Domain.Entities;
-using back_end.DTO;
-using back_end.Enums;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace back_end.Controllers
 {
@@ -18,137 +15,67 @@ namespace back_end.Controllers
     [AllowAnonymous]
     public class BrandsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IBrandRepository _brandRepository;
 
-        public BrandsController(ApplicationDbContext context)
+        public BrandsController(IBrandRepository brandRepository)
         {
-            _context = context;
+            _brandRepository = brandRepository;
         }
 
         // GET: api/Brands
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Brand>>> GetBrands()
+        public async Task<ActionResult<IEnumerable<Brand>>> GetBrands(int page, int pageSize, string search = null)
         {
-          if (_context.Brands == null)
-          {
-              return NotFound();
-          }
-            return await _context.Brands.ToListAsync();
+            var brands = await _brandRepository.GetBrands(page,pageSize,search);
+            if (brands == null)
+            {
+                return NotFound();
+            }
+            return Ok(brands);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Brand>> GetBrand(Guid id)
         {
-            if (_context.Brands == null)
-            {
-                return NotFound();
-            }
-            var brand = await _context.Brands.FindAsync(id);
-
+            var brand = await _brandRepository.GetBrand(id);
             if (brand == null)
             {
                 return NotFound();
             }
-
-            return brand;
+            return Ok(brand);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<Brand>> PutBrand(Guid id, BrandDTO brandDTO)
         {
-            if (id.ToString() != brandDTO.BrandId)
+            var updatedBrand = await _brandRepository.UpdateBrand(id, brandDTO);
+            if (updatedBrand == null)
             {
                 return BadRequest();
             }
-
-            var existingdata=await _context.Brands.FirstOrDefaultAsync(r=>r.BrandId==id);
-            if (existingdata == null)
-            {
-                return BadRequest();
-            }
-            if (!Enum.TryParse(typeof(Status), brandDTO.BrandStatus.ToString(), out var brandStatus))
-            {
-                return BadRequest("Invalid brand status.");
-            }
-
-            try
-            {
-                existingdata.BrandId = id;
-                existingdata.BrandName= brandDTO.BrandName;
-                existingdata.BrandStatus = (Status)brandStatus;
-                existingdata.CreatedBy = brandDTO.CreatedBy;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BrandExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return existingdata;
+            return Ok(updatedBrand);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Brand>> PostBrand([FromBody]BrandDTO brandDTO)
+        public async Task<ActionResult<Brand>> PostBrand([FromBody] BrandDTO brandDTO)
         {
-            try
+            var createdBrand = await _brandRepository.CreateBrand(brandDTO);
+            if (createdBrand == null)
             {
-                if (brandDTO == null)
-                {
-                    return BadRequest("Brand object is null.");
-                }
-
-                if (!Enum.TryParse(typeof(Status), brandDTO.BrandStatus.ToString(), out var brandStatus))
-                {
-                    return BadRequest("Invalid brand status.");
-                }
-
-                var brand = new Brand
-                {
-                    BrandName = brandDTO.BrandName,
-                    BrandStatus=(Status)brandStatus,
-                    CreatedBy= brandDTO.CreatedBy
-
-                };
-                _context.Brands.Add(brand);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetBrand", new { id = brand.BrandId }, brand);
+                return BadRequest();
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error creating brand: " + ex.Message);
-            }
+            return CreatedAtAction("GetBrand", new { id = createdBrand.BrandId }, createdBrand);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBrand(Guid id)
         {
-            if (_context.Brands == null)
+            var result = await _brandRepository.DeleteBrand(id);
+            if (!result)
             {
                 return NotFound();
             }
-            var brand = await _context.Brands.FindAsync(id);
-            if (brand == null)
-            {
-                return NotFound();
-            }
-
-            _context.Brands.Remove(brand);
-            await _context.SaveChangesAsync();
-
             return Ok("Brand Deleted Successfully");
-        }
-
-        private bool BrandExists(Guid id)
-        {
-            return (_context.Brands?.Any(e => e.BrandId == id)).GetValueOrDefault();
         }
     }
 }

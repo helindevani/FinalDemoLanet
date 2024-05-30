@@ -4,6 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
 import AdminSidebar from "@/components/AdminSidebar";
+import { getPaymentDoneOrNot, getPaymentMode, getPaymentStatus, getPaymentType } from "@/components/Enums/EnumConverter";
 
 interface OrderFormValues {
   OrderId: string;
@@ -71,8 +72,8 @@ const Order: React.FC = () => {
             StaffId: "", 
             BookingId: response.data.booking.bookingId,
             Amount: response.data.booking.price,
-            PaymentType: getPaymentMode(response.data.booking.paymentType),
-            PaymentStatus: getPaymentStatus(response.data.booking.paymentStatus),
+            PaymentType: getPaymentType(response.data.booking.paymentType),
+            PaymentStatus: getPaymentDoneOrNot(response.data.booking.paymentStatus),
             CreatedBy: response.data.booking.createdBy,
             Address: response.data.booking.shippingAddress,
             ProductId : response.data.booking.productID,
@@ -103,7 +104,7 @@ const Order: React.FC = () => {
       [name]: value,
     }));
   };
-  console.log(formValues)
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,30 +128,6 @@ const Order: React.FC = () => {
         // Handle error response, show error message
     }
 };
-
-  const getPaymentStatus = (value: number): string => {
-    switch (value) {
-      case 0:
-        return "Pending";
-      case 1:
-        return "Success";
-      case 2:
-        return "Failed";
-      default:
-        return "";
-    }
-  };
-
-  const getPaymentMode = (value: number): string => {
-    switch (value) {
-      case 0:
-        return "Online";
-      case 1:
-        return "COD";
-      default:
-        return "";
-    }
-  };
 
   return (
     <AdminSidebar>

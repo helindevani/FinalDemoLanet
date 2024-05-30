@@ -1,18 +1,13 @@
-﻿ using back_end.Domain.Entities;
-using back_end.Domain.Identity;
-using back_end.DTO;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
-namespace back_end.ServiceContracts.Repository
+namespace back_end.Services
 {
     public interface IUserRepository
     {
-        Task<RegisterationResponse> UserRegisterRequest(RegisterDTO registerDTO);
-        Task<bool> EmailCheckRequest(string email);
-        Task<AuthenticationResponse> UserLoginRequest(LoginDTO loginDTO);
-        Task<ForgotPasswordRequest> ForgotPasswordRequest(ForgotPasswordRequest request);
-        Task<bool> ResetPasswordRequest(ResetPasswordRequestData request);
-        Task<bool> UserLogoutRequest();
-        Task<bool> AddAdminRoleAsync(Guid userId);
-        Task<bool> IsUserInRoleAsync(ApplicationUser user, string roleName);
+        Task<IActionResult> AppliedNewConnection(ClaimsPrincipal user);
+        Task<IActionResult> LinkConnection(Guid userId, string LpgNo);
     }
 }

@@ -1,10 +1,5 @@
-﻿using back_end.DatabaseContext;
-using back_end.Domain.Identity;
-using back_end.Enums;
-using back_end.ServiceContracts;
+﻿using back_end.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace back_end.Controllers
@@ -14,80 +9,23 @@ namespace back_end.Controllers
     [AllowAnonymous]
     public class UserController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IEmailSenderService _emailService;
-        public UserController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IEmailSenderService emailService)
+        private readonly IUserRepository _userService;
+
+        public UserController(IUserRepository userService)
         {
-            _context = context;
-            _userManager = userManager;
-            _emailService = emailService;
-            
+            _userService = userService;
         }
 
-        [HttpGet("AppliedNewConnection/{userId}")]
-        public async Task<IActionResult> AppliedNewConnection(Guid userId)
+        [HttpGet("AppliedNewConnection")]
+        public async Task<IActionResult> AppliedNewConnection()
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user.IsHasConnection)
-            {
-                var connectionForm=  _context.Connections.FirstOrDefault(r=> r.UserId == userId);
-
-                if(connectionForm.Status == ConnectionStatus.Pending)
-                {
-                    return Ok(new
-                    {
-                        Status = "Pending",
-                        LPGNo = connectionForm.LpgNo
-                    });
-                }
-                else if (connectionForm.Status == ConnectionStatus.Rejected)
-                {
-                    return Ok(new
-                    {
-                        Status = "Rejected",
-                        LPGNo = connectionForm.LpgNo
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        Status = "Success",
-                        LPGNo = connectionForm.LpgNo
-                    });
-                }
-            }
-            return NoContent();
-
+            return await _userService.AppliedNewConnection(User);
         }
 
         [HttpPost("LinkConnection/{userId}")]
-        public async Task<IActionResult> LinkConnection(Guid userId,string LpgNo)
+        public async Task<IActionResult> LinkConnection(Guid userId, string LpgNo)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-            var connection =  _context.Connections.FirstOrDefault(r=>r.LpgNo == LpgNo);
-            if (user.IsHasConnectionLinked)
-            {
-                return BadRequest("User Was Already Linked Accound With System");
-            }
-
-            if(connection != null)
-            {
-                if(user.Id==connection.UserId && connection.Status == ConnectionStatus.Approved)
-                {
-                    user.IsHasConnectionLinked = true;
-
-                    var message = $"Your LPG Connection No {connection.LpgNo} Is Linked With {user.Name} Account Successfully.";
-
-                    await _emailService.SendEmailAsync(user.Email, "Link Connection", message);
-
-                    return Ok("User Was Linked Successfully On His Account");
-                }
-            }
-
-            return BadRequest("User Was Not Linked With System");
-
+            return await _userService.LinkConnection(userId, LpgNo);
         }
     }
 }

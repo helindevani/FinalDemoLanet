@@ -18,7 +18,7 @@ interface Booking {
   paymentType: number;
   phoneNumber: string;
   price: string;
-  product: any; 
+  product: any;
   productID: string;
   shippingAddress: string;
   status: number;
@@ -41,55 +41,111 @@ interface Staff {
 }
 
 export type Order = {
-  address: string;
-  amount: string;
-  booking: Booking; 
-  bookingId: string;
+  orderId: string;
+  lpgNo: string;
+  clientName: string;
   clientContact: string;
   clientEmail: string;
-  clientName: string;
-  createDate: string; 
-  createdBy: string;
-  isStaffAccepted: boolean | null;
-  lpgNo: string;
-  orderId: string;
-  orderStatus: number;
-  orderDate: string; 
-  paymentStatus: number;
-  paymentType: number;
-  staff: Staff;
   staffId: string;
-  updateDate: string; 
+  bookingId: string;
+  amount: string;
+  paymentType: number;
+  paymentStatus: number;
+  createdBy: string;
+  address: string;
+  productId: string;
+  orderStatus: number;
+  isStaffAccepted: boolean | null;
+  createDate: string;
+  updateDate: string;
   updatedBy: string;
+  deliveryDate: any | null;
+  staff: any | null;
+  booking: Booking;
+  orderDate: any;
 };
 
 export type OrderDTO = {
-    clientName: string;
-    clientEmail: string;
-    clientContact: string;
-    bookingId: string;
-    amount: string;
-    lpgNo: string;
-    paymentType: number;
-    paymentStatus: number;
-    address: string;
-    staffId: string;
-  };
+  clientName: string;
+  clientEmail: string;
+  clientContact: string;
+  bookingId: string;
+  amount: string;
+  lpgNo: string;
+  paymentType: number;
+  paymentStatus: number;
+  address: string;
+  staffId: string;
+};
 
 interface OrderState {
   orders: Order[];
   selectedOrder: Order | null;
+  totalCount: number;
+  page: number;
+  pageSize: number;
 }
 
 const apiUrl = "http://localhost:5057/api/Orders";
 
 const getToken = () => Cookies.get("token");
 
-export const fetchOrdersAdmin = createAsyncThunk<Order[],boolean>(
-  "order/fetchOrdersAdmin",
-  async (history) => {
+export const fetchOrdersAdmin = createAsyncThunk<
+  { data: Order[]; totalCount: number },
+  { page: number; pageSize: number; history: boolean ;search?: string}
+>("order/fetchOrdersAdmin", async ({ page, pageSize, history,search = "" }) => {
+  const token = getToken();
+  const response = await axios.get<{ data: Order[]; totalCount: number }>(
+    `${apiUrl}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      params: { page, pageSize, history ,search},
+    }
+  );
+  return response.data;
+});
+
+export const fetchOrdersStaff = createAsyncThunk<
+  { data: Order[]; totalCount: number },
+  { page: number; pageSize: number; history: boolean ;search?: string }
+>("order/fetchOrdersStaff", async ({ page, pageSize, history ,search = "" }) => {
+  const token = getToken();
+  const response = await axios.get<{ data: Order[]; totalCount: number }>(
+    `${apiUrl}/Staff`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      params: { page, pageSize, history ,search},
+    }
+  );
+  return response.data;
+});
+
+export const staffActionOrder = createAsyncThunk<
+  Order,
+  { orderId: string; status: boolean }
+>("order/staffActionOrder", async ({ orderId, status }) => {
+  const token = getToken();
+  const response = await axios.post<Order>(`${apiUrl}/${orderId}`, null, {
+    params: { status },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+});
+
+export const fetchOrderById = createAsyncThunk<Order, string>(
+  "order/fetchOrderById",
+  async (orderId) => {
     const token = getToken();
-    const response = await axios.get<Order[]>(`${apiUrl}?history=${history}`, {
+    const response = await axios.get<Order>(`${apiUrl}/${orderId}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -99,11 +155,11 @@ export const fetchOrdersAdmin = createAsyncThunk<Order[],boolean>(
   }
 );
 
-export const fetchOrdersStaff = createAsyncThunk<Order[]>(
-  "order/fetchOrdersStaff",
-  async () => {
+export const postOrder = createAsyncThunk<Order, OrderDTO>(
+  "order/postOrder",
+  async (orderDTO) => {
     const token = getToken();
-    const response = await axios.get<Order[]>(apiUrl + "/Staff", {
+    const response = await axios.post<Order>(apiUrl, orderDTO, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -112,49 +168,6 @@ export const fetchOrdersStaff = createAsyncThunk<Order[]>(
     return response.data;
   }
 );
-
-export const staffActionOrder = createAsyncThunk<Order, { orderId: string, status: boolean }>(
-    "order/staffActionOrder",
-    async ({ orderId, status }) => {
-      const token = getToken();
-      const response = await axios.post<Order>(`${apiUrl}/${orderId}`, null, {
-        params: { status },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    }
-  );
-
-  export const fetchOrderById = createAsyncThunk<Order, string>(
-    "order/fetchOrderById",
-    async (orderId) => {
-      const token = getToken();
-      const response = await axios.get<Order>(`${apiUrl}/${orderId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    }
-  );
-
-  export const postOrder = createAsyncThunk<Order, OrderDTO>(
-    "order/postOrder",
-    async (orderDTO) => {
-      const token = getToken();
-      const response = await axios.post<Order>(apiUrl, orderDTO, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    }
-  );
 
 export const updateOrder = createAsyncThunk<
   Order,
@@ -174,7 +187,7 @@ export const deleteOrder = createAsyncThunk<string, string>(
   "order/deleteOrder",
   async (orderId) => {
     const token = getToken();
-    const response = await axios.delete(`${apiUrl}/${orderId}`, {
+    await axios.delete(`${apiUrl}/${orderId}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -188,16 +201,28 @@ const orderSlice = createSlice({
   name: "order",
   initialState: {
     orders: [] as Order[],
-    selectedOrder: null, 
+    selectedOrder: null,
+    totalCount: 0,
+    page: 1,
+    pageSize: 5,
   } as OrderState,
-  reducers: {},
+  reducers: {
+    setPage: (state, action) => {
+      state.page = action.payload;
+    },
+    setPageSize: (state, action) => {
+      state.pageSize = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
-    .addCase(fetchOrdersAdmin.fulfilled, (state, action) => {
-      state.orders = action.payload;
-    })
+      .addCase(fetchOrdersAdmin.fulfilled, (state, action) => {
+        state.orders = action.payload.data;
+        state.totalCount = action.payload.totalCount;
+      })
       .addCase(fetchOrdersStaff.fulfilled, (state, action) => {
-        state.orders = action.payload;
+        state.orders = action.payload.data;
+        state.totalCount = action.payload.totalCount;
       })
       .addCase(staffActionOrder.fulfilled, (state, action) => {
         const updatedOrder = action.payload;
@@ -213,7 +238,7 @@ const orderSlice = createSlice({
         }
       })
       .addCase(fetchOrderById.fulfilled, (state, action) => {
-        state.selectedOrder = action.payload; 
+        state.selectedOrder = action.payload;
       })
       .addCase(postOrder.fulfilled, (state, action) => {
         state.orders.push(action.payload);
@@ -233,5 +258,7 @@ const orderSlice = createSlice({
       });
   },
 });
+
+export const { setPage, setPageSize } = orderSlice.actions;
 
 export default orderSlice.reducer;

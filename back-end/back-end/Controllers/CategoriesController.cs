@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using back_end.Domain.Entities;
+using back_end.DTO;
+using back_end.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using back_end.DatabaseContext;
-using back_end.Domain.Entities;
-using back_end.DTO;
-using back_end.Enums;
-using Microsoft.AspNetCore.Authorization;
 
 namespace back_end.Controllers
 {
@@ -18,112 +12,56 @@ namespace back_end.Controllers
     [AllowAnonymous]
     public class CategoriesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CategoriesController(ApplicationDbContext context)
+        public CategoriesController(ICategoryRepository categoryRepository)
         {
-            _context = context;
+            _categoryRepository = categoryRepository;
         }
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategories(int page, int pageSize, string search = null)
         {
-          if (_context.Categories == null)
-          {
-              return NotFound();
-          }
-            return await _context.Categories.ToListAsync();
+            var categories = await _categoryRepository.GetCategories(page, pageSize, search);
+            if (categories == null)
+            {
+                return NotFound();
+            }
+            return Ok(categories);
         }
 
-
         [HttpPut("{id}")]
-        public async Task<ActionResult<Category>> PutBrand(Guid id, CategoryDTO categoryDTO)
+        public async Task<ActionResult<Category>> PutCategory(Guid id, CategoryDTO categoryDTO)
         {
-            if (id.ToString() != categoryDTO.CategoryId)
+            var updatedCategory = await _categoryRepository.UpdateCategory(id, categoryDTO);
+            if (updatedCategory == null)
             {
                 return BadRequest();
             }
-
-            var existingdata = await _context.Categories.FirstOrDefaultAsync(r => r.CategoryId == id);
-            if (existingdata == null)
-            {
-                return BadRequest();
-            }
-            if (!Enum.TryParse(typeof(Status), categoryDTO.CategoryStatus.ToString(), out var categoryStatus))
-            {
-                return BadRequest("Invalid brand status.");
-            }
-
-            try
-            {
-                existingdata.CategoryId = id;
-                existingdata.CategoryName = categoryDTO.CategoryName;
-                existingdata.CategoryStatus = (Status)categoryStatus;
-                existingdata.CreatedBy = categoryDTO.CreatedBy;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return existingdata;
+            return Ok(updatedCategory);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory([FromBody]CategoryDTO categoryDTO)
+        public async Task<ActionResult<Category>> PostCategory([FromBody] CategoryDTO categoryDTO)
         {
-          if (_context.Categories == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Categories'  is null.");
-          }
-            if (!Enum.TryParse(typeof(Status), categoryDTO.CategoryStatus.ToString(), out var categoryStatus))
+            var createdCategory = await _categoryRepository.CreateCategory(categoryDTO);
+            if (createdCategory == null)
             {
-                return BadRequest("Invalid brand status.");
+                return BadRequest();
             }
-            var category = new Category
-            {
-                CategoryName= categoryDTO.CategoryName,
-                CategoryStatus= (Status)categoryStatus,
-                CreatedBy= categoryDTO.CreatedBy,
-            };
-
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCategory", new { id = category.CategoryId }, category);
+            return CreatedAtAction("GetCategory", new { id = createdCategory.CategoryId }, createdCategory);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(Guid id)
         {
-            if (_context.Categories == null)
+            var result = await _categoryRepository.DeleteCategory(id);
+            if (!result)
             {
                 return NotFound();
             }
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
             return Ok("Deleted Successfully!!");
-        }
-
-        private bool CategoryExists(Guid id)
-        {
-            return (_context.Categories?.Any(e => e.CategoryId == id)).GetValueOrDefault();
         }
     }
 }

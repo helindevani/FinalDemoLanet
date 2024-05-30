@@ -20,10 +20,8 @@ export default function Booking() {
 
   useEffect(() => {
     if (token) {
-      const decodedToken = JSON.parse(atob(token.split(".")[1]));
-      const userId = decodedToken.sub;
       const response = axios
-        .get(`http://localhost:5057/api/Bookings/Details/${userId}`, {
+        .get(`http://localhost:5057/api/Bookings/Details`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -40,15 +38,15 @@ export default function Booking() {
 
     const bookingData = {
       ConsumerName:
-        data.approvedConnection.firstName +
+        data.approvedConnection[0].firstName +
         " " +
-        data.approvedConnection.lastName,
-      LpgNo: data.approvedConnection.lpgNo,
-      EmailId: data.approvedConnection.emailId,
-      PhoneNumber: data.approvedConnection.phoneNumber,
-      ProductID: data.approvedConnection.product.productId,
-      CreatedBy: data.approvedConnection.userId,
-      ShippingAddress: data.approvedConnection.address,
+        data.approvedConnection[0].lastName,
+      LpgNo: data.approvedConnection[0].lpgNo,
+      EmailId: data.approvedConnection[0].emailId,
+      PhoneNumber: data.approvedConnection[0].phoneNumber,
+      ProductID: data.approvedConnection[0].product.productId,
+      CreatedBy: data.approvedConnection[0].userId,
+      ShippingAddress: data.approvedConnection[0].address,
       Price: parseFloat(data.cylinderPrice),
       PaymentType: paymentType,
       PaymentStatus: "Pending",
@@ -104,6 +102,7 @@ export default function Booking() {
       }
       
   };
+  console.log(data);
 
   return (
     <Sidebar>
@@ -133,7 +132,7 @@ export default function Booking() {
                     className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="LpgNo"
                     type="text"
-                    value={data ? data.approvedConnection.lpgNo : ""}
+                    value={data ? data.approvedConnection[0].lpgNo : ""}
                     disabled
                   />
                 </div>
@@ -149,9 +148,9 @@ export default function Booking() {
                     type="text"
                     value={
                       data
-                        ? data.approvedConnection.firstName +
+                        ? data.approvedConnection[0].firstName +
                           " " +
-                          data.approvedConnection.lastName
+                          data.approvedConnection[0].lastName
                         : ""
                     }
                     disabled
@@ -167,7 +166,7 @@ export default function Booking() {
                     id="PhoneNumber"
                     name="PhoneNumber"
                     type="text"
-                    value={data ? data.approvedConnection.phoneNumber : ""}
+                    value={data ? data.approvedConnection[0].phoneNumber : ""}
                     disabled
                   />
                 </div>
@@ -181,7 +180,7 @@ export default function Booking() {
                     id="EmailId"
                     name="EmailId"
                     type="text"
-                    value={data ? data.approvedConnection.emailId : ""}
+                    value={data ? data.approvedConnection[0].emailId : ""}
                     disabled
                   />
                 </div>
@@ -197,9 +196,9 @@ export default function Booking() {
                     type="text"
                     value={
                       data
-                        ? data.approvedConnection.product.productName +
+                        ? data.approvedConnection[0].product.productName +
                           "-" +
-                          data.approvedConnection.product.brand.brandName
+                          data?.approvedConnection[0].product.brand.brandName
                         : ""
                     }
                     disabled
@@ -229,7 +228,7 @@ export default function Booking() {
                     id="Address"
                     name="Address"
                     rows={2}
-                    value={data ? data.approvedConnection.address : ""}
+                    value={data ? data.approvedConnection[0].address : ""}
                     disabled
                   ></textarea>
                 </div>

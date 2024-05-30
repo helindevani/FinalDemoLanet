@@ -4,6 +4,8 @@ export const getBookingStatus = (value: number): string => {
         return "Pending";
       case 1:
         return "Confirmed";
+        case 2:
+        return "Rejected";
       default:
         return "";
     }
@@ -29,6 +31,61 @@ export const getBookingStatus = (value: number): string => {
     }
   };
 
+  export const getPaymentStatus = (value: number | undefined): string | null  => {
+    if (typeof value === "undefined") {
+      return null;
+    }
+    switch (value) {
+      case 0:
+        return "Pending";
+      case 1:
+        return "Success";
+      case 2:
+        return "Failed";
+      default:
+        return "";
+    }
+  };
+
+  export const getPaymentDoneOrNot = (value: number): string  => {
+    switch (value) {
+      case 0:
+        return "Pending";
+      case 1:
+        return "Success";
+      case 2:
+        return "Failed";
+      default:
+        return "";
+    }
+  };
+
+
+  export const getPaymentMode = (value: number | undefined): string | null=> {
+    if (typeof value === "undefined") {
+      return null;
+    }
+    switch (value) {
+      case 0:
+        return "Online";
+      case 1:
+        return "CashOnDelivery";
+      default:
+        return "";
+    }
+  };
+
+  export const getPaymentType = (value: number ): string => {
+    switch (value) {
+      case 0:
+        return "Online";
+      case 1:
+        return "CashOnDelivery";
+      default:
+        return "";
+    }
+  };
+
   export function convertToLocalDate(dateString: string | undefined): string | null {
     if (typeof dateString === "undefined") {
       return null;
@@ -40,3 +97,70 @@ export const getBookingStatus = (value: number): string => {
     return `${day}-${month}-${year}`;
   }
 
+ export const getStatusStrings = (status: string) => {
+    switch (status) {
+      case "0":
+        return "Available";
+      case "1":
+        return "NotAvailable";
+      default:
+        return "";
+    }
+  };
+
+  export const getStatusString = (status: number) => {
+    switch (status) {
+      case 0:
+        return "Available";
+      case 1:
+        return "NotAvailable";
+      default:
+        return "";
+    }
+  };
+
+  export const getSubsidyStatus = (value: boolean): string => {
+    switch (value) {
+        case true:
+            return "Yes";
+        case false:
+            return "No";
+        default:
+            return "";
+    }
+};
+
+export const getStatusClass = (status: number) => {
+  switch (status) {
+    case 0:
+      return "bg-green-500"; // Available status
+    case 1:
+      return "bg-red-500"; // Not Available status
+    default:
+      return ""; // Default background color
+  }
+};
+
+export const getStatusClasss = (status: string) => {
+  switch (status) {
+    case "0":
+      return "bg-green-500"; // Available status
+    case "1":
+      return "bg-red-500"; // Not Available status
+    default:
+      return ""; // Default background color
+  }
+};
+
+export const getConnectionStatus=(value : number) : string =>{
+  switch(value){
+      case 0:
+          return "Pending";
+      case 1:
+          return "Approved";
+      case 2:
+          return "Rejected";
+      default :
+          return "";
+  }
+};

@@ -1,4 +1,5 @@
 "use client";
+import { convertToLocalDate } from "@/components/Enums/EnumConverter";
 import StarRating from "@/components/Items/StarRating";
 import Sidebar from "@/components/Sidebar";
 import { AppDispatch, RootState } from "@/store";
@@ -56,16 +57,6 @@ const BookingDetails = () => {
     setStaffRating(value);
   };
 
-  function convertToLocalDate(dateString: string | undefined): string | null {
-    if (typeof dateString === 'undefined') {
-      return null;
-    }
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0'); 
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear(); 
-    return `${day}-${month}-${year}`;
-  }
 
   return (
     <Sidebar>

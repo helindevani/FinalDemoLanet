@@ -27,7 +27,8 @@ const Header: React.FC = () => {
         <nav className="max-w-screen-xl px-6 sm:px-8 lg:px-16 mx-auto grid grid-flow-col py-3 sm:py-4">
           {/* <button> <FaCoffee /></button> */}
           <div className="col-start-1 col-end-2 flex items-center">
-            <Image src={LogoVPN} alt="LogoImage" height={100} width={100} />
+            <Image src={LogoVPN} alt="LogoImage" height={50} width={50} />
+            <span className="text-4xl p-1 m-1 text-gray-800">Refill Smart</span>
           </div>
           <ul className="hidden text-black-500  lg:flex col-start-4 col-end-8 text-black-500  items-center">
             <Link

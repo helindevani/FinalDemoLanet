@@ -16,11 +16,18 @@ interface Booking {
   paymentType: number;
   phoneNumber: string;
   price: string;
-  product: any; 
+  product: any;
   productID: string;
   shippingAddress: string;
   status: number;
   updateDate: string;
+}
+
+interface BookingState {
+  bookings: Booking[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
 }
 
 const apiBooking = 'http://localhost:5057/api/Bookings';
@@ -28,49 +35,70 @@ const apiBooking = 'http://localhost:5057/api/Bookings';
 const getToken = () => Cookies.get('token');
 
 export const deleteBooking = createAsyncThunk<string, string>(
-    'booking/deleteBooking',
-    async (bookingId) => {
-      const token = getToken();
-      const response=await axios.delete(`${apiBooking}/${bookingId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return bookingId;
-    }
-  );
+  'booking/deleteBooking',
+  async (bookingId) => {
+    const token = getToken();
+    await axios.delete(`${apiBooking}/${bookingId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return bookingId;
+  }
+);
 
-  export const fetchBookings = createAsyncThunk<Booking[], boolean>(
-    'Booking/fetchBookings',
-    async (history: boolean) => {
-      const token = getToken();
-      const response = await axios.get<any>(`${apiBooking}?history=${history}`, {
+export const fetchBookings = createAsyncThunk<
+  { data: Booking[]; totalCount: number },
+  { page: number; pageSize: number; history: boolean ; search?: string}
+>(
+  'booking/fetchBookings',
+  async ({ page, pageSize, history,search="" }) => {
+    const token = getToken();
+    const response = await axios.get<{ data: Booking[]; totalCount: number }>(
+      `${apiBooking}`,
+      {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-      });
-      return response.data;
-    }
-  );
-  const bookingSlice = createSlice({
-    name: 'booking',
-    initialState: {
-      bookings: [] as any,
-    } as any,
-    reducers: {},
-    extraReducers: (builder) => {
-      builder
-        .addCase(fetchBookings.fulfilled, (state, action) => {
-          state.bookings = action.payload;
-        })
-        .addCase(deleteBooking.fulfilled, (state, action) => {
-          state.bookings = state.bookings.filter(
-            (booking : any) => booking.bookingId !== action.payload
-          );
-        });
+        params: { page, pageSize, history ,search},
+      }
+    );
+    return response.data;
+  }
+);
+
+const bookingSlice = createSlice({
+  name: "booking",
+  initialState: {
+    bookings: [] as Booking[],
+    totalCount: 0,
+    page: 1,
+    pageSize: 5,
+  } as BookingState,
+  reducers: {
+    setPage: (state, action) => {
+      state.page = action.payload;
     },
-  });
-  
-  export default bookingSlice.reducer;
+    setPageSize: (state, action) => {
+      state.pageSize = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchBookings.fulfilled, (state, action) => {
+        state.bookings = action.payload.data;
+        state.totalCount = action.payload.totalCount;
+      })
+      .addCase(deleteBooking.fulfilled, (state, action) => {
+        state.bookings = state.bookings.filter(
+          (booking) => booking.bookingId !== action.payload
+        );
+      });
+  },
+});
+
+export const { setPage, setPageSize } = bookingSlice.actions;
+
+export default bookingSlice.reducer;

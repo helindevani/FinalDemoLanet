@@ -20,7 +20,7 @@ export default function RequieredDocument({ onChange } : changeType) {
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 p-5">
         <div>
           <label htmlFor="POI" className="w-1/4  text-gray-700 ">
-            Proof Of Identity (POI)
+            Proof Of Identity (POI) <span className="text-red-500">*</span>
           </label>
           <div className="mt-2.5">
             <select
@@ -37,10 +37,10 @@ export default function RequieredDocument({ onChange } : changeType) {
             </select>
           </div>
           <div className="mt-2.5">
-            <ImagePicker label="POI" name="POI" onImageChange={setPoi}/>
+            <ImagePicker label="POI" name="POI" onImageChange={setPoi}/> <span className="text-red-500">*</span>
           </div>
           <label htmlFor="POINo" className="w-1/4  text-gray-700 ">
-            Proof Of Identity Number
+            Proof Of Identity Number <span className="text-red-500">*</span>
           </label>
           <div className="mt-2.5">
             <input
@@ -56,7 +56,7 @@ export default function RequieredDocument({ onChange } : changeType) {
         </div>
         <div>
           <label htmlFor="POA" className="w-1/4  text-gray-700 ">
-            Proof Of Address (POA)
+            Proof Of Address (POA) <span className="text-red-500">*</span>
           </label>
           <div className="mt-2.5">
             <select
@@ -74,10 +74,10 @@ export default function RequieredDocument({ onChange } : changeType) {
             </select>
           </div>
           <div className="mt-2.5">
-            <ImagePicker label="POA" name="POA" onImageChange={setPoa}/>
+            <ImagePicker label="POA" name="POA" onImageChange={setPoa}/> <span className="text-red-500">*</span>
           </div>
           <label htmlFor="POANo" className="w-1/4  text-gray-700 ">
-            Proof Of Address Number 
+            Proof Of Address Number <span className="text-red-500">*</span>
           </label>
           <div className="mt-2.5">
             <input

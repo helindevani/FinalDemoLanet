@@ -44,7 +44,7 @@ export interface Booking {
     updatedBy: string;
     deliveryDate: string | null;
     staff: any | null;
-    booking: any;
+    booking: Booking;
     orderDate: any;
   }
   

@@ -13,9 +13,9 @@ namespace back_end.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IAccountRepository _userRepository;
 
-        public AccountController(IUserRepository userRepository)
+        public AccountController(IAccountRepository userRepository)
         {
             _userRepository = userRepository;
         }

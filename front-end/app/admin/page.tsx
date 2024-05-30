@@ -4,7 +4,7 @@ import axios from "axios";
 import AdminSidebar from "@/components/AdminSidebar";
 
 const Dashboard: React.FC = () => {
-  const [countProduct, setCountProduct] = useState<number>(0);
+  const [countProduct, setCountProduct] = useState();
   const [countOrder, setCountOrder] = useState<number>(0);
   const [totalRevenue, setTotalRevenue] = useState<number>(0);
   const [countSuppliers, setCountSuppliers] = useState<number>(0);
@@ -12,34 +12,23 @@ const Dashboard: React.FC = () => {
   const [userWiseBooking, setUserWiseBooking] = useState<any[]>([]);
 
   useEffect(() => {
-    // Fetch data from backend API
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5057/api/Admin/Dashboard");
+        console.log(response.data.TotalCylinder,response.data,typeof response.data.TotalSupplier )
+        const tc =response.data.TotalCylinder
+        setCountProduct(tc);
+        setCountSuppliers(response.data.TotalSupplier);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
     fetchData();
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get("http://localhost:5057/api/Admin/Dashboard");
-      setCountProduct(response.data.TotalCylinder);
-      setCountSuppliers(response.data.TotalSupplier);
-      setCountProduct(response.data.TotalCategory);
 
-
-      const revenueResponse = await axios.get("/api/revenue");
-      setTotalRevenue(revenueResponse.data.total);
-
-      const supplierResponse = await axios.get("/api/suppliers");
-      setCountSuppliers(supplierResponse.data.count);
-
-      const lowStockResponse = await axios.get("/api/low-stock");
-      setLowStockProducts(lowStockResponse.data);
-
-      const userWiseBookingResponse = await axios.get("/api/user-wise-booking");
-      setUserWiseBooking(userWiseBookingResponse.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
+  console.log(countProduct)
+  console.log(countSuppliers)
   return (
     <AdminSidebar>
       <div className="page-wrapper">

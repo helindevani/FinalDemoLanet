@@ -2,33 +2,39 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-type AppDispatch = (arg: any) => any;
-
 export type Brand = {
   brandId: string;
-brandName: string;
-brandStatus: string;
+  brandName: string;
+  brandStatus: string;
   createdBy: string;
 };
 
-
 interface BrandState {
-    brands: Brand[];
+  brands: Brand[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
 }
 
 const apiUrl = 'http://localhost:5057/api/Brands';
 
 const getToken = () => Cookies.get('token');
 
-export const fetchBrands = createAsyncThunk<Brand[]>(
+export const fetchBrands = createAsyncThunk<{ data: Brand[]; totalCount: number },
+{ page: number; pageSize: number; search?: string },
+{ state: any }>(
   'Brand/fetchBrands',
-  async () => {
+  async (
+    { page, pageSize, search = "" },
+    { getState }
+  ) => {
     const token = getToken();
-    const response = await axios.get<Brand[]>(apiUrl, {
+    const response = await axios.get<{ data: Brand[]; totalCount: number }>(apiUrl, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
+      params: { page, pageSize, search },
     });
     return response.data;
   }
@@ -48,9 +54,9 @@ export const addBrand = createAsyncThunk<Brand, Brand>(
   }
 );
 
-export const updateBrand = createAsyncThunk<Brand, { brandId: string; data: Brand } >(
+export const updateBrand = createAsyncThunk<Brand, { brandId: string; data: Brand }>(
   'Brand/updateBrand',
-  async ({brandId,data}) => {
+  async ({ brandId, data }) => {
     const token = getToken();
     const response = await axios.put<Brand>(`${apiUrl}/${brandId}`, data, {
       headers: {
@@ -62,12 +68,11 @@ export const updateBrand = createAsyncThunk<Brand, { brandId: string; data: Bran
   }
 );
 
-// Async thunk to delete a Brand
 export const deleteBrand = createAsyncThunk<string, string>(
   'Brand/deleteBrand',
   async (brandId) => {
     const token = getToken();
-    const response=await axios.delete(`${apiUrl}/${brandId}`, {
+    await axios.delete(`${apiUrl}/${brandId}`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
@@ -77,24 +82,34 @@ export const deleteBrand = createAsyncThunk<string, string>(
   }
 );
 
-// Brand slice
 const brandSlice = createSlice({
   name: 'brand',
   initialState: {
     brands: [] as Brand[],
+    totalCount: 0,
+    page: 1,
+    pageSize: 5,
   } as BrandState,
-  reducers: {},
+  reducers: {
+    setPage: (state, action) => {
+      state.page = action.payload;
+    },
+    setPageSize: (state, action) => {
+      state.pageSize = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchBrands.fulfilled, (state, action) => {
-        state.brands = action.payload;
+        state.brands = action.payload.data;
+        state.totalCount = action.payload.totalCount;
       })
       .addCase(addBrand.fulfilled, (state, action) => {
         state.brands.push(action.payload);
       })
       .addCase(updateBrand.fulfilled, (state, action) => {
         const index = state.brands.findIndex(
-          (Brand) => Brand.brandId === action.payload.brandId
+          (brand) => brand.brandId === action.payload.brandId
         );
         if (index !== -1) {
           state.brands[index] = action.payload;
@@ -102,10 +117,12 @@ const brandSlice = createSlice({
       })
       .addCase(deleteBrand.fulfilled, (state, action) => {
         state.brands = state.brands.filter(
-          (Brand) => Brand.brandId !== action.payload
+          (brand) => brand.brandId !== action.payload
         );
       });
   },
 });
+
+export const { setPage, setPageSize } = brandSlice.actions;
 
 export default brandSlice.reducer;

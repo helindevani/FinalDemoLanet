@@ -364,27 +364,6 @@
   },
   {
     "ContainingType": "back_end.Controllers.BookingsController",
-    "Method": "PutBooking",
-    "RelativePath": "api/Bookings/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "booking",
-        "Type": "back_end.Domain.Entities.Booking",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "back_end.Controllers.BookingsController",
     "Method": "DeleteBooking",
     "RelativePath": "api/Bookings/{id}",
     "HttpMethod": "DELETE",
@@ -402,13 +381,13 @@
   {
     "ContainingType": "back_end.Controllers.BookingsController",
     "Method": "GetBooking",
-    "RelativePath": "api/Bookings/{userId}",
+    "RelativePath": "api/Bookings/{userId1}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
+        "Name": "userId1",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -427,8 +406,8 @@
   },
   {
     "ContainingType": "back_end.Controllers.BookingsController",
-    "Method": "GetBooking",
-    "RelativePath": "api/Bookings/b{id}",
+    "Method": "GetBookingById",
+    "RelativePath": "api/Bookings/B/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -480,17 +459,11 @@
   {
     "ContainingType": "back_end.Controllers.BookingsController",
     "Method": "GetApprovedConnections",
-    "RelativePath": "api/Bookings/Details/{userId}",
+    "RelativePath": "api/Bookings/Details",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.IEnumerable\u00601[[back_end.Domain.Entities.Connection, back-end, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
@@ -670,7 +643,7 @@
   },
   {
     "ContainingType": "back_end.Controllers.CategoriesController",
-    "Method": "PutBrand",
+    "Method": "PutCategory",
     "RelativePath": "api/Categories/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -1060,37 +1033,6 @@
   },
   {
     "ContainingType": "back_end.Controllers.OrdersController",
-    "Method": "StaffAction",
-    "RelativePath": "api/Orders/{id}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "status",
-        "Type": "System.Boolean",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "back_end.Domain.Entities.Order",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "back_end.Controllers.OrdersController",
     "Method": "PutOrder",
     "RelativePath": "api/Orders/{id}",
     "HttpMethod": "PUT",
@@ -1143,7 +1085,13 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "history",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": [
       {
         "Type": "back_end.Domain.Entities.Order",
@@ -1336,7 +1284,23 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.IEnumerable\u00601[[back_end.Domain.Entities.Staff, back-end, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
@@ -1451,17 +1415,11 @@
   {
     "ContainingType": "back_end.Controllers.UserController",
     "Method": "AppliedNewConnection",
-    "RelativePath": "api/User/AppliedNewConnection/{userId}",
+    "RelativePath": "api/User/AppliedNewConnection",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
