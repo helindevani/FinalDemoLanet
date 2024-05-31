@@ -43,6 +43,11 @@ namespace back_end.Repositories
             };
         }
 
+        public async Task<Category> GetCategoryById(Guid id)
+        {
+            return await _context.Categories.FindAsync(id);
+        }
+
         public async Task<Category> UpdateCategory(Guid id, CategoryDTO categoryDTO)
         {
             var existingData = await _context.Categories.FirstOrDefaultAsync(r => r.CategoryId == id);

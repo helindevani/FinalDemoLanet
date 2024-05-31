@@ -31,6 +31,17 @@ namespace back_end.Controllers
             return Ok(categories);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Brand>> GetCategory(Guid id)
+        {
+            var brand = await _categoryRepository.GetCategoryById(id);
+            if (brand == null)
+            {
+                return NotFound();
+            }
+            return Ok(brand);
+        }
+
         [HttpPut("{id}")]
         public async Task<ActionResult<Category>> PutCategory(Guid id, CategoryDTO categoryDTO)
         {

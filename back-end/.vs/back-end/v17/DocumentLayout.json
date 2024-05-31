@@ -1,33 +1,45 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Final Demo Lanet\\back-end\\",
+  "WorkspaceRootPath": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\services\\repository\\bookingrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\services\\repository\\bookingrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\finaldemolanet\\finaldemolanet\\back-end\\back-end\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\services\\repository\\brandrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\finaldemolanet\\finaldemolanet\\back-end\\back-end\\servicecontracts\\repository\\icategoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\servicecontracts\\repository\\icategoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\finaldemolanet\\finaldemolanet\\back-end\\back-end\\services\\repository\\categoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\services\\repository\\categoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\finaldemolanet\\finaldemolanet\\back-end\\back-end\\services\\repository\\brandrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\services\\repository\\brandrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\controllers\\brandscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\finaldemolanet\\finaldemolanet\\back-end\\back-end\\controllers\\brandscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\controllers\\brandscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\servicecontracts\\repository\\ibrandrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\finaldemolanet\\finaldemolanet\\back-end\\back-end\\servicecontracts\\repository\\ibrandrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\servicecontracts\\repository\\ibrandrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\servicecontracts\\repository\\ibookingrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\finaldemolanet\\finaldemolanet\\back-end\\back-end\\services\\repository\\bookingrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\services\\repository\\bookingrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\finaldemolanet\\finaldemolanet\\back-end\\back-end\\controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\finaldemolanet\\finaldemolanet\\back-end\\back-end\\servicecontracts\\repository\\ibookingrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\servicecontracts\\repository\\ibookingrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\servicecontracts\\repository\\istaffrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\finaldemolanet\\finaldemolanet\\back-end\\back-end\\servicecontracts\\repository\\istaffrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\servicecontracts\\repository\\istaffrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -38,106 +50,152 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "OrdersController.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\OrdersController.cs",
-              "RelativeDocumentMoniker": "back-end\\Controllers\\OrdersController.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\OrdersController.cs",
-              "RelativeToolTip": "back-end\\Controllers\\OrdersController.cs",
-              "ViewState": "AQIAAB4AAAAAAAAAAAASwDkAAABKAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-30T15:52:13.11Z",
-              "EditorCaption": ""
+              "Name": "ST:128:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "BrandsController.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\BrandsController.cs",
-              "RelativeDocumentMoniker": "back-end\\Controllers\\BrandsController.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\BrandsController.cs",
-              "RelativeToolTip": "back-end\\Controllers\\BrandsController.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Title": "CategoryRepository.cs",
+              "DocumentMoniker": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\Services\\Repository\\CategoryRepository.cs",
+              "RelativeDocumentMoniker": "back-end\\Services\\Repository\\CategoryRepository.cs",
+              "ToolTip": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\Services\\Repository\\CategoryRepository.cs",
+              "RelativeToolTip": "back-end\\Services\\Repository\\CategoryRepository.cs",
+              "ViewState": "AQIAAB4AAAAAAAAAAAAowCkAAAAxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-30T15:51:48.006Z",
+              "WhenOpened": "2024-05-31T09:11:51.461Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
+              "Title": "ICategoryRepository.cs",
+              "DocumentMoniker": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\ServiceContracts\\Repository\\ICategoryRepository.cs",
+              "RelativeDocumentMoniker": "back-end\\ServiceContracts\\Repository\\ICategoryRepository.cs",
+              "ToolTip": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\ServiceContracts\\Repository\\ICategoryRepository.cs",
+              "RelativeToolTip": "back-end\\ServiceContracts\\Repository\\ICategoryRepository.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAowBUAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T09:10:28.581Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CategoriesController.cs",
+              "DocumentMoniker": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\Controllers\\CategoriesController.cs",
+              "RelativeDocumentMoniker": "back-end\\Controllers\\CategoriesController.cs",
+              "ToolTip": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\Controllers\\CategoriesController.cs",
+              "RelativeToolTip": "back-end\\Controllers\\CategoriesController.cs",
+              "ViewState": "AQIAADwAAAAAAAAAAAAqwEUAAABGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T09:08:50.776Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "IBrandRepository.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\ServiceContracts\\Repository\\IBrandRepository.cs",
+              "DocumentMoniker": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\ServiceContracts\\Repository\\IBrandRepository.cs",
               "RelativeDocumentMoniker": "back-end\\ServiceContracts\\Repository\\IBrandRepository.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\ServiceContracts\\Repository\\IBrandRepository.cs",
+              "ToolTip": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\ServiceContracts\\Repository\\IBrandRepository.cs",
               "RelativeToolTip": "back-end\\ServiceContracts\\Repository\\IBrandRepository.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-30T15:51:42.94Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "BrandRepository.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Services\\Repository\\BrandRepository.cs",
+              "DocumentMoniker": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\Services\\Repository\\BrandRepository.cs",
               "RelativeDocumentMoniker": "back-end\\Services\\Repository\\BrandRepository.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Services\\Repository\\BrandRepository.cs",
+              "ToolTip": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\Services\\Repository\\BrandRepository.cs",
               "RelativeToolTip": "back-end\\Services\\Repository\\BrandRepository.cs",
-              "ViewState": "AQIAABAAAAAAAAAAAAA5wCgAAAAbAAAA",
+              "ViewState": "AQIAACIAAAAAAAAAAAAowC8AAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-30T15:48:20.747Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
               "Title": "BookingRepository.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Services\\Repository\\BookingRepository.cs",
+              "DocumentMoniker": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\Services\\Repository\\BookingRepository.cs",
               "RelativeDocumentMoniker": "back-end\\Services\\Repository\\BookingRepository.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Services\\Repository\\BookingRepository.cs",
+              "ToolTip": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\Services\\Repository\\BookingRepository.cs",
               "RelativeToolTip": "back-end\\Services\\Repository\\BookingRepository.cs",
-              "ViewState": "AQIAAF0AAAAAAAAAAAAAAMMAAAANAAAA",
+              "ViewState": "AQIAAG4AAAAAAAAAAAAIwMMAAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-30T15:46:38.186Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "IBookingRepository.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\ServiceContracts\\Repository\\IBookingRepository.cs",
-              "RelativeDocumentMoniker": "back-end\\ServiceContracts\\Repository\\IBookingRepository.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\ServiceContracts\\Repository\\IBookingRepository.cs",
-              "RelativeToolTip": "back-end\\ServiceContracts\\Repository\\IBookingRepository.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAAAAAAA",
+              "DocumentIndex": 4,
+              "Title": "BrandsController.cs",
+              "DocumentMoniker": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\Controllers\\BrandsController.cs",
+              "RelativeDocumentMoniker": "back-end\\Controllers\\BrandsController.cs",
+              "ToolTip": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\Controllers\\BrandsController.cs",
+              "RelativeToolTip": "back-end\\Controllers\\BrandsController.cs",
+              "ViewState": "AQIAAB4AAAAAAAAAAAAowC0AAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-30T15:46:04.997Z",
+              "WhenOpened": "2024-05-30T15:51:48.006Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
+              "Title": "OrdersController.cs",
+              "DocumentMoniker": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\Controllers\\OrdersController.cs",
+              "RelativeDocumentMoniker": "back-end\\Controllers\\OrdersController.cs",
+              "ToolTip": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\Controllers\\OrdersController.cs",
+              "RelativeToolTip": "back-end\\Controllers\\OrdersController.cs",
+              "ViewState": "AQIAAB4AAAAAAAAAAAASwDkAAABKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-30T15:52:13.11Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "IBookingRepository.cs",
+              "DocumentMoniker": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\ServiceContracts\\Repository\\IBookingRepository.cs",
+              "RelativeDocumentMoniker": "back-end\\ServiceContracts\\Repository\\IBookingRepository.cs",
+              "ToolTip": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\ServiceContracts\\Repository\\IBookingRepository.cs",
+              "RelativeToolTip": "back-end\\ServiceContracts\\Repository\\IBookingRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-30T15:46:04.997Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "IStaffRepository.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\ServiceContracts\\Repository\\IStaffRepository.cs",
+              "DocumentMoniker": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\ServiceContracts\\Repository\\IStaffRepository.cs",
               "RelativeDocumentMoniker": "back-end\\ServiceContracts\\Repository\\IStaffRepository.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\ServiceContracts\\Repository\\IStaffRepository.cs",
+              "ToolTip": "D:\\FinalDemoLanet\\FinalDemoLanet\\back-end\\back-end\\ServiceContracts\\Repository\\IStaffRepository.cs",
               "RelativeToolTip": "back-end\\ServiceContracts\\Repository\\IStaffRepository.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-30T15:44:29.161Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-30T15:44:29.161Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 48,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{74946827-37a0-11d2-a273-00c04f8ef4ff}"
             }
           ]
         }

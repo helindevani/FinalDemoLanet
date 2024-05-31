@@ -14,6 +14,7 @@ namespace back_end.Repositories
     public interface ICategoryRepository
     {
         Task<PagedCategoryResult<Category>> GetCategories(int page, int pageSize, string search = null);
+        Task<Category> GetCategoryById(Guid id);
         Task<Category> UpdateCategory(Guid id, CategoryDTO categoryDTO);
         Task<Category> CreateCategory(CategoryDTO categoryDTO);
         Task<bool> DeleteCategory(Guid id);
