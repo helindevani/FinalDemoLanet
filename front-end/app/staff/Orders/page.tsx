@@ -35,7 +35,7 @@ const ViewOrders = () => {
 
 
   return (
-    <StaffSidebar>
+    <>
       {/* <div className="page-wrapper"> */}
       <div className="flex justify-between bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
         <h3 className="text-xl text-blue-800 font-semibold text-primary">
@@ -55,14 +55,14 @@ const ViewOrders = () => {
           <div className="bg-white shadow-md rounded px-8 pt-14 pb-15 m-10 w-auto h-auto ">
           <div className="flex justify-between items-center pb-2">
 
-                <div className="dataTables_length">
+                <div>
                   <label className="mr-3">
                     Show{" "}
                     <select
                       name="myTable_length"
                       value={pageSize}
                       onChange={(e) => dispatch(setPageSize(Number(e.target.value)))}
-                      className="form-select border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
+                      className="border-b-2 border-gray-500 shadow-md focus:outline-none"
                     >
                       <option value="5">5</option>
                       <option value="10">10</option>
@@ -70,21 +70,21 @@ const ViewOrders = () => {
                     entries
                   </label>
                 </div>
-                <div id="myTable_filter" className="dataTables_filter">
-                  <label className="flex items-center">
+                <div className="flex">
+
                     <span className="mr-1">Search:</span>
                     <input
                       type="search"
-                      className="border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
+                      className="border-b-2 border-gray-500 shadow-md focus:outline-none"
                       placeholder=""
                       value={search}
                       onChange={(e)=>(setSearch(e.target.value))}
                     />
-                  </label>
+
                 </div>
               </div>
 
-            <div className="table-responsive justify-between mt-3">
+            <div className="justify-between mt-3">
               <div className="overflow-x-auto">
                 <table className="w-full border border-gray-300">
                   <thead className="bg-white">
@@ -199,7 +199,7 @@ const ViewOrders = () => {
         </div>
       </div>
       {/* </div> */}
-    </StaffSidebar>
+    </>
   );
 };
 

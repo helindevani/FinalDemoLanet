@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AdminSidebar from '@/components/AdminSidebar';
+import AdminSidebar from '@/components/Sidebar/AdminSidebar';
 import Cookies from 'js-cookie';
 import { fetchBrands, deleteBrand, setPage, setPageSize, Brand } from '@/store/supplierSlice';
 import { FaEdit, FaTrash } from 'react-icons/fa';
@@ -46,7 +46,7 @@ const ViewSupplier = () => {
   const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
-    <AdminSidebar>
+    <>
       <ToastContainer />
       <div className="page-wrapper">
         <div className="flex flex-col sm:flex-row justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
@@ -177,7 +177,7 @@ const ViewSupplier = () => {
           </div>
         </div>
       </div>
-    </AdminSidebar>
+    </>
   );
 };
 

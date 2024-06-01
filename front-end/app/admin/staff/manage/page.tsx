@@ -1,7 +1,7 @@
 "use client";
 import { format } from 'date-fns';
 import { useCallback, useEffect, useState } from "react";
-import AdminSidebar from "@/components/AdminSidebar";
+import AdminSidebar from "@/components/Sidebar/AdminSidebar";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,7 +40,7 @@ const ViewStaff = () => {
 
 
   return (
-    <AdminSidebar>
+    <>
       <div className="page-wrapper">
         <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
@@ -210,7 +210,7 @@ const ViewStaff = () => {
           </div>
         </div>
       </div>
-    </AdminSidebar>
+    </>
   );
 };
 

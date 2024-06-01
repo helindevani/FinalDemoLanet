@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import AdminSidebar from "@/components/AdminSidebar";
+import AdminSidebar from "@/components/Sidebar/AdminSidebar";
 
 const Dashboard: React.FC = () => {
   const [countProduct, setCountProduct] = useState();
@@ -30,7 +30,7 @@ const Dashboard: React.FC = () => {
   console.log(countProduct)
   console.log(countSuppliers)
   return (
-    <AdminSidebar>
+    <>
       <div className="page-wrapper">
         <div className="flex justify-between top-0 bg-white border border-gray-300 p-3 h-10 mb-8 sm:h-auto w-auto text-sm"></div>
         <div className="grid grid-cols-4 gap-4 p-5 mb-4">
@@ -81,7 +81,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
-    </AdminSidebar>
+    </>
   );
 };
 

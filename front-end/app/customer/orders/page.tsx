@@ -20,44 +20,45 @@ const BookingDetails = () => {
   const router=useRouter();
 
   const token = Cookies.get("token");
-
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5057/api/Bookings/BookingDetails",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.status === 200 && response.data.message === 
-          "Order not placed.") {
-            setOrderData(response.data.booking);
-            setShowData("booking");
-          console.log("Booking is pending");
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5057/api/Bookings/BookingDetails",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
-          if (response.status === 200 && response.data.message === "Order Successfully Places" ) {
-            setOrderData(response.data.order);
-            setShowData("order");
-            console.log("Order is not delivered");
-          }
-        if (
-          response.status === 200 &&
-          response.data.message === "No active orders for your account."
-        ) {
-          router.push('/customer/booking')
-          console.log("No active orders for your account.");
-        }
-        // }
-      } catch (error) {
-        console.error("Error fetching orders:", error);
+      );
+      if (response.status === 200 && response.data.message === 
+        "Order not placed.") {
+          setOrderData(response.data.booking);
+          setShowData("booking");
+        console.log("Booking is pending");
       }
-    };
-    fetchOrders();
-  }, [router,token]);
+        if (response.status === 200 && response.data.message === "Order Successfully Places" ) {
+          setOrderData(response.data.order);
+          setShowData("order");
+          console.log("Order is not delivered");
+        }
+      if (
+        response.status === 200 &&
+        response.data.message === "No active orders for your account."
+      ) {
+        router.push('/customer/booking')
+        console.log("No active orders for your account.");
+      }
+      // }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
+  useEffect(() => {
+    if (!orderData) {
+      fetchOrders();
+    }
+  }, [orderData]);
 
   const handleRatingChange = (value: any) => {
     setStaffRating(value);
@@ -65,7 +66,7 @@ const BookingDetails = () => {
 
 
   return (
-    <Sidebar>
+    <>
       <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
         <h3 className="text-xl text-blue-800 font-semibold text-primary">
           Order Details
@@ -83,7 +84,7 @@ const BookingDetails = () => {
         {showData == "order" && <TrackByOrder data={orderData}/>}
         {showData == "booking" && <TrackByBooking data={orderData}/>}
       </div>
-    </Sidebar>
+    </>
   );
 };
 

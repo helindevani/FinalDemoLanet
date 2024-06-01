@@ -10,9 +10,12 @@ const Footer: React.FC = () => {
     <footer className="bg-white pt-4 pb-24 z-[1000] dark:bg-gray-900 border">
       <div className="max-w-screen-xl w-full mx-auto px-6 sm:px-8 lg:px-16 grid grid-rows-6 sm:grid-rows-1 grid-flow-row sm:grid-flow-col grid-cols-3 sm:grid-cols-12 gap-4">
         <div className="row-span-2 sm:col-span-4 col-start-1 col-end-4 sm:col-end-5 flex flex-col items-start">
-          <Image src={LogoVPN} alt="LogoVpn" width={50} height={50} />
+        <div className="col-start-1 col-end-2 flex items-center">
+            <Image src={LogoVPN} alt="LogoImage" height={50} width={50} />
+            <span className="text-4xl p-1 m-1 text-gray-800">Refill Smart</span>
+          </div>
           <p className="mb-4">
-            <strong className="font-medium">LaslesVPN</strong> is a private
+            <strong className="font-medium">RefillSmart</strong> is a private
             virtual network that has unique features and has high security.
           </p>
           <div className="flex w-full mt-2 mb-8 -mx-2">
@@ -26,7 +29,7 @@ const Footer: React.FC = () => {
               <Image src={Instagram} alt="Instagram" className="h-8 w-auto" />
             </div>
           </div>
-          <p className="text-gray-400">©{new Date().getFullYear()} - LaslesVPN</p>
+          <p className="text-gray-400">©{new Date().getFullYear()} - RefillSmart</p>
         </div>
         <div className="row-span-2 sm:col-span-2 sm:col-start-7 sm:col-end-9 flex flex-col">
           <p className="text-black mb-4 font-medium text-lg">Product</p>

@@ -37,3 +37,21 @@ export const ToastSuccess = (message: string) => {
     </>
   );
 };
+
+export const ToastWarning = (message: string) => {
+  return (
+    <>
+      {toast.warning(message, {
+       position: "top-right",
+       autoClose: 3000,
+       hideProgressBar: false,
+       closeOnClick: true,
+       pauseOnHover: true,
+       draggable: true,
+       progress: undefined,
+       theme: "colored",
+       transition: Bounce,
+      })}
+    </>
+  );
+};

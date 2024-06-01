@@ -93,7 +93,7 @@ const TrackByOrder : React.FC<TrackByOrderProps> = ({ data }) => {
               </tr>
               <tr>
                 <td className="py-1 pr-2 font-semibold">Booking Id:</td>
-                <td className="py-1">{data?.bookingId}</td>
+                <td className="py-1">{data?.bookingId.split("-").join("")}</td>
               </tr>
               <tr>
                 <td className="py-1 pr-2 font-semibold">Product Detail:</td>

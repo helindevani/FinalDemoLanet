@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import AdminSidebar from "@/components/AdminSidebar";
+import AdminSidebar from "@/components/Sidebar/AdminSidebar";
 
 interface User {
   userId: number;
@@ -29,7 +29,7 @@ const RegisteredUsers: React.FC = () => {
   }, []);
 
   return (
-    <AdminSidebar>
+    <>
       <div className="bg-white px-6 py-8 sm:px-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-6">Registered Users</h2>
         <table className="w-full border-collapse border border-gray-300">
@@ -51,7 +51,7 @@ const RegisteredUsers: React.FC = () => {
           </tbody>
         </table>
       </div>
-    </AdminSidebar>
+    </>
   );
 };
 

@@ -19,14 +19,10 @@ export default function LinkConnection() {
       console.error("JWT token not found");
       return;
     }
-
-    const decodedToken = JSON.parse(atob(token.split(".")[1]));
-
-    const userId = decodedToken ? decodedToken.sub : null;
     const data = { LpgNo: connectionNo };
 
     const response = await axios.post(
-      `http://localhost:5057/api/User/LinkConnection/${userId}`,
+      `http://localhost:5057/api/User/LinkConnection`,
       data,
       {
         headers: {
@@ -48,7 +44,7 @@ export default function LinkConnection() {
     console.log("Form submitted successfully");
   };
   return (
-    <Sidebar>
+    <>
       <ToastContainer />
       <div className="page-wrapper">
       <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border-b">
@@ -98,6 +94,6 @@ export default function LinkConnection() {
           </div>
         </div>
       </div>
-    </Sidebar>
+    </>
   );
 }

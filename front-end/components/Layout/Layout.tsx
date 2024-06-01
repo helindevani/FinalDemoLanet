@@ -1,40 +1,21 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import Footer from './Footer';
+import React, { useState, useEffect, ReactNode } from 'react';
+import { useSelector } from 'react-redux';
 import Header from './Header';
 import AdminHeader from './AdminHeader';
-import { useSelector } from 'react-redux';
+import { LayoutProps, RootState } from '../TypeInterface/AllType';
 
-interface RootState {
-  auth: AuthState;
-}
-
-interface AuthState {
-  token: string | null;
-  error: string | null;
-  loading: boolean;
-  status: string;
-}
-
-const Layout = ({ children }: { children: any }): JSX.Element => {
-  const {token}  = useSelector((state: RootState) => state.auth);
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const { token } = useSelector((state: RootState) => state.auth);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
-    // Use a truthiness check instead of token !== null
-    if (token !== null) {
-      setIsLoggedIn(true);
-    }
-    else{
-      setIsLoggedIn(false)
-    }
+    setIsLoggedIn(!!token);
   }, [token]);
+
   return (
     <>
-      {isLoggedIn ? <AdminHeader /> : <Header />}
-      {/* <div className="mt-[85px]"> */}
-        {children}
-      {/* </div> */}
+      {isLoggedIn ? <AdminHeader>{children}</AdminHeader> : <Header>{children}</Header>}
     </>
   );
 };

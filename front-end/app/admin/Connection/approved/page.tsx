@@ -1,5 +1,5 @@
 'use client';
-import AdminSidebar from '@/components/AdminSidebar';
+import AdminSidebar from '@/components/Sidebar/AdminSidebar';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaEdit, FaTrash } from 'react-icons/fa';
@@ -23,7 +23,7 @@ const ApproveConnection = () => {
   }, [token]);
 
     return (
-      <AdminSidebar>
+
       <div className="page-wrapper">
         <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
@@ -165,7 +165,6 @@ const ApproveConnection = () => {
           </div>
         </div>
       </div>
-    </AdminSidebar>
     );
 };
 

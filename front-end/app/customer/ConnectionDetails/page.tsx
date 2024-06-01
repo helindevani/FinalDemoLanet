@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Sidebar from "@/components/Sidebar";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import {
@@ -31,41 +30,49 @@ const ConnectionDetails: React.FC = () => {
 
   console.log(data?.approvedConnection[0].status)
 
-  // console.log(userId);
 
-  // useEffect(() => {
-  //  
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:5057/api/User/AppliedNewConnection`
-  //       );
+  useEffect(() => {
+   
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5057/api/User/AppliedNewConnection`,{
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-  //       if (response.data.status == "Pending") {
-  //         const confirmed = window.confirm(`Your LPG No Is ${response.data.lpgNo} In Pending State!!` );
-  //         if (confirmed) {
-  //           router.push("/customer/Dashboard");
-  //         }
-  //       }
-  //       if (response.data.status == "Rejected") {
-  //         const confirmed = window.confirm(`Your LPG No Is ${response.data.lpgNo} In Rejected State Please Applied New Connection!!` );
-  //         if (confirmed) {
-  //           router.push("/customer/NewConnection");
-  //         }
-  //       }
-  //       setIsLoading(false);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //       setIsLoading(false);
-  //     }
-  //   };
+        if (response.data.status == "Pending") {
+          const confirmed = window.confirm(`Your LPG No Is ${response.data.lpgNo} In Pending State!!` );
+          if (confirmed) {
+            router.push("/customer/Dashboard");
+          }
+        }
+        if (response.data.status == "Rejected") {
+          const confirmed = window.confirm(`Your LPG No Is ${response.data.lpgNo} In Rejected State Please Applied New Connection!!` );
+          if (confirmed) {
+            router.push("/customer/NewConnection");
+          }
+        }
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  //   fetchData();
-  // }, [ router]);
+    fetchData();
+  }, [ router,token]);
 
   return (
-    <Sidebar>
-      <div className="page-wrapper">
+    <>
+   <div className="relative">
+      {isLoading && (
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        </div>
+      )}
+    {!isLoading && <div className="page-wrapper">
         <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
             Connection Details
@@ -396,8 +403,10 @@ const ConnectionDetails: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>}
       </div>
-    </Sidebar>
+      
+    </>
   );
 };
 

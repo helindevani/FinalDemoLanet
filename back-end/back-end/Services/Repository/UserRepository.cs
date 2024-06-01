@@ -69,24 +69,32 @@ namespace back_end.Services
             return new NoContentResult();
         }
 
-        public async Task<IActionResult> LinkConnection(Guid userId, string LpgNo)
+        public async Task<IActionResult> LinkConnection(ClaimsPrincipal user, string LpgNo)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                throw new UnauthorizedAccessException("User ID not found in token.");
+            }
+
+            var userId = userIdClaim.Value;
+            var userdata=await _userManager.FindByIdAsync(userId);
             var connection = _context.Connections.FirstOrDefault(r => r.LpgNo == LpgNo);
 
-            if (user.IsHasConnectionLinked)
+            if (userdata.IsHasConnectionLinked)
             {
                 return new BadRequestObjectResult("User was already linked to an account with the system.");
             }
 
             if (connection != null)
             {
-                if (user.Id == connection.UserId && connection.Status == ConnectionStatus.Approved)
+                if (userdata.Id == connection.UserId && connection.Status == ConnectionStatus.Approved)
                 {
-                    user.IsHasConnectionLinked = true;
+                    userdata.IsHasConnectionLinked = true;
 
-                    var message = $"Your LPG Connection No {connection.LpgNo} is linked with {user.Name} account successfully.";
-                    await _emailService.SendEmailAsync(user.Email, "Link Connection", message);
+                    var message = $"Your LPG Connection No {connection.LpgNo} is linked with {userdata.Name} account successfully.";
+                    await _emailService.SendEmailAsync(userdata.Email, "Link Connection", message);
 
                     return new OkObjectResult("User was linked successfully to his account.");
                 }

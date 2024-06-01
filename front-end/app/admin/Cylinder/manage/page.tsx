@@ -1,6 +1,12 @@
 "use client";
-import AdminSidebar from "@/components/AdminSidebar";
-import { deleteProduct, fetchProducts, setPage, setPageSize, Product } from "@/store/productSlice";
+import AdminSidebar from "@/components/Sidebar/AdminSidebar";
+import {
+  deleteProduct,
+  fetchProducts,
+  setPage,
+  setPageSize,
+  Product,
+} from "@/store/productSlice";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useState, useEffect, useCallback } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -23,15 +29,15 @@ const ViewCylinder = () => {
   const token = Cookies.get("token");
 
   const fetchData = useCallback(
-    debounce((page, pageSize,search) => {
-      dispatch(fetchProducts({ page, pageSize ,search}));
+    debounce((page, pageSize, search) => {
+      dispatch(fetchProducts({ page, pageSize, search }));
     }, 1500),
     [dispatch]
   );
 
   useEffect(() => {
-    fetchData(page, pageSize,search);
-  }, [dispatch, token, page, pageSize, fetchData,search]);
+    fetchData(page, pageSize, search);
+  }, [dispatch, token, page, pageSize, fetchData, search]);
 
   const handleDeleteProduct = (productId: string) => {
     if (window.confirm("Are you sure to delete this product?")) {
@@ -48,7 +54,7 @@ const ViewCylinder = () => {
   const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
-    <AdminSidebar>
+    <>
       <ToastContainer />
       <div className="page-wrapper">
         <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
@@ -82,7 +88,9 @@ const ViewCylinder = () => {
                     <select
                       name="myTable_length"
                       value={pageSize}
-                      onChange={(e) => dispatch(setPageSize(Number(e.target.value)))}
+                      onChange={(e) =>
+                        dispatch(setPageSize(Number(e.target.value)))
+                      }
                       className="form-select border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
                     >
                       <option value="5">5</option>
@@ -99,7 +107,7 @@ const ViewCylinder = () => {
                       className="border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
                       placeholder=""
                       value={search}
-                      onChange={(e)=>(setSearch(e.target.value))}
+                      onChange={(e) => setSearch(e.target.value)}
                     />
                   </label>
                 </div>
@@ -229,7 +237,7 @@ const ViewCylinder = () => {
           </div>
         </div>
       </div>
-    </AdminSidebar>
+    </>
   );
 };
 

@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Identity;
 using back_end.Domain.Identity;
 using back_end.DTO;
 using back_end.Enums;
+using System.Security.Claims;
+using System.Linq.Expressions;
 
 namespace back_end.Repositories
 {
@@ -29,6 +31,12 @@ namespace back_end.Repositories
         public async Task<IEnumerable<Connection>> GetConnectionsAsync()
         {
             return await _context.Connections.ToListAsync();
+        }
+
+        public async Task<Connection> GetConnectionByIdAsync(string id)
+        {
+            return await _context.Connections
+                .FirstOrDefaultAsync(p => p.LpgNo == id);
         }
 
         public async Task<PagedConnectionsResult<Connection>> GetConnectionsByStatusAsync(string status, int page, int pageSize, string search = null)
@@ -208,6 +216,58 @@ namespace back_end.Repositories
             var uploadResult = await cloudinary.UploadAsync(uploadParams);
 
             return uploadResult.SecureUrl.ToString();
+        }
+
+        public async Task<bool> CheckConnectionAppliedAsync(ClaimsPrincipal user)
+        {
+            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                throw new UnauthorizedAccessException("User ID not found in token.");
+            }
+
+            var userId = userIdClaim.Value;
+
+            var userData = await _userManager.FindByIdAsync(userId);
+            if (userData == null)
+            {
+                throw new Exception("User Not Found");
+            }
+            if(userData.IsHasConnection)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> CheckConnectionLinkedAsync(ClaimsPrincipal user)
+        {
+            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                throw new UnauthorizedAccessException("User ID not found in token.");
+            }
+
+            var userId = userIdClaim.Value;
+
+            var userData = await _userManager.FindByIdAsync(userId);
+            if (userData == null)
+            {
+                throw new Exception("User Not Found");
+            }
+            if (userData.IsHasConnectionLinked)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

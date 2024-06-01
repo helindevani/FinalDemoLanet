@@ -62,7 +62,8 @@ namespace back_end.Services.Repository
                             UnitAmount = (long)(booking.Price * 100), // Price in cents
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
-                                Name = $"{booking.ProductID} - LPG Cylinder",
+                                Name = $"{booking.ProductID.Split("-")} - LPG Cylinder",
+                                
                             },
                         },
                         Quantity = 1,
@@ -250,6 +251,7 @@ namespace back_end.Services.Repository
             var userId = userIdClaim.Value;
             return await _context.Bookings
                 .Include(p => p.Product)
+                .Include(b=>b.Product.Brand)
                 .Where(b => b.CreatedBy == userId)
                 .OrderByDescending(b => b.BookingDate)
                 .FirstOrDefaultAsync();
@@ -259,8 +261,8 @@ namespace back_end.Services.Repository
         {
             return await _context.Orders
                 .Include(r => r.Booking)
-                    .ThenInclude(b => b.Product)
-                        .ThenInclude(p => p.Brand)
+                    .Include(b => b.Booking.Product)
+                        .Include(p => p.Booking.Product.Brand)
                 .FirstOrDefaultAsync(i => i.BookingId == bookingId);
         }
 

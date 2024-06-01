@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { TbHelpSquareRounded } from "react-icons/tb";
 import { TrackByBookingProps} from "../TypeInterface/AllType";
-import { convertToLocalDate, getBookingStatus } from "../Enums/EnumConverter";
+import { convertToLocalDate, getBookingStatus, getPaymentMode, getPaymentStatus } from "../Enums/EnumConverter";
 
 const TrackByBooking : React.FC<TrackByBookingProps> = ({ data }) => {
   const [staffRating, setStaffRating] = useState(0);
@@ -83,22 +83,22 @@ const TrackByBooking : React.FC<TrackByBookingProps> = ({ data }) => {
             <tbody>
               <tr>
                 <td className="py-1 pr-2 font-semibold">Booking Id:</td>
-                <td className="py-1">{data?.bookingId}</td>
+                <td className="py-1">{data?.bookingId.split("-").join("").split("-").join("")}</td>
               </tr>
               <tr>
                 <td className="py-1 pr-2 font-semibold">Product Detail:</td>
                 <td className="py-1">
-                  {/* {data?.product.productName}-
-                  {data?.product.brand.brandName} */}
+                  {data?.product.productName}-
+                  {data?.product.brand.brandName}
                 </td>
               </tr>
               <tr>
                 <td className="py-1 pr-2 font-semibold">Payment Type:</td>
-                <td className="py-1">{data?.paymentType}</td>
+                <td className="py-1">{getPaymentMode(data?.paymentType)}</td>
               </tr>
               <tr>
                 <td className="py-1 pr-2 font-semibold">Payment Status:</td>
-                <td className="py-1">{data?.paymentStatus}</td>
+                <td className="py-1">{getPaymentStatus(data?.paymentStatus)}</td>
               </tr>
               <tr>
                 <td className="py-1 pr-2 font-semibold">Amount:</td>

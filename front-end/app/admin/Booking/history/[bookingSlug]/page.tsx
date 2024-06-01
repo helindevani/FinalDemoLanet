@@ -1,5 +1,5 @@
 "use client";
-import AdminSidebar from "@/components/AdminSidebar";
+import AdminSidebar from "@/components/Sidebar/AdminSidebar";
 import {
   convertToLocalDate,
   getBookingStatus,
@@ -54,7 +54,7 @@ const BookingDetails = () => {
   }));
 
   return (
-    <AdminSidebar>
+    <>
       <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
         <h3 className="text-xl text-blue-800 font-semibold text-primary">
           Booking Details
@@ -194,7 +194,7 @@ const BookingDetails = () => {
           </div>
         </div>
       </div>
-    </AdminSidebar>
+</>
   );
 };
 

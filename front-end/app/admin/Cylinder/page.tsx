@@ -1,5 +1,5 @@
 "use client";
-import AdminSidebar from "@/components/AdminSidebar";
+import AdminSidebar from "@/components/Sidebar/AdminSidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchBrands, Brand } from "@/store/supplierSlice";
@@ -110,7 +110,7 @@ const AddProduct = () => {
   };
 
   return (
-    <AdminSidebar>
+    <>
       <ToastContainer/>
       <div className="page-wrapper">
         <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
@@ -259,7 +259,7 @@ const AddProduct = () => {
           </div>
         </div>
       </div>
-    </AdminSidebar>
+    </>
   );
 };
 

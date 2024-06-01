@@ -105,7 +105,7 @@ export default function Booking() {
   console.log(data);
 
   return (
-    <Sidebar>
+    <>
       <ToastContainer/>
       <div className="page-wrapper">
         <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
@@ -264,6 +264,6 @@ export default function Booking() {
           </div>
         </div>
       </div>
-    </Sidebar>
+    </>
   );
 }

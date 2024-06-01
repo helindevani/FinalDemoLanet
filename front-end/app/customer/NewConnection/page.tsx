@@ -1,17 +1,60 @@
 'use client';
 import Sidebar from "@/components/Sidebar";
+import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { FaDeleteLeft } from "react-icons/fa6";
+import Cookies from "js-cookie";
+import { ToastError, ToastWarning } from "@/components/ToastError";
+import { ToastContainer } from "react-toastify";
 
 export default function NewConnection() {
   const router=useRouter();
+  const token= Cookies.get("token");
 
-  const handelSubmit=()=>{
-    router.push("/customer/newConnection/kycForm");
+  const handelAppliedNewConnection=async ()=>{
+    try {
+      const response = await axios.get("http://localhost:5057/api/Connections/checkConnectionApplied", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200 && response.data) {
+        ToastWarning("You Have Already Applied");
+      }
+      else{
+        router.push("/customer/newConnection/kycForm");
+      }
+    } catch (error) {
+      console.error("Error checking existing connection:", error);
+    }
+};
+
+  const handelLinkConnection=async()=>{
+    try {
+      const response = await axios.get("http://localhost:5057/api/Connections/checkConnectionLinked", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200 && response.data) {
+        ToastWarning("You Have Already Linked Account");
+      }
+      else{
+        router.push("/customer/newConnection/linkConnection");
+      }
+    } catch (error) {
+      console.error("Error checking existing connection:", error);
+    }
+    
   }
+
+
   return (
     <>
-      <Sidebar>
+    <ToastContainer/>
         <div className="page-wrapper">
           <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
             <h3 className="text-xl text-blue-800 font-semibold text-primary">
@@ -35,15 +78,15 @@ export default function NewConnection() {
                 </h1>
                 <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 p-5">
                   <div className="text-center mx-auto  w-[401px]">
-                    <div className="m-5 border py-5 px-16 rounded-full border-gray-700">
+                    <div className="m-5 border py-5 px-16 rounded-full bg-slate-200 shadow">
                       <b> Apply For New Connection</b><br/>
-                      <button className="block mx-auto my-5 w-auto rounded-md bg-orange-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={handelSubmit}> Submit </button>
+                      <button className="block mx-auto my-5 w-auto rounded-md bg-orange-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={handelAppliedNewConnection}> Submit </button>
                     </div>
                   </div>
                   <div className="text-center mx-auto w-[401px]">
-                    <div className="m-5 border py-5 px-16 rounded-full border-gray-700">
+                    <div className="m-5 border py-5 px-16 rounded-full bg-slate-200 shadow">
                       <b> Link Your Connection</b><br/>
-                      <button className="block mx-auto my-5 w-auto rounded-md bg-orange-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"> Submit </button>
+                      <button className="block mx-auto my-5 w-auto rounded-md bg-orange-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={handelLinkConnection}> Submit </button>
                     </div>
                   </div>
                 </div>
@@ -52,7 +95,6 @@ export default function NewConnection() {
             </div>
           </div>
         </div>
-      </Sidebar>
     </>
   );
 }

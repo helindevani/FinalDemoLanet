@@ -8,6 +8,6 @@ namespace back_end.Services
     public interface IUserRepository
     {
         Task<IActionResult> AppliedNewConnection(ClaimsPrincipal user);
-        Task<IActionResult> LinkConnection(Guid userId, string LpgNo);
+        Task<IActionResult> LinkConnection(ClaimsPrincipal user, string LpgNo);
     }
 }

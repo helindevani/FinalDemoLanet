@@ -684,6 +684,32 @@
   },
   {
     "ContainingType": "back_end.Controllers.CategoriesController",
+    "Method": "GetCategory",
+    "RelativePath": "api/Categories/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "back_end.Domain.Entities.Brand",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "back_end.Controllers.CategoriesController",
     "Method": "PutCategory",
     "RelativePath": "api/Categories/{id}",
     "HttpMethod": "PUT",
@@ -917,6 +943,32 @@
   },
   {
     "ContainingType": "back_end.Controllers.ConnectionsController",
+    "Method": "GetConnection",
+    "RelativePath": "api/Connections/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "back_end.Domain.Entities.Connection",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "back_end.Controllers.ConnectionsController",
     "Method": "PutConnection",
     "RelativePath": "api/Connections/{id}",
     "HttpMethod": "PUT",
@@ -984,6 +1036,46 @@
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.IEnumerable\u00601[[back_end.Domain.Entities.Connection, back-end, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "back_end.Controllers.ConnectionsController",
+    "Method": "CheckConnectionApplied",
+    "RelativePath": "api/Connections/checkConnectionApplied",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "back_end.Controllers.ConnectionsController",
+    "Method": "CheckConnectionLinked",
+    "RelativePath": "api/Connections/checkConnectionLinked",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1527,20 +1619,15 @@
   {
     "ContainingType": "back_end.Controllers.UserController",
     "Method": "LinkConnection",
-    "RelativePath": "api/User/LinkConnection/{userId}",
+    "RelativePath": "api/User/LinkConnection",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
         "Name": "LpgNo",
-        "Type": "System.String",
-        "IsRequired": false
+        "Type": "back_end.DTO.LinkConnectionRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

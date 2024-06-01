@@ -6,31 +6,17 @@ import { BsCalendar } from "react-icons/bs";
 import { FaExpandArrowsAlt, FaTachometerAlt } from "react-icons/fa";
 import { IoInformationCircleSharp, IoReceiptSharp } from "react-icons/io5";
 
-const Sidebar = ({ showName, children }: any) => {
+const Sidebar = () => {
   const [expandedMenu, setExpandedMenu] = useState("");
-  const [selectedMenuItem, setSelectedMenuItem] = useState("");
   const router = usePathname();
-
-  useEffect(() => {
-    console.log("Expanded menu:", expandedMenu);
-  }, [expandedMenu]);
 
   const toggleSubMenu = (menuId: string) => {
     setExpandedMenu(menuId === expandedMenu ? "" : menuId);
   };
 
-  const selectMenuItem = (menuId: string) => {
-    setSelectedMenuItem(menuId);
-  };
-
-  const isMenuItemSelected = (menuId: string) => {
-    return selectedMenuItem === menuId;
-  };
-
   return (
     <>
-      <div className="flex border z-40 mt-[80px]">
-        <aside className="sm:w-56">
+        <aside className="sm:w-56 mt-[80px]">
           <div className="h-full px-3 w-14 sm:w-56 py-4 overflow-y-auto bg-gray-100 dark:bg-gray-800 border">
             <ul className="space-y-2 font-medium">
               <li>
@@ -143,10 +129,6 @@ const Sidebar = ({ showName, children }: any) => {
             </ul>
           </div>
         </aside>
-        <div className="flex-col flex-col-11 w-full overflow-y-auto mb-10">
-          {children}
-        </div>
-      </div>
     </>
   );
 };

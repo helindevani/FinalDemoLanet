@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
-import AdminSidebar from "@/components/AdminSidebar";
+import AdminSidebar from "@/components/Sidebar/AdminSidebar";
 import { getPaymentDoneOrNot, getPaymentMode, getPaymentStatus, getPaymentType } from "@/components/Enums/EnumConverter";
 
 interface OrderFormValues {
@@ -130,7 +130,7 @@ const Order: React.FC = () => {
 };
 
   return (
-    <AdminSidebar>
+    <>
       <div className="page-wrapper">
         <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
@@ -402,7 +402,7 @@ const Order: React.FC = () => {
           </div>
         </div>
       </div>
-    </AdminSidebar>
+    </>
   );
 };
 

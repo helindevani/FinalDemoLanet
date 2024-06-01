@@ -1,7 +1,7 @@
 'use client';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
-import AdminSidebar from '@/components/AdminSidebar';
+import AdminSidebar from '@/components/Sidebar/AdminSidebar';
 import Cookies from 'js-cookie';
 import { addBrand } from '@/store/supplierSlice';
 import { ToastError, ToastSuccess } from '@/components/ToastError';
@@ -45,7 +45,6 @@ const AddSupplier = () => {
     
     return (
         <>
-        <AdminSidebar>
           <ToastContainer/>
         <div className="page-wrapper">
           <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
@@ -111,13 +110,6 @@ const AddSupplier = () => {
           </div>
         </div>
 
-         
-
-            {/* <footer className="text-center text-sm text-gray-600 mt-8">
-                Author Name- Mayuri K. For any PHP, Codeignitor, Laravel OR Python work contact me at mayuri.infospace@gmail.com Visit website - www.mayurik.com
-            </footer> */}
-
-        </AdminSidebar>
         </>
     );
 };

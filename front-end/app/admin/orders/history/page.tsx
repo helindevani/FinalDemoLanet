@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {  FaEdit,  FaEye,  FaTrash } from "react-icons/fa";
 import { fetchOrdersAdmin,Order, setPageSize,setPage } from "@/store/orderSlice";
 import { AppDispatch, RootState } from "@/store";
-import AdminSidebar from "@/components/AdminSidebar";
+import AdminSidebar from "@/components/Sidebar/AdminSidebar";
 import Link from "next/link";
 import { convertToLocalDate, getOrderStatus } from "@/components/Enums/EnumConverter";
 import debounce from "lodash.debounce";
@@ -34,7 +34,7 @@ const ViewOrders = () => {
   const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
-    <AdminSidebar>
+    <>
       {/* <div className="page-wrapper"> */}
         <div className="flex justify-between bg-white p-1 h-10 mb-10 sm:h-auto w-auto text-sm">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
@@ -195,7 +195,7 @@ const ViewOrders = () => {
           </div>
         </div>
       {/* </div> */}
-    </AdminSidebar>
+    </>
   );
 };
 

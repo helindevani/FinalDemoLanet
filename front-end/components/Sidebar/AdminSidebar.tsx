@@ -12,7 +12,7 @@ import { FaRegChartBar, FaUser } from "react-icons/fa6";
 import { BiCylinder, BiListCheck } from "react-icons/bi";
 import { IoReceiptSharp } from "react-icons/io5";
 
-const AdminSidebar = ({ children }: any) => {
+const AdminSidebar = () => {
   const [expandedMenu, setExpandedMenu] = useState("");
 
   const toggleSubMenu = (menuId: string) => {
@@ -20,8 +20,7 @@ const AdminSidebar = ({ children }: any) => {
   };
   return (
     <>
-      <div className="flex border z-40 mt-[80px]">
-        <aside className="sm:w-56"
+        <aside className="sm:w-56 mt-[80px]"
         >
           <div className="h-full px-3 w-14 sm:w-56 py-4 overflow-y-auto bg-gray-100 dark:bg-gray-800 ">
             <ul className="space-y-2 font-medium">
@@ -409,8 +408,6 @@ const AdminSidebar = ({ children }: any) => {
             </ul>
           </div>
         </aside>
-        <div className="flex-col flex-col-11 w-full h-auto">{children}</div>
-      </div>
     </>
   );
 };

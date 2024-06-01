@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import AdminSidebar from "@/components/AdminSidebar";
+import AdminSidebar from "@/components/Sidebar/AdminSidebar";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -82,7 +82,7 @@ const EditStaff = () => {
 
   return (
     <>
-      <AdminSidebar>
+
         <ToastContainer />
         <div className="page-wrapper">
           <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
@@ -212,7 +212,7 @@ const EditStaff = () => {
             </div>
           </div>
         </div>
-      </AdminSidebar>
+
     </>
   );
 };

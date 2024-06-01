@@ -1,4 +1,5 @@
-﻿using back_end.Services;
+﻿using back_end.DTO;
+using back_end.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,10 +23,10 @@ namespace back_end.Controllers
             return await _userService.AppliedNewConnection(User);
         }
 
-        [HttpPost("LinkConnection/{userId}")]
-        public async Task<IActionResult> LinkConnection(Guid userId, string LpgNo)
+        [HttpPost("LinkConnection")]
+        public async Task<IActionResult> LinkConnection([FromBody] LinkConnectionRequest LpgNo)
         {
-            return await _userService.LinkConnection(userId, LpgNo);
+            return await _userService.LinkConnection(User, LpgNo.LpgNo);
         }
     }
 }

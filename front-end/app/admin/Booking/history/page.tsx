@@ -1,5 +1,5 @@
 'use client';
-import AdminSidebar from "@/components/AdminSidebar";
+import AdminSidebar from "@/components/Sidebar/AdminSidebar";
 import { useEffect, useCallback, useState } from "react";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +13,7 @@ import {
   getPaymentStatus,
 } from "@/components/Enums/EnumConverter";
 import debounce from 'lodash.debounce';
+import { DebouncedFunc } from 'lodash';
 
 const BookingHistory = () => {
   const dispatch = useDispatch<any>();
@@ -20,9 +21,9 @@ const BookingHistory = () => {
   const token = Cookies.get("token");
   const [search, setSearch] = useState("");
 
-  const fetchData = useCallback(
-    debounce((page, pageSize,search) => {
-      dispatch(fetchBookings({ page, pageSize,history :true,search }));
+  const fetchData = useCallback<DebouncedFunc<(page: any, pageSize: any, search: any) => void>>(
+    debounce((page, pageSize, search) => {
+      dispatch(fetchBookings({ page, pageSize, history: true, search }));
     }, 1500),
     [dispatch]
   );
@@ -34,7 +35,6 @@ const BookingHistory = () => {
   const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
-    <AdminSidebar>
       <div className="page-wrapper overflow-scroll">
         <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
@@ -156,7 +156,6 @@ const BookingHistory = () => {
           </div>
         </div>
       </div>
-    </AdminSidebar>
   );
 };
 

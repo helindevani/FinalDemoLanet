@@ -32,6 +32,17 @@ namespace back_end.Controllers
             return Ok(connections);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Connection>>GetConnection(string id)
+        {
+            var connections = await _connectionRepository.GetConnectionByIdAsync(id);
+            if (connections == null)
+            {
+                return NotFound();
+            }
+            return Ok(connections);
+        }
+
         [HttpGet("{status}")]
         public async Task<ActionResult<IEnumerable<Connection>>> GetConnection(string status, int page, int pageSize, string search = null)
         {
@@ -41,6 +52,20 @@ namespace back_end.Controllers
                 return NotFound();
             }
             return Ok(connections);
+        }
+
+        [HttpGet("checkConnectionApplied")]
+        public async Task<bool> CheckConnectionApplied()
+        {
+            var result = await _connectionRepository.CheckConnectionAppliedAsync(User);
+            return result;
+        }
+
+        [HttpGet("checkConnectionLinked")]
+        public async Task<bool> CheckConnectionLinked()
+        {
+            var result = await _connectionRepository.CheckConnectionLinkedAsync(User);
+            return result;
         }
 
 

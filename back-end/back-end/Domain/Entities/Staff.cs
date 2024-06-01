@@ -37,6 +37,10 @@ namespace back_end.Domain.Entities
         [Required]
         public DateTime UpdatedDate { get; set;} = DateTime.UtcNow;
 
+        public int? Rating { get; set; }
+
+        public int? RatingQuantity { get;}
+
         [Required]
         public string CreatedBy { get; set; }
     }

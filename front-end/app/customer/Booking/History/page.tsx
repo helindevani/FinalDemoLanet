@@ -33,7 +33,7 @@ useEffect(() => {
 
 const totalPages = Math.ceil(totalCount / pageSize);
   return (
-    <Sidebar>
+    <>
       <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
         <h3 className="sm:text-xl text-blue-800 font-semibold text-primary">
           Order History
@@ -49,7 +49,6 @@ const totalPages = Math.ceil(totalCount / pageSize);
 
       <div className="bg-white shadow-md rounded p-10 m-10 w-auto border-b ">
       <div className="flex justify-between items-center pb-2">
-              <div className="flex justify-between items-center">
                 <div className="dataTables_length">
                   <label className="mr-3">
                     Show{" "}
@@ -78,22 +77,11 @@ const totalPages = Math.ceil(totalCount / pageSize);
                   </label>
                 </div>
               </div>
-                <div id="myTable_filter" className="dataTables_filter">
-                  <label className="flex items-center">
-                    <span className="mr-1">Search:</span>
-                    <input
-                      type="search"
-                      className="border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
-                      placeholder=""
-                      aria-controls="myTable"
-                    />
-                  </label>
-                </div>
-              </div>
 
-        <ul>
+
+        <ul className="my-3">
         {orders.map((order : Order) => (
-            <li key={order.orderId}>
+            <li key={order.orderId} className="my-1">
               <Link href={`/customer/booking/history/${order.orderId}`}>
               <div className="sm:flex p-2  bg-slate-100 shadow-lg">
           <div className="w-full sm:w-1/6 flex justify-center items-center">
@@ -174,7 +162,7 @@ const totalPages = Math.ceil(totalCount / pageSize);
                   </div>
                 </div>
       </div>
-    </Sidebar>
+    </>
   );
 };
 

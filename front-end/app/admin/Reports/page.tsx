@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 
-import AdminSidebar from '@/components/AdminSidebar';
+import AdminSidebar from '@/components/Sidebar/AdminSidebar';
 
 const DatewiseReport = () => {
   const [startDate, setStartDate] = useState('');

@@ -64,7 +64,7 @@ export const loginUser = createAsyncThunk<string, LoginCredentials>(
         localStorage.removeItem("savedEmail");
         localStorage.removeItem("savedPassword");
       }
-      return response.data.token;
+      return response.data;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }

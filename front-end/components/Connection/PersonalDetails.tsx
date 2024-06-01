@@ -18,8 +18,7 @@ export default function PersonalDetails({ onChange } : changeType) {
   const token = Cookies.get("token");
 
   useEffect(() => {
-    // dispatch(fetchBrands());
-    dispatch(fetchProducts());
+    dispatch(fetchProducts({page:1,pageSize:100}));
   }, [dispatch, token]);
 
 

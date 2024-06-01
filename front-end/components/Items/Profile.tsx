@@ -3,7 +3,7 @@ import Sidebar from "@/components/Sidebar";
 
 export default function ProfileView() {
   return (
-    <Sidebar>
+    <>
     <div className="p-16">
       <div className="p-8 bg-white shadow mt-24">
         {" "}
@@ -82,6 +82,6 @@ export default function ProfileView() {
         </div>
       </div>
     </div>
-    </Sidebar>
+    </>
   );
 }

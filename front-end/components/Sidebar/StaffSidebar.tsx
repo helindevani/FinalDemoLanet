@@ -12,20 +12,16 @@ import { FaRegChartBar, FaUser } from "react-icons/fa6";
 import { BiCylinder, BiListCheck } from "react-icons/bi";
 import { IoReceiptSharp } from "react-icons/io5";
 
-const StaffSidebar = ({ children }: any) => {
+const StaffSidebar = () => {
   const [expandedMenu, setExpandedMenu] = useState("");
 
-  useEffect(() => {
-    console.log("Expanded menu:", expandedMenu);
-  }, [expandedMenu]);
 
   const toggleSubMenu = (menuId: string) => {
     setExpandedMenu(menuId === expandedMenu ? "" : menuId);
   };
   return (
     <>
-      <div className="flex border z-40 w-full mt-[85px]">
-        <aside className="sm:w-56"
+        <aside className="sm:w-56 mt-[80px]" 
         >
           <div className="h-full w-14 sm:w-56 px-3 py-4 overflow-y-auto bg-gray-100 dark:bg-gray-800 ">
             <ul className="space-y-2 font-medium">
@@ -93,8 +89,6 @@ const StaffSidebar = ({ children }: any) => {
             </ul>
           </div>
         </aside>
-        <div className="w-full">{children}</div>
-      </div>
     </>
   );
 };

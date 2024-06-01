@@ -1,3 +1,9 @@
+import { ReactNode } from "react";
+
+export interface HeaderProps {
+  children?: ReactNode;
+}
+
 export interface Booking {
     bookingDate: string; 
     bookingId: string; 
@@ -50,4 +56,19 @@ export interface Booking {
   
   export interface TrackByOrderProps {
     data: Order;
+  }
+
+  export interface RootState {
+    auth: AuthState;
+  }
+  
+  export interface AuthState {
+    token: string | null;
+    error: string | null;
+    loading: boolean;
+    status: string;
+  }
+  
+  export interface LayoutProps {
+    children: ReactNode;
   }

@@ -45,7 +45,7 @@ interface FormData {
 
 export default function Connection() {
   const [step, setStep] = useState(1);
-  const [stepStatus, setStepStatus] = useState(step);
+  const [submissionSuccessful, setSubmissionSuccessful] = useState(false);
   const [formData, setFormData] = useState<any>({
     FirstName: "",
     LastName: "",
@@ -83,7 +83,7 @@ export default function Connection() {
     { name: "Personal Details", status: step > 1 ? "completed" : "active" },
     { name: "Required Documents", status: step > 2 ? "completed" : step === 2 ? "active" : "upcoming" },
     { name: "Other Details", status: step > 3 ? "completed" : step === 3 ? "active" : "upcoming" },
-    { name: "Declaration", status: step === 4 ? "active" : "upcoming" },
+    { name: "Declaration", status: submissionSuccessful ? "completed" : step === 4 ? "active" : "upcoming" },
   ];
 
   const handleFormChange: any = (data: any) => {
@@ -166,8 +166,8 @@ export default function Connection() {
       try {
         const formDataToSend = new FormData();
         for (const [key, value] of Object.entries(formData)) {
-          if ((value as any) instanceof File) {
-            formDataToSend.append(key, value as any);
+          if (value instanceof File) {
+            formDataToSend.append(key, value);
           } else if (value !== null && typeof value !== "undefined") {
             formDataToSend.append(key, String(value));
           }
@@ -179,13 +179,19 @@ export default function Connection() {
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${Cookies.get("token")}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
 
-        console.log("Form submitted successfully");
-        ToastSuccess("Your Request Added");
+        if (response.status === 201) {
+          console.log("Form submitted successfully");
+          ToastSuccess("Your Request Added");
+          setSubmissionSuccessful(true); 
+        } else {
+          console.error("Unexpected response status:", response.status);
+          ToastError("Unexpected response from server");
+        }
       } catch (error: any) {
         console.error("Error submitting form:", error.message);
         ToastError("Please Provide Valid Data");
@@ -197,7 +203,7 @@ export default function Connection() {
 
   return (
     <>
-      <Sidebar>
+      <>
         <ToastContainer />
         <div className="page-wrapper">
           <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
@@ -310,7 +316,7 @@ export default function Connection() {
             </div>
           </div>
         </div>
-      </Sidebar>
+      </>
     </>
   );
 }

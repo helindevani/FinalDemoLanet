@@ -1,5 +1,5 @@
 "use client";
-import { convertToLocalDate } from "@/components/Enums/EnumConverter";
+import { convertToLocalDate, getPaymentMode, getPaymentStatus } from "@/components/Enums/EnumConverter";
 import StarRating from "@/components/Items/StarRating";
 import Sidebar from "@/components/Sidebar";
 import { AppDispatch, RootState } from "@/store";
@@ -59,7 +59,7 @@ const BookingDetails = () => {
 
 
   return (
-    <Sidebar>
+    <>
       <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
         <h3 className="text-xl text-blue-800 font-semibold text-primary">
           Order Details
@@ -152,11 +152,11 @@ const BookingDetails = () => {
                 </tr>
                 <tr>
                   <td className="py-1 pr-2 font-semibold">Payment Type:</td>
-                  <td className="py-1">{order?.paymentType}</td>
+                  <td className="py-1">{getPaymentMode(order?.paymentType)}</td>
                 </tr>
                 <tr>
                   <td className="py-1 pr-2 font-semibold">Payment Status:</td>
-                  <td className="py-1">{order?.paymentStatus}</td>
+                  <td className="py-1">{getPaymentStatus(order?.paymentStatus)}</td>
                 </tr>
                 <tr>
                   <td className="py-1 pr-2 font-semibold">Amount:</td>
@@ -227,7 +227,7 @@ const BookingDetails = () => {
         </div>
       </div>
 
-    </Sidebar>
+    </>
   );
 };
 

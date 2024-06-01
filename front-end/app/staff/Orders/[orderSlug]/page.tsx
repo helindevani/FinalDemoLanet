@@ -54,7 +54,7 @@ const Order: React.FC = () => {
 
 
   return (
-    <StaffSidebar>
+    <>
       <div className="page-wrapper">
         <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
@@ -78,7 +78,7 @@ const Order: React.FC = () => {
           </div>
         </div>
       </div>
-    </StaffSidebar>
+    </>
   );
 };
 
