@@ -1,6 +1,6 @@
 "use client";
 import { convertToLocalDate } from "@/components/Enums/EnumConverter";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/Sidebar/Sidebar";
 import { AppDispatch, RootState } from "@/store";
 import { fetchOrdersAdmin,Order, setPageSize,setPage } from "@/store/orderSlice";
 import axios from "axios";

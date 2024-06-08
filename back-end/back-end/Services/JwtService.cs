@@ -54,6 +54,9 @@ namespace back_end.Services
                 Token = token,
                 Email = user.Email,
                 PersonName = user.Name,
+                PhoneNumber=user.PhoneNumber,
+                ProfileImage = user.ProfileImage,
+                BannerImage= user.BannerImage,
                 Expiration = expiration,
             };
         }

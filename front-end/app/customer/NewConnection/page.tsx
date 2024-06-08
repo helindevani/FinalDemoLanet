@@ -1,9 +1,6 @@
 'use client';
-import Sidebar from "@/components/Sidebar";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { FaDeleteLeft } from "react-icons/fa6";
 import Cookies from "js-cookie";
 import { ToastError, ToastWarning } from "@/components/ToastError";
 import { ToastContainer } from "react-toastify";
@@ -71,13 +68,9 @@ export default function NewConnection() {
 
           <div className="container m-auto h-screen">
             <div className="w-auto">
-              <div className="bg-white shadow-md rounded px-8 pt-14 pb-15 m-10 w-auto h-auto">
-                <h1>
-                  We Could Not Find Connection For You Please Select Any Option
-                  Below
-                </h1>
+              <div className="bg-white shadow-md rounded m-10 w-auto h-auto">
                 <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 p-5">
-                  <div className="text-center mx-auto  w-[401px]">
+                  <div className="text-center mx-auto w-[401px]">
                     <div className="m-5 border py-5 px-16 rounded-full bg-slate-200 shadow">
                       <b> Apply For New Connection</b><br/>
                       <button className="block mx-auto my-5 w-auto rounded-md bg-orange-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={handelAppliedNewConnection}> Submit </button>

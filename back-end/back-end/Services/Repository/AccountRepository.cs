@@ -6,6 +6,10 @@ using back_end.DTO;
 using back_end.ServiceContracts;
 using back_end.ServiceContracts.Repository;
 using Azure;
+using System.Security.Claims;
+using CloudinaryDotNet.Actions;
+using CloudinaryDotNet;
+using back_end.DatabaseContext;
 
 namespace back_end.Services.Repository
 {
@@ -16,14 +20,16 @@ namespace back_end.Services.Repository
         private readonly IJwtService _jwtService;
         private readonly IConfiguration _configuration;
         private readonly IEmailSenderService _emailService;
+        private readonly ApplicationDbContext _context;
 
-        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IJwtService jwtService, IConfiguration configuration, IEmailSenderService emailSender)
+        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IJwtService jwtService, IConfiguration configuration, IEmailSenderService emailSender, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtService = jwtService;
             _configuration = configuration;
             _emailService = emailSender;
+            _context = context;
         }
 
         public async Task<bool> EmailCheckRequest(string email)
@@ -77,6 +83,8 @@ namespace back_end.Services.Repository
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByEmailAsync(loginDTO.Email);
+
+                user.FcsToken = loginDTO.FcmToken;
 
                 if (user == null)
                     throw new InvalidOperationException("User not found");
@@ -180,6 +188,92 @@ namespace back_end.Services.Repository
             }
 
             return await _userManager.IsInRoleAsync(user, roleName);
+        }
+
+        public async Task<ApplicationUser> UpdateUsedataasync(ClaimsPrincipal user, UserUpdateRequest userdata)
+        {
+            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                throw new UnauthorizedAccessException("User ID not found in token.");
+            }
+
+            var userId = userIdClaim.Value;
+            var user1= await _userManager.FindByIdAsync(userId);
+            user1.PhoneNumber = userdata.PhoneNumber;
+            if(userdata.BannerImage != null)
+            {
+                user1.BannerImage = await UploadImageToCloudinaryAsync(userdata.BannerImage);
+            }
+            if (userdata.ProfileImage != null)
+            {
+                user1.ProfileImage = await UploadImageToCloudinaryAsync(userdata.ProfileImage);
+            }
+
+            user1.Email=userdata.Email;
+            user1.Name = userdata.Name;
+            user1.UserName = userdata.Email;
+
+           _userManager.UpdateAsync(user1);
+            _context.SaveChangesAsync();
+            return user1;
+
+        }
+
+        public async Task<bool> ChangePasswordAsync(ClaimsPrincipal user, ChangePasswordRequest request)
+        {
+            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                throw new UnauthorizedAccessException("User ID not found in token.");
+            }
+
+            var userId = userIdClaim.Value;
+            var user1 = await _userManager.FindByIdAsync(userId);
+
+            if (user1 == null)
+            {
+                throw new InvalidOperationException("User not found");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user1, request.Password, request.NewPassword);
+
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            else
+            {
+                throw new InvalidOperationException("Failed to change password");
+            }
+        }
+
+        public async Task<string> UploadImageToCloudinaryAsync(IFormFile imageFile)
+        {
+            byte[] fileBytes;
+            using (var ms = new MemoryStream())
+            {
+                await imageFile.CopyToAsync(ms);
+                fileBytes = ms.ToArray();
+            }
+
+            Account account = new Account(
+                "ddcpygqpz",
+                "355678217655168",
+                "oOu6_mF-OAC9vJs65scbc1c_e4M");
+
+            Cloudinary cloudinary = new Cloudinary(account);
+
+            var uploadParams = new ImageUploadParams
+            {
+                File = new FileDescription("Product Image", new MemoryStream(fileBytes)),
+            };
+
+            var uploadResult = await cloudinary.UploadAsync(uploadParams);
+
+            return uploadResult.SecureUrl.ToString();
         }
     }
 }

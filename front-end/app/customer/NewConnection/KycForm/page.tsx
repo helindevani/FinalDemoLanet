@@ -4,7 +4,7 @@ import Declaration from "../../../../components/Connection/Declaration";
 import OtherDetails from "../../../../components/Connection/OtherDetails";
 import PersonalDetails from "../../../../components/Connection/PersonalDetails";
 import RequieredDocument from "../../../../components/Connection/RequieredDocument";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/Sidebar/Sidebar";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ToastError, ToastSuccess } from "@/components/ToastError";

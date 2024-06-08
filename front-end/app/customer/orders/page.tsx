@@ -2,7 +2,7 @@
 import TrackByBooking from "@/components/Customer/TrackByBooking";
 import TrackByOrder from "@/components/Customer/TrackByOrder";
 import StarRating from "@/components/Items/StarRating";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/Sidebar/Sidebar";
 import { RootState } from "@/store";
 
 import { Order } from "@/store/orderSlice";

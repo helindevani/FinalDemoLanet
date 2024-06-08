@@ -1,9 +1,11 @@
 ﻿using back_end.DatabaseContext;
 using back_end.Domain.Entities;
+using back_end.Domain.Identity;
 using back_end.DTO;
 using back_end.Enums;
 using back_end.ServiceContracts;
 using back_end.ServiceContracts.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -12,12 +14,16 @@ namespace back_end.Services.Repository
     public class OrderRepository : IOrderRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSenderService _emailSenderService;
+        private readonly INotificationService _notificationService;
 
-        public OrderRepository(ApplicationDbContext context,IEmailSenderService emailSenderService)
+        public OrderRepository(ApplicationDbContext context,IEmailSenderService emailSenderService,UserManager<ApplicationUser> userManager,INotificationService notificationService)
         {
             _context = context;
             _emailSenderService = emailSenderService;
+            _userManager = userManager;
+            _notificationService = notificationService;
         }
         public async Task<PagedOrdersResult<Order>> GetOrders(bool history, int page, int pageSize, string search = null)
         {
@@ -110,6 +116,18 @@ namespace back_end.Services.Repository
 
         public async Task<Order> UpdateOrder(Guid id, OrderDTO orderDTO)
         {
+            var admins = await _userManager.GetUsersInRoleAsync("Admin");
+            var adminEmail = admins.FirstOrDefault().Email;
+            var admindata = await _userManager.FindByEmailAsync(adminEmail);
+
+            var staffs = await _userManager.GetUsersInRoleAsync("Staff");
+            var staffEmail = admins.FirstOrDefault().Email;
+            var staffdata = await _userManager.FindByEmailAsync(staffEmail);
+
+            var userdata = await _userManager.FindByEmailAsync(orderDTO.ClientEmail);
+
+            var staff = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffId.ToString() == orderDTO.StaffId);
+
             if (id.ToString() != orderDTO.OrderId)
             {
                 return null;
@@ -134,10 +152,24 @@ namespace back_end.Services.Repository
                 return null;
             }
             existingOrder.OrderStatus = (OrderStatus)orderStatus;
+            if((OrderStatus)orderStatus == OrderStatus.OnTheWay)
+            {
+                await _notificationService.SendNotificationAsync(userdata.FcsToken, "Order Status", $"Your Assigned Order will be Successfully accepted by {staff.StaffName} and Order Is On The Way");
+            }
             existingOrder.StaffId = Guid.Parse(orderDTO.StaffId);
             if (orderDTO.IsStaffAccepted != null)
             {
                 existingOrder.IsStaffAccepted = orderDTO.IsStaffAccepted;
+                if ((bool)orderDTO.IsStaffAccepted)
+                {
+                    await _notificationService.SendNotificationAsync(admindata.FcsToken, "Order Status", $"Your Assigned Order will be Successfully accepted by {staff.StaffName}");
+                    await _notificationService.SendNotificationAsync(userdata.FcsToken, "Order Status", $"Your Assigned Order will be Successfully accepted by {staff.StaffName}");
+                }
+                else
+                {
+                    await _notificationService.SendNotificationAsync(admindata.FcsToken, "Order Status", $"Your Assigned Order will be rejected by {staff.StaffName}");
+                }
+                
             }
             if (orderDTO.OrderStatus == "Delivered")
             {
@@ -149,6 +181,8 @@ namespace back_end.Services.Repository
                     existingOrder.Booking.PaymentId = "Cash Payment";
                     existingOrder.Booking.PaymentStatus = PaymentStatus.Success;
                 }
+                await _notificationService.SendNotificationAsync(userdata.FcsToken, "Order Delivered", $"Your Order Of LPG No: {orderDTO.LpgNo} Number will be successfully delivered!!");
+
             }
             await _context.SaveChangesAsync();
             return existingOrder;
@@ -162,7 +196,7 @@ namespace back_end.Services.Repository
             {
                 throw new UnauthorizedAccessException("User ID not found in token.");
             }
-
+            var userData = await _userManager.FindByEmailAsync(orderDTO.ClientEmail);
             var userId = userIdClaim.Value;
 
             if (_context.Orders == null)
@@ -227,6 +261,7 @@ namespace back_end.Services.Repository
                                   $"Customer Address: {order.Address}<br>";
 
             await _emailSenderService.SendEmailAsync(order.ClientEmail, "You Order Placed Successfully", emailContent);
+            await _notificationService.SendNotificationAsync(userData.FcsToken, "New Booking", $"You Have Receive Booking Of LPG No: {order.LpgNo} Number");
             return order;
         }
 

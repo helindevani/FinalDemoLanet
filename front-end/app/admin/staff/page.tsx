@@ -49,7 +49,7 @@ const AddStaff = () => {
           const response = await dispatch(addStaff(data));
           console.log('Category created successfully:', response.payload);
           ToastSuccess("Category Added Successfully!!")
-          router.push("/admin/DeliveryStaff/ManageStaff");
+          router.push("/admin/staff/manage");
       } catch (error) {
           console.error('Error creating brand:', error);
           ToastError("Category Not Added Successfully")

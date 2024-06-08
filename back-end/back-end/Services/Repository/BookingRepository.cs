@@ -1,11 +1,15 @@
 ﻿using back_end.DatabaseContext;
 using back_end.Domain.Entities;
+using back_end.Domain.Identity;
 using back_end.DTO;
 using back_end.Enums;
+using back_end.ServiceContracts;
 using back_end.ServiceContracts.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Stripe.Checkout;
+using Stripe.Climate;
 using System.Security.Claims;
 
 namespace back_end.Services.Repository
@@ -13,9 +17,13 @@ namespace back_end.Services.Repository
     public class BookingRepository : IBookingRepository
     {
         private readonly ApplicationDbContext _context;
-        public BookingRepository(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly INotificationService _notificationService;
+        public BookingRepository(ApplicationDbContext context,INotificationService notificationService,UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _notificationService = notificationService;
+            _userManager = userManager;
         }
         public async Task<Booking> CreateBookingAsync(BookingDTO bookingDTO,ClaimsPrincipal user)
         {
@@ -25,7 +33,9 @@ namespace back_end.Services.Repository
             {
                 throw new UnauthorizedAccessException("User ID not found in token.");
             }
-
+            var admins = await _userManager.GetUsersInRoleAsync("Admin");
+            var adminEmail = admins.FirstOrDefault().Email;
+            var admindata = await _userManager.FindByEmailAsync(adminEmail);
             var userId = userIdClaim.Value;
             var booking = new Booking
             {
@@ -44,11 +54,13 @@ namespace back_end.Services.Repository
 
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
+            await _notificationService.SendNotificationAsync(admindata.FcsToken, "New Booking", $"You Have Receive Booking Of LPG No: {booking.LpgNo} Number");
             return booking;
         }
 
         public async Task<string> CreateCheckoutSessionAsync(BookingDTO booking)
         {
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId.ToString() == booking.PaymentId);
             var options = new SessionCreateOptions
             {
                 PaymentMethodTypes = new List<string> { "card" },
@@ -62,7 +74,7 @@ namespace back_end.Services.Repository
                             UnitAmount = (long)(booking.Price * 100), // Price in cents
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
-                                Name = $"{booking.ProductID.Split("-")} - LPG Cylinder",
+                                Name = $"{booking.ProductID.Split("-")} - LPG Cylinder<br/>",
                                 
                             },
                         },
@@ -70,8 +82,8 @@ namespace back_end.Services.Repository
                     },
                 },
                 Mode = "payment",
-                SuccessUrl = "http://localhost:3000/",
-                CancelUrl = "http://localhost:3000/cancel",
+                SuccessUrl = "http://localhost:3000/customer/orders",
+                CancelUrl = "http://localhost:3000/customer/booking",
                 CustomerEmail = booking.EmailId,
                 ClientReferenceId = booking.BookingId,
                 Metadata = new Dictionary<string, string>
@@ -215,7 +227,6 @@ namespace back_end.Services.Repository
                 TotalBookings = totalBookings
             };
         }
- 
 
         public async Task<Booking> GetBookingsByUserIdAsync(ClaimsPrincipal user)
         {
@@ -257,7 +268,7 @@ namespace back_end.Services.Repository
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Order> GetOrderByBookingIdAsync(Guid bookingId)
+        public async Task<Domain.Entities.Order> GetOrderByBookingIdAsync(Guid bookingId)
         {
             return await _context.Orders
                 .Include(r => r.Booking)

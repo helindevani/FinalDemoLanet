@@ -1,5 +1,5 @@
 "use client";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/Sidebar/Sidebar";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -120,8 +120,8 @@ export default function Booking() {
             <span className="text-gray-600">Book Your Cylinder</span>
           </nav>
         </div>
-        <div className="container m-auto h-screen">
-          <div className="max-w-4xl mx-auto h-screen">
+        <div className="container m-auto h-auto">
+          <div className="max-w-4xl mx-auto h-auto">
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-6 m-10 w-auto h-auto">
               <form className="space-y-4 px-5 py-8" onSubmit={handleBooking}>
                 <div className="flex items-center">

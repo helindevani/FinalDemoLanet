@@ -1,6 +1,6 @@
 'use client';
 
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/Sidebar/Sidebar";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { ToastError, ToastSuccess } from "@/components/ToastError";

@@ -36,6 +36,8 @@ namespace back_end.Repositories
         public async Task<Connection> GetConnectionByIdAsync(string id)
         {
             return await _context.Connections
+                .Include(r => r.Product)
+                    .Include(r => r.Product.Brand)
                 .FirstOrDefaultAsync(p => p.LpgNo == id);
         }
 

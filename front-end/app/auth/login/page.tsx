@@ -9,11 +9,14 @@ import Footer from "@/components/Layout/Footer";
 import { ToastSuccess } from "@/components/ToastError";
 import { ToastContainer } from "react-toastify";
 import { JwtPayload, decode } from "jsonwebtoken";
+import { getMessaging, getToken } from "firebase/messaging";
+import { initializeApp } from "firebase/app";
 
 interface LoginCredentials {
   email: string;
   password: string;
   rememberPassword: boolean;
+  fcmToken : string | null;
 }
 
 const Login: React.FC = () => {
@@ -23,39 +26,71 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberPassword, setRememberPassword] = useState(false);
   const router = useRouter();
-  const [userRole, setUserRole] = useState<"User" | "Admin" | "Staff" | null>(
-    null
-  );
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDxZiowRmEKy48jbLzRjUPcibF9sSkzBxA",
+    authDomain: "refillsmart-59b9d.firebaseapp.com",
+    projectId: "refillsmart-59b9d",
+    storageBucket: "refillsmart-59b9d.appspot.com",
+    messagingSenderId: "385094691529",
+    appId: "1:385094691529:web:7a83116616c16fabf47b18",
+    measurementId: "G-5919513J9P"
+  };
+
+  const vapidkeys = process.env.NEXT_PUBLIC_VAPIDKEY || "";
+
+  const app = initializeApp(firebaseConfig);
+  const messaging = getMessaging(app);
+
+  const requestForToken = async () => {
+    try {
+      const serviceWorkerRegistration = await navigator.serviceWorker.register(
+        "/firebase-messaging-sw.js"
+      );
+      const currentToken = await getToken(messaging, {
+        vapidKey: vapidkeys,
+        serviceWorkerRegistration,
+      });
+
+      if (currentToken) {
+        return currentToken;
+      } else {
+        return null;
+      }
+    } catch (err) {
+      return null;
+    }
+  };
 
   const submitHandler = async (
     event: React.FormEvent<HTMLFormElement> | any
   ) => {
     event.preventDefault();
-    const credentials: LoginCredentials = { email, password, rememberPassword };
+
+    
     try {
+      const fcmToken =await requestForToken();
+      const credentials: LoginCredentials = { email, password, rememberPassword, fcmToken };
       const response = await dispatch(loginUser(credentials)).unwrap();
-      console.log(response);
-      if (response) {
+      if (response.token != null) {
         ToastSuccess("Login Successfully");
-        const decodedToken = decode(response.data.token) as JwtPayload;
-        console.log(decodedToken);
+        const decodedToken = decode(response.token) as JwtPayload;
         let roles =
           decodedToken[
             "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
           ];
         if (typeof roles === "object") {
           roles = roles[0];
-          if (userRole === "Admin") {
+          if (roles === "Admin") {
             router.push("/admin");
           }
         } else {
-          if (userRole === "User") {
+          if (roles === "User") {
             router.push("/customer");
-          } else if (userRole === "Staff") {
+          } else if (roles === "Staff") {
             router.push("/staff");
           }
         }
-        
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -68,7 +103,7 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer className="z-50" />
       <section className="bg-gray-50 dark:bg-gray-900 mt-[85px]">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">

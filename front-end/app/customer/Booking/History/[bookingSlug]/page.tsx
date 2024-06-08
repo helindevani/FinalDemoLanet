@@ -1,16 +1,17 @@
 "use client";
 import { convertToLocalDate, getPaymentMode, getPaymentStatus } from "@/components/Enums/EnumConverter";
 import StarRating from "@/components/Items/StarRating";
-import Sidebar from "@/components/Sidebar";
 import { AppDispatch, RootState } from "@/store";
 import { Order, fetchOrderById } from "@/store/orderSlice";
+import axios from "axios";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { TbHelpSquareRounded } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
 
 const BookingDetails = () => {
-  const [staffRating, setStaffRating] = useState(0);
+  const [staffRating, setStaffRating] = useState<number | null>(null);
   const pathname = usePathname();
   const orderId = pathname.split("/")[4];
   const dispatch = useDispatch<AppDispatch>();
@@ -18,7 +19,7 @@ const BookingDetails = () => {
     state.order.orders.find((order) => order.orderId=== orderId)
   );
 
-
+const token=Cookies.get("token");
   const allSteps = ["Placed", "Confirmed", "On The Way", "Delivered"];
 
   const getOrderStatus = (value: number): string => {
@@ -48,14 +49,50 @@ const BookingDetails = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-        dispatch(fetchOrderById(orderId));
+      await dispatch(fetchOrderById(orderId));
+      if (order && order.staffRating !== null) {
+        setStaffRating(order.staffRating);
+      }
     };
     fetchOrders();
-  }, [dispatch, orderId]);
+  }, [dispatch, orderId, order]);
 
-  const handleRatingChange = (value: any) => {
+  const handleRatingChange = async (value: number) => {
     setStaffRating(value);
+    console.log(value);
+    try {
+      await axios.post(`http://localhost:5057/api/User/StaffRating?id=${orderId}&rating=${value}`, null, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to submit rating:", error);
+    }
   };
+
+  const downloadInvoice = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5057/api/User/DownloadInvoice?id=${orderId}`, {
+        responseType: 'blob', 
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'Invoice.pdf');
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.error('Error downloading the invoice', error);
+    }
+  };
+
 
 
   return (
@@ -124,7 +161,7 @@ const BookingDetails = () => {
                     </a>
                   </td>
                   <td className="py-1 pr-2 font-semibold">
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <button onClick={downloadInvoice} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                       Download
                     </button>
                   </td>
@@ -214,7 +251,12 @@ const BookingDetails = () => {
             </div>
             <div className="h-1/2 p-1 m-1 w-full sm:flex items-center">
               <div className="flex-1">
-                <StarRating onChange={handleRatingChange} size="4xl" />
+              <StarRating
+                  onChange={handleRatingChange}
+                  size="4xl"
+                  initialRating={staffRating}
+                  isDisabled={staffRating !== null} 
+                />
               </div>
               <div className="flex-1 flex sm:justify-end items-center">
                 <p className="ml-2 text-xl">Need Help</p>

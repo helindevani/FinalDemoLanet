@@ -3,11 +3,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import AdminSidebar from "@/components/Sidebar/AdminSidebar";
 
 const Order: React.FC = () => {
   const [staffs, setStaffs] = useState<any>();
-  const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
   const [data, setData] = useState<any>();
   const token = Cookies.get("token");
@@ -29,8 +27,6 @@ const Order: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      const decodedToken = JSON.parse(atob(token.split(".")[1]));
-      const userId = decodedToken.sub;
       axios
         .get(`http://localhost:5057/api/Bookings/User`, {
           headers: {
@@ -40,7 +36,7 @@ const Order: React.FC = () => {
         })
         .then((response) => {
           setData(response.data);
-          setStaffs(response.data.staff);
+          setStaffs(response.data.staff.pagedStaffs);
           setFormValues({
             LpgNo: response.data.booking.lpgNo,
             ClientName: response.data.booking.consumerName,
@@ -57,8 +53,6 @@ const Order: React.FC = () => {
           });
         })
         .catch((error) => console.error("Error fetching data:", error));
-      setUserId(userId);
-      
     }
   }, [token]);
 
@@ -79,11 +73,9 @@ const Order: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("Order created successfully:", response.data);
       router.push("/admin/orders")
     } catch (error) {
       console.error("Error creating order:", error);
-      // Handle error response, show error message
     }
   };
 

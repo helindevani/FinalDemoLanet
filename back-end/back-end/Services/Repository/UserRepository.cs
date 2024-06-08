@@ -1,13 +1,18 @@
 ﻿using back_end.DatabaseContext;
+using back_end.Domain.Entities;
 using back_end.Domain.Identity;
 using back_end.Enums;
 using back_end.ServiceContracts;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace back_end.Services
 {
@@ -69,6 +74,23 @@ namespace back_end.Services
             return new NoContentResult();
         }
 
+        public async Task<bool> IsGivenRating(Guid id)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(o => o.OrderId == id);
+            if (order == null)
+            {
+                throw new Exception("Order Not Found");
+            }
+            if (order.staffRating == null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public async Task<IActionResult> LinkConnection(ClaimsPrincipal user, string LpgNo)
         {
             var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
@@ -79,7 +101,7 @@ namespace back_end.Services
             }
 
             var userId = userIdClaim.Value;
-            var userdata=await _userManager.FindByIdAsync(userId);
+            var userdata = await _userManager.FindByIdAsync(userId);
             var connection = _context.Connections.FirstOrDefault(r => r.LpgNo == LpgNo);
 
             if (userdata.IsHasConnectionLinked)
@@ -101,6 +123,84 @@ namespace back_end.Services
             }
 
             return new BadRequestObjectResult("User was not linked with the system.");
+        }
+
+        public async Task<IActionResult> StaffRating(Guid id, int rating)
+        {
+            if (rating < 1 || rating > 5)
+            {
+                throw new Exception("Invalid rating. Rating should be between 1 and 5.");
+            }
+
+            var order = await _context.Orders.FirstOrDefaultAsync(c => c.OrderId == id);
+            if (order == null)
+            {
+                throw new Exception("Order not found.");
+            }
+
+            var staff = await _context.Staffs.FirstOrDefaultAsync(c => c.StaffId == order.StaffId);
+            if (staff == null)
+            {
+                throw new Exception("Staff not found.");
+            }
+
+            if (order.staffRating == null)
+            {
+                order.staffRating = 0;
+            }
+
+            if (staff.Rating == null && staff.RatingQuantity == null)
+            {
+                staff.RatingQuantity = 0;
+                staff.Rating = 0;
+            }
+
+            int currentRatingSum = (int)(staff.Rating * staff.RatingQuantity);
+            int newRatingSum = currentRatingSum + rating;
+            int newRatingQuantity = (int)(staff.RatingQuantity + 1);
+            int newRating = (int)newRatingSum / newRatingQuantity;
+
+            staff.RatingQuantity = newRatingQuantity;
+            staff.Rating = newRating;
+
+            order.staffRating = rating;
+
+            _context.Orders.Update(order);
+            _context.Staffs.Update(staff);
+
+            await _context.SaveChangesAsync();
+
+            return new OkObjectResult("Staff rating updated successfully.");
+        }
+
+        public async Task<byte[]> DownloadInvoice(Order order)
+        {
+
+
+            using (var ms = new MemoryStream())
+            {
+                var document = new Document();
+                PdfWriter.GetInstance(document, ms);
+                document.Open();
+
+                var table = new PdfPTable(3); // Number of columns
+                table.AddCell("Order ID");
+                table.AddCell("Product Name");
+                table.AddCell("Amount");
+
+         
+                    table.AddCell(order.OrderId.ToString());
+                table.AddCell(order.Booking.Product.Brand.BrandName);
+                    table.AddCell(order.Amount.ToString());
+   
+
+                document.Add(table);
+                document.Close();
+
+                var byteArray = ms.ToArray();
+                return byteArray;
+            }
+
         }
     }
 }
