@@ -18,6 +18,7 @@ import productReducer from "./productSlice";
 import staffReducer from "./staffSlice";
 import bookingReducer from "./bookingSlice";
 import orderReducer from "./orderSlice";
+import connectionReducer from "./connectionSlice";
 
 const persistConfig = {
   key: "root",
@@ -36,6 +37,7 @@ export const store = configureStore({
     staff : staffReducer,
     booking:bookingReducer,
     order : orderReducer,
+    connection : connectionReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

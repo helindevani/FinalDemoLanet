@@ -72,3 +72,63 @@ export interface Booking {
   export interface LayoutProps {
     children: ReactNode;
   }
+
+  export interface ConnectionDetails {
+    lpgNo: string;
+    firstName: string;
+    lastName: string;
+    gender: string;
+    maritalStatus: string;
+    dob: string;
+    nationality: string;
+    relatedType: number;
+    relatedFirstName: string;
+    relatedLastName: string;
+    address: string;
+    district: string;
+    state: string;
+    pinCode: string;
+    productId: string;
+    product: {
+      productId: string;
+      productName: string;
+      productImage: string;
+      brandId: string;
+      brand: {
+        brandId: string;
+        brandName: string;
+        brandStatus: number;
+        createDate: string;
+        updateDate: string;
+        createdBy: string;
+      };
+      categoryId: string;
+      category: any; // Adjust type according to your data structure
+      quantity: string;
+      unitPrice: string;
+      status: number;
+      createDate: string;
+      updateDate: string;
+      createdBy: string;
+    };
+    emailId: string;
+    phoneNumber: string;
+    poiName: string;
+    poiNo: string;
+    poi: string;
+    poaName: string;
+    poaNo: string;
+    poa: string;
+    photoGraph: string;
+    isPNG: boolean;
+    isGovScheme: boolean;
+    aadharCardNo: string;
+    rationState: string;
+    rationCardNumber: string;
+    isDeclarationAccept: boolean;
+    status: number;
+    createdDate: string;
+    updateDate: string;
+    userId: string;
+  }
+  

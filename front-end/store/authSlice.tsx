@@ -13,6 +13,7 @@ interface LoginCredentials {
   email: string;
   password: string;
   rememberPassword: boolean;
+  fcmToken : string | null;
 }
 
 interface RegistrationData {
@@ -41,13 +42,14 @@ interface AuthState {
 
 export const loginUser = createAsyncThunk<string, LoginCredentials>(
   "auth/loginUser",
-  async ({ email, password, rememberPassword }, { rejectWithValue }) => {
+  async ({ email, password, fcmToken,rememberPassword }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         "http://localhost:5057/api/Account/login",
         {
           Email: email,
           Password: password,
+          FcmToken : fcmToken
         },
         {
           headers: {

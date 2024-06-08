@@ -118,7 +118,6 @@ const staffSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchStaffs.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.staffs = action.payload.data;
         state.totalCount = action.payload.totalCount;
       })

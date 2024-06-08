@@ -63,6 +63,7 @@ export type Order = {
   staff: any | null;
   booking: Booking;
   orderDate: any;
+  staffRating: number;
 };
 
 export type OrderDTO = {
@@ -92,51 +93,51 @@ const getToken = () => Cookies.get("token");
 
 export const fetchOrdersAdmin = createAsyncThunk<
   { data: Order[]; totalCount: number },
-  { page: number; pageSize: number; history: boolean ;search?: string}
->("order/fetchOrdersAdmin", async ({ page, pageSize, history,search = "" }) => {
-  const token = getToken();
-  const response = await axios.get<{
-    pagedOrders: Order[];
-    totalOrders: number;
-  }>(
-    `${apiUrl}`,
-    {
+  { page: number; pageSize: number; history: boolean; search?: string }
+>(
+  "order/fetchOrdersAdmin",
+  async ({ page, pageSize, history, search = "" }) => {
+    const token = getToken();
+    const response = await axios.get<{
+      pagedOrders: Order[];
+      totalOrders: number;
+    }>(`${apiUrl}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      params: { page, pageSize, history ,search},
-    }
-  );
-  return {
-    data: response.data.pagedOrders,
-    totalCount: response.data.totalOrders,
-  };
-});
+      params: { page, pageSize, history, search },
+    });
+    return {
+      data: response.data.pagedOrders,
+      totalCount: response.data.totalOrders,
+    };
+  }
+);
 
 export const fetchOrdersStaff = createAsyncThunk<
   { data: Order[]; totalCount: number },
-  { page: number; pageSize: number; history: boolean ;search?: string }
->("order/fetchOrdersStaff", async ({ page, pageSize, history ,search = "" }) => {
-  const token = getToken();
-  const response = await axios.get<{
-    pagedOrders: Order[];
-    totalOrders: number;
-  }>(
-    `${apiUrl}/Staff`,
-    {
+  { page: number; pageSize: number; history: boolean; search?: string }
+>(
+  "order/fetchOrdersStaff",
+  async ({ page, pageSize, history, search = "" }) => {
+    const token = getToken();
+    const response = await axios.get<{
+      pagedOrders: Order[];
+      totalOrders: number;
+    }>(`${apiUrl}/Staff`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      params: { page, pageSize, history ,search},
-    }
-  );
-  return {
-    data: response.data.pagedOrders,
-    totalCount: response.data.totalOrders,
-  };
-});
+      params: { page, pageSize, history, search },
+    });
+    return {
+      data: response.data.pagedOrders,
+      totalCount: response.data.totalOrders,
+    };
+  }
+);
 
 export const staffActionOrder = createAsyncThunk<
   Order,
