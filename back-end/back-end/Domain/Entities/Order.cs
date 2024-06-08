@@ -54,6 +54,8 @@ namespace back_end.Domain.Entities
         public DateTime? DeliveryDate {  get; set; }
         public bool? IsStaffAccepted {  get; set; }
 
+        public int? staffRating { get; set; }
+
         [Required]
         public Guid CreatedBy { get; set; }
 

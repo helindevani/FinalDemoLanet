@@ -39,7 +39,7 @@ namespace back_end.Domain.Entities
 
         public int? Rating { get; set; }
 
-        public int? RatingQuantity { get;}
+        public int? RatingQuantity { get; set; }
 
         [Required]
         public string CreatedBy { get; set; }

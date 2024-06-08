@@ -15,6 +15,8 @@ using Stripe;
 using back_end.Repositories;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using back_end.DTO;
+using System.Text.Json;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,19 +74,21 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
  .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>()
  .AddDefaultTokenProviders();
 
-builder.Services.AddTransient<IJwtService, JwtService>();
-builder.Services.AddTransient<IEmailSenderService, EmailSenderService>();
-builder.Services.AddTransient<IAccountRepository, AccountRepository>();
-builder.Services.AddTransient<IStaffRepository, StaffRepository>();
-builder.Services.AddTransient<IBrandRepository, BrandRepository>();
-builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
-builder.Services.AddTransient<IStripeWebhookRepository, StripeWebhookService>();
-builder.Services.AddTransient<IBookingRepository, BookingRepository>();
-builder.Services.AddTransient<IConnectionRepository, ConnectionRepository>();
-builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IEmailSenderService, EmailSenderService>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IStripeWebhookRepository, StripeWebhookService>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IConnectionRepository, ConnectionRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 //Jwt
@@ -105,6 +109,14 @@ builder.Services.AddAuthentication(options => {
             IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
         };
     });
+
+var firebaseSettings = new FirebaseSettings();
+builder.Configuration.GetSection("Firebase").Bind(firebaseSettings);
+
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromJson(JsonSerializer.Serialize(firebaseSettings))
+}) ;
 
 
 builder.Services.AddAuthentication(options => { });
@@ -128,7 +140,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapHub<NotificationHub>("/NotiFiy").RequireCors("front-end");
 
 app.Run();

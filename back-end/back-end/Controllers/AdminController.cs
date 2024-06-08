@@ -1,7 +1,9 @@
 ﻿using back_end.DatabaseContext;
+using back_end.Domain.Entities;
 using back_end.Domain.Identity;
 using back_end.Enums;
 using back_end.ServiceContracts.Repository;
+using back_end.Services.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -21,147 +23,78 @@ namespace back_end.Controllers
         private readonly IAccountRepository _userService;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _usermanager;
+        private readonly IAdminRepository _adminRepository;
 
-        public AdminController(IAccountRepository userService, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public AdminController(IAccountRepository userService, ApplicationDbContext context, UserManager<ApplicationUser> userManager, IAdminRepository adminRepository)
         {
             _userService = userService;
             _context = context;
             _usermanager = userManager;
+            _adminRepository = adminRepository;
         }
 
-        [HttpPost("MakeAdmin/{userId}")]
-        public async Task<IActionResult> MakeAdminRequest(Guid userId)
+        //[HttpPost("MakeAdmin/{userId}")]
+        //public async Task<IActionResult> MakeAdminRequest(Guid userId)
+        //{
+        //    try
+        //    {
+        //        // Check if the user exists and has requested admin role
+        //        if (_context.AdminRequests == null)
+        //        {
+        //            return NotFound();
+        //        }
+
+        //        var adminRequest = await _context.AdminRequests.FirstOrDefaultAsync(req => req.Id == userId); 
+        //        if (adminRequest == null)
+        //        {
+        //            return NotFound();
+        //        }
+
+        //        var user = await _context.Users.FindAsync(userId);
+
+        //        if (user != null && await _userService.IsUserInRoleAsync(user, "Admin"))
+        //        {
+        //            return BadRequest("User already has an admin role.");
+        //        }
+
+        //        var success = await _userService.AddAdminRoleAsync(userId);
+
+        //        if (success)
+        //        {
+        //            if (adminRequest.RequestTypeName == Enums.RequestType.MakeAdmin)
+        //            {
+        //                adminRequest.Status = Enums.RequestStatus.Approved;
+        //                _context.AdminRequests.Update(adminRequest);
+        //                await _context.SaveChangesAsync();
+        //                //await _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveApproval", "Your request has been approved.");
+        //            }
+
+        //            return Ok("Admin role added successfully.");
+        //        }
+        //        else
+        //        {
+        //            return BadRequest("Failed to add admin role.");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log the exception
+        //        return StatusCode(500, "Internal server error");
+        //    }
+        //}
+
+        [HttpPut("Connection/{lpgNo}")]
+        public async Task<IActionResult> ConnectionAction(string lpgNo,[FromQuery] string status)
         {
-            try
-            {
-                // Check if the user exists and has requested admin role
-                if (_context.AdminRequests == null)
-                {
-                    return NotFound();
-                }
-
-                var adminRequest = await _context.AdminRequests.FirstOrDefaultAsync(req => req.Id == userId); 
-                if (adminRequest == null)
-                {
-                    return NotFound();
-                }
-
-                var user = await _context.Users.FindAsync(userId);
-
-                if (user != null && await _userService.IsUserInRoleAsync(user, "Admin"))
-                {
-                    return BadRequest("User already has an admin role.");
-                }
-
-                var success = await _userService.AddAdminRoleAsync(userId);
-
-                if (success)
-                {
-                    if (adminRequest.RequestTypeName == Enums.RequestType.MakeAdmin)
-                    {
-                        adminRequest.Status = Enums.RequestStatus.Approved;
-                        _context.AdminRequests.Update(adminRequest);
-                        await _context.SaveChangesAsync();
-                        //await _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveApproval", "Your request has been approved.");
-                    }
-
-                    return Ok("Admin role added successfully.");
-                }
-                else
-                {
-                    return BadRequest("Failed to add admin role.");
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
-        [HttpPut("Connection/{userId}")]
-        public async Task<IActionResult> ApproveConnectionStatus(Guid userId, [FromQuery] string remark, [FromQuery] string status)
-        {
-            var connectionForm = await _context.Connections.FirstOrDefaultAsync(r=>r.UserId ==  userId);
-
-            var user = await _usermanager.FindByIdAsync(userId.ToString());
-
-            var request = await _context.AdminRequests.FirstOrDefaultAsync(req => req.Id == userId);
-
-            var approverUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (connectionForm == null)
-            {
-                return NotFound();
-            }
-
-            if (status == ConnectionStatus.Approved.ToString())
-            {
-                var isRationCardUnique = _context.Connections
-                .Where(f => f.RationCardNumber == connectionForm.RationCardNumber && f.UserId != userId)
-                .Count() == 0;
-
-                if (isRationCardUnique)
-                {
-                    connectionForm.Status = ConnectionStatus.Approved;
-
-                    if (connectionForm.Status == ConnectionStatus.Approved)
-                    {
-                        request.ActionBy = approverUserId;
-                        request.Status = RequestStatus.Approved;
-                        request.Remark = remark;
-                        _context.AdminRequests.Update(request);
-                       
-                    }
-                    await _context.SaveChangesAsync();
-                    return Ok("Connection status approved successfully.");
-                }
-                else
-                {
-                    connectionForm.Status = ConnectionStatus.Rejected;
-
-                    if (connectionForm.Status == ConnectionStatus.Rejected)
-                    {
-                        user.IsHasConnection = false;
-                        await _usermanager.UpdateAsync(user);
-                        request.ActionBy = approverUserId;
-                        request.Status = RequestStatus.Rejected;
-                        request.Remark = remark;
-
-                        _context.AdminRequests.Update(request);
-
-                    }
-
-                    await _context.SaveChangesAsync();
-
-                    return Ok("Connection status rejected due to You Have Already Hold Gas Connection.");
-
-                }
-            }
-            else
-            {
-                return BadRequest("Please Provide valid Data");  
-            }
+            return await _adminRepository.UpdateConnectionStatus(User,lpgNo, status);
 
         }
 
         [HttpGet("Dashboard")]
         public ActionResult<Dictionary<string, int>> GetCount()
         {
-            try
-            {
-                Dictionary<string,int> data = new Dictionary<string, int>();
-                int TotalCylinder = _context.Products.Count();
-                int TotalSupplier = _context.Brands.Count();
-                data.Add("TotalCylinder", TotalCylinder);
-                data.Add("TotalSupplier", TotalSupplier);
-
-                return Ok(data);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            var data = _adminRepository.GetDashboardCounts();
+            return Ok(data);
         }
 
         public class UserWithRoles
@@ -194,6 +127,19 @@ namespace back_end.Controllers
             }
 
             return usersWithRoles;
+        }
+
+        [HttpGet("GenrateReport")]
+        public async Task<IActionResult> GenrateReport([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            var result = await _adminRepository.OrderReport(startDate,endDate);
+            return File(result, "application/pdf", "Report.pdf");
+        }
+
+        [HttpGet("UserWiseBooking")]
+        public async Task<ActionResult<IEnumerable<Booking>>> GetUserWiseBooking()
+        {
+            return await _adminRepository.GetUserWiseBookingsAsync();
         }
     }
 }

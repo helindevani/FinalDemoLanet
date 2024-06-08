@@ -43,8 +43,8 @@ namespace back_end.Controllers
             return Ok(connections);
         }
 
-        [HttpGet("{status}")]
-        public async Task<ActionResult<IEnumerable<Connection>>> GetConnection(string status, int page, int pageSize, string search = null)
+        [HttpGet("status")]
+        public async Task<ActionResult<IEnumerable<Connection>>> GetConnection([FromQuery]string status, [FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string search = null)
         {
             var connections = await _connectionRepository.GetConnectionsByStatusAsync(status,page,pageSize,search);
             if (connections == null)

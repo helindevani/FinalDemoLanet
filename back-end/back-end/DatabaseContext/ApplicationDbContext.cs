@@ -18,8 +18,6 @@ namespace back_end.DatabaseContext
             
         }
 
-        public virtual DbSet<Notification> Notifications { get; set; }
-        public virtual DbSet<AdminRequest> AdminRequests { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Product> Products { get; set; }

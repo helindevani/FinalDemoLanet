@@ -8,6 +8,8 @@ namespace back_end.Domain.Identity
         public string Name { get; set; }
         public bool IsHasConnection { get; set; }
         public bool IsHasConnectionLinked { get; set; }
-        public ICollection<AdminRequest>? AdminRequests { get; set; }
+        public string? FcsToken { get; set; }
+        public string? ProfileImage {  get; set; }
+        public string? BannerImage { get; set; }
     }
 }

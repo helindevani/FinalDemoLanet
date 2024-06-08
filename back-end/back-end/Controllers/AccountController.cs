@@ -71,6 +71,27 @@ namespace back_end.Controllers
 
         }
 
+        [HttpPatch]
+        public async Task<IActionResult> UpdateUserData([FromForm]UserUpdateRequest userdata)
+        {
+            var user = await _userRepository.UpdateUsedataasync(User, userdata);
+            return Ok(user);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdatePassword([FromBody] ChangePasswordRequest userdata)
+        {
+            var result = await _userRepository.ChangePasswordAsync(User, userdata);
+            if (result)
+            {
+                return Ok("Password Updated Successfully!!");
+            }
+            else
+            {
+                return BadRequest("Soory Failed To Update Password Retry!!");
+            }
+        }
+
         [HttpGet("logout")]
         public async Task<IActionResult> GetLogout()
         {
