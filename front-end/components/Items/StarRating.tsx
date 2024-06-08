@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BsStar, BsStarFill } from 'react-icons/bs';
 
-const StarRating = ({ onChange, size }: any) => {
-  const [rating, setRating] = useState(0);
+const StarRating = ({ onChange, size, initialRating, isDisabled }: any) => {
+  const [rating, setRating] = useState(initialRating || 0);
 
-  const handleStarClick = (value : any) => {
-    setRating(value);
-    onChange(value);
+  useEffect(() => {
+    if (initialRating !== null) {
+      setRating(initialRating);
+    }
+  }, [initialRating]);
+
+  const handleStarClick = (value: number) => {
+    if (!isDisabled) {
+      setRating(value);
+      onChange(value);
+    }
   };
 
   return (
@@ -19,7 +27,7 @@ const StarRating = ({ onChange, size }: any) => {
             <span
               key={index}
               onClick={() => handleStarClick(starValue)}
-              className="cursor-pointer m-2"
+              className={`cursor-pointer m-2 ${isDisabled ? 'cursor-not-allowed' : ''}`}
             >
               {starValue <= rating ? (
                 <BsStarFill className={`text-yellow-500 text-${size}`} />
