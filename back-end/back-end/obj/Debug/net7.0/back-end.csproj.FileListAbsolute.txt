@@ -1431,3 +1431,5 @@ D:\FinalDemoLanet\FinalDemoLanet\back-end\back-end\obj\Debug\net7.0\refint\back-
 D:\FinalDemoLanet\FinalDemoLanet\back-end\back-end\obj\Debug\net7.0\back-end.pdb
 D:\FinalDemoLanet\FinalDemoLanet\back-end\back-end\obj\Debug\net7.0\back-end.genruntimeconfig.cache
 D:\FinalDemoLanet\FinalDemoLanet\back-end\back-end\obj\Debug\net7.0\ref\back-end.dll
+D:\Final Demo Lanet\back-end\back-end\bin\Debug\net7.0\BouncyCastle.Crypto.dll
+D:\Final Demo Lanet\back-end\back-end\bin\Debug\net7.0\itextsharp.dll

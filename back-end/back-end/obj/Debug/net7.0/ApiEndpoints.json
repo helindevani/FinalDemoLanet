@@ -17,6 +17,58 @@
   },
   {
     "ContainingType": "back_end.Controllers.AccountController",
+    "Method": "UpdateUserData",
+    "RelativePath": "api/Account",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfileImage",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "BannerImage",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "back_end.Controllers.AccountController",
+    "Method": "UpdatePassword",
+    "RelativePath": "api/Account",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userdata",
+        "Type": "back_end.DTO.ChangePasswordRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "back_end.Controllers.AccountController",
     "Method": "ForgotPassword",
     "RelativePath": "api/Account/forgotpassword",
     "HttpMethod": "POST",
@@ -101,21 +153,16 @@
   },
   {
     "ContainingType": "back_end.Controllers.AdminController",
-    "Method": "ApproveConnectionStatus",
-    "RelativePath": "api/Admin/Connection/{userId}",
+    "Method": "ConnectionAction",
+    "RelativePath": "api/Admin/Connection/{lpgNo}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "remark",
+        "Name": "lpgNo",
         "Type": "System.String",
-        "IsRequired": false
+        "IsRequired": true
       },
       {
         "Name": "status",
@@ -147,16 +194,21 @@
   },
   {
     "ContainingType": "back_end.Controllers.AdminController",
-    "Method": "MakeAdminRequest",
-    "RelativePath": "api/Admin/MakeAdmin/{userId}",
-    "HttpMethod": "POST",
+    "Method": "GenrateReport",
+    "RelativePath": "api/Admin/GenrateReport",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
-        "Type": "System.Guid",
-        "IsRequired": true
+        "Name": "startDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -182,125 +234,16 @@
     ]
   },
   {
-    "ContainingType": "back_end.Controllers.AdminRequestsController",
-    "Method": "GetAdminRequests",
-    "RelativePath": "api/AdminRequests",
+    "ContainingType": "back_end.Controllers.AdminController",
+    "Method": "GetUserWiseBooking",
+    "RelativePath": "api/Admin/UserWiseBooking",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[back_end.DTO.AdminRequestResponse, back-end, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "back_end.Controllers.AdminRequestsController",
-    "Method": "PostAdminRequest",
-    "RelativePath": "api/AdminRequests",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "adminRequestdto",
-        "Type": "back_end.DTO.AdminRequestDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "back_end.Domain.Entities.AdminRequest",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "back_end.Controllers.AdminRequestsController",
-    "Method": "GetAdminRequest",
-    "RelativePath": "api/AdminRequests/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "back_end.Domain.Entities.AdminRequest",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "back_end.Controllers.AdminRequestsController",
-    "Method": "PutAdminRequest",
-    "RelativePath": "api/AdminRequests/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "adminRequest",
-        "Type": "back_end.Domain.Entities.AdminRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "back_end.Controllers.AdminRequestsController",
-    "Method": "DeleteAdminRequest",
-    "RelativePath": "api/AdminRequests/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "back_end.Controllers.AdminRequestsController",
-    "Method": "GetNewConnectionRequests",
-    "RelativePath": "api/AdminRequests/Connection",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[back_end.DTO.AdminRequestResponse, back-end, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[back_end.Domain.Entities.Booking, back-end, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1006,47 +949,6 @@
   },
   {
     "ContainingType": "back_end.Controllers.ConnectionsController",
-    "Method": "GetConnection",
-    "RelativePath": "api/Connections/{status}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "status",
-        "Type": "System.String",
-        "IsRequired": true
-      },
-      {
-        "Name": "page",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "pageSize",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "search",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[back_end.Domain.Entities.Connection, back-end, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "back_end.Controllers.ConnectionsController",
     "Method": "CheckConnectionApplied",
     "RelativePath": "api/Connections/checkConnectionApplied",
     "HttpMethod": "GET",
@@ -1086,17 +988,42 @@
     ]
   },
   {
-    "ContainingType": "back_end.Controllers.NotificationController",
-    "Method": "UpdateProduct",
-    "RelativePath": "api/Notification",
+    "ContainingType": "back_end.Controllers.ConnectionsController",
+    "Method": "GetConnection",
+    "RelativePath": "api/Connections/status",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[back_end.Domain.Entities.Connection, back-end, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
@@ -1618,6 +1545,48 @@
   },
   {
     "ContainingType": "back_end.Controllers.UserController",
+    "Method": "DownloadInvoice",
+    "RelativePath": "api/User/DownloadInvoice",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "back_end.Controllers.UserController",
+    "Method": "IsGivenRating",
+    "RelativePath": "api/User/IsGivenRating",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "back_end.Controllers.UserController",
     "Method": "LinkConnection",
     "RelativePath": "api/User/LinkConnection",
     "HttpMethod": "POST",
@@ -1628,6 +1597,27 @@
         "Name": "LpgNo",
         "Type": "back_end.DTO.LinkConnectionRequest",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "back_end.Controllers.UserController",
+    "Method": "StaffRating",
+    "RelativePath": "api/User/StaffRating",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "rating",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
