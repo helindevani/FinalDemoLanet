@@ -2,16 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import {
-  FaExpandArrowsAlt,
   FaTachometerAlt,
-  FaUserFriends,
-  FaMoneyBillAlt,
-  FaChartBar,
-  FaCog,
 } from "react-icons/fa";
-import { FaRegChartBar, FaUser } from "react-icons/fa6";
-import { BiCylinder, BiListCheck } from "react-icons/bi";
 import { IoReceiptSharp } from "react-icons/io5";
+import Link from "next/link";
+
 
 const StaffSidebar = () => {
   const [expandedMenu, setExpandedMenu] = useState("");
@@ -30,7 +25,7 @@ const StaffSidebar = () => {
 
   return (
     <>
-      <aside className="sm:w-56 mt-[80px]">
+      <aside className="sm:w-56 mt-[85px]">
         <div className="h-full w-14 sm:w-56 px-3 py-4 overflow-y-auto bg-gray-100 dark:bg-gray-800 ">
           <ul className="space-y-2 font-medium">
             <li
@@ -40,13 +35,13 @@ const StaffSidebar = () => {
                   : "text-gray-700 hover:text-blue-900 dark:text-white hover:bg-white hover:shadow-lg dark:hover:bg-gray-700"
               }`}
             >
-              <a
+              <Link
                 href="/staff"
                 className="flex items-center p-2 rounded-lg group"
               >
                 <FaTachometerAlt size={20} />
                 <span className="ms-3 hidden sm:block">Dashboard</span>
-              </a>
+              </Link>
             </li>
             <li
               className={`rounded-lg ${
@@ -85,24 +80,24 @@ const StaffSidebar = () => {
               {expandedMenu === "orders" && (
                 <ul className="py-2 space-y-2">
                   <li>
-                    <a
+                    <Link
                       href="/staff/orders"
                       className={`flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 ${
                         isActive("/staff/orders") ? "bg-gray-200" : ""
                       }`}
                     >
                       Active
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       href="/staff/orders/history"
                       className={`flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 ${
                         isActive("/staff/orders/history") ? "bg-gray-200" : ""
                       }`}
                     >
                       Order History
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               )}

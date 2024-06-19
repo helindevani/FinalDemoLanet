@@ -628,9 +628,6 @@ namespace back_end.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("BannerImage")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -656,6 +653,9 @@ namespace back_end.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("MakeAdminRequest")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()

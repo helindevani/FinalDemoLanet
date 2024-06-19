@@ -21,12 +21,14 @@ namespace back_end.Services
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSenderService _emailService;
+        private readonly INotificationService _notificationService;
 
-        public UserRepository(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IEmailSenderService emailService)
+        public UserRepository(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IEmailSenderService emailService, INotificationService notificationService)
         {
             _context = context;
             _userManager = userManager;
             _emailService = emailService;
+            _notificationService = notificationService;
         }
 
         public async Task<IActionResult> AppliedNewConnection(ClaimsPrincipal user)
@@ -114,10 +116,10 @@ namespace back_end.Services
                 if (userdata.Id == connection.UserId && connection.Status == ConnectionStatus.Approved)
                 {
                     userdata.IsHasConnectionLinked = true;
-
+                    await _userManager.UpdateAsync(userdata);
                     var message = $"Your LPG Connection No {connection.LpgNo} is linked with {userdata.Name} account successfully.";
                     await _emailService.SendEmailAsync(userdata.Email, "Link Connection", message);
-
+                    await _context.SaveChangesAsync();
                     return new OkObjectResult("User was linked successfully to his account.");
                 }
             }

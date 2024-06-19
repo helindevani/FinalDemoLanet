@@ -30,21 +30,45 @@ export default function NewConnection() {
 
   const handelLinkConnection=async()=>{
     try {
-      const response = await axios.get("http://localhost:5057/api/Connections/checkConnectionLinked", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.status === 200 && response.data) {
-        ToastWarning("You Have Already Linked Account");
+      const response = await axios.get(
+        `http://localhost:5057/api/User/AppliedNewConnection`,{
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if(response.status==204){
+        ToastWarning("Sorry You have no any Approve Connection Found So First Applied New Connection!!")
       }
-      else{
-        router.push("/customer/newConnection/linkConnection");
+      if (response.data.status == "Pending") {
+        ToastWarning(`Your LPG No Is ${response.data.lpgNo} In Pending State!!`);
+      }
+      if (response.data.status == "Success") {
+        try {
+          const response = await axios.get("http://localhost:5057/api/Connections/checkConnectionLinked", {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (response.status === 200 && response.data) {
+            ToastWarning("You Have Already Linked Account");
+          }
+          else{
+            router.push("/customer/newConnection/linkConnection");
+          }
+        } catch (error) {
+          console.error("Error checking existing connection:", error);
+        }
+      }
+      if (response.data.status == "Rejected") {
+        window.prompt("Your Connection Request Was Rejected Please Reapply!!")
       }
     } catch (error) {
-      console.error("Error checking existing connection:", error);
+      console.error("Error fetching data:", error);
     }
+    
     
   }
 

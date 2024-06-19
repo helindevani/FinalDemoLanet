@@ -10,6 +10,8 @@ import {
 import { AppDispatch } from "@/store";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchConnectionById, fetchConnections } from "@/store/connectionSlice";
+import { ToastError, ToastSuccess } from "@/components/ToastError";
+import { ToastContainer } from "react-toastify";
 
 const ConnectionDetails: React.FC = () => {
   const [status, setStatus] = useState<string>();
@@ -17,35 +19,58 @@ const ConnectionDetails: React.FC = () => {
   const pathname = usePathname();
   const lpgNo = pathname.split("/")[3];
   const dispatch = useDispatch<AppDispatch>();
-  const connection: any | undefined = useSelector((state: any) =>
-    state.connection.selectedConnection);
+  const [isVerified, setIsVerified] = useState(false);
+  const connection: any | undefined = useSelector(
+    (state: any) => state.connection.selectedConnection
+  );
+  const router=useRouter();
 
   useEffect(() => {
     if (token) {
-      dispatch(fetchConnectionById(lpgNo))
+      dispatch(fetchConnectionById(lpgNo));
     }
-  }, [token,lpgNo,dispatch]);
+  }, [token, lpgNo, dispatch]);
 
   const handleSubmit = async () => {
+    if (!isVerified) {
+      ToastError("Please Verified Document!!");
+      return;
+    }
+
     try {
       const response = await axios.put(
-        `http://localhost:5057/api/Admin/Connection/${lpgNo}?status=${status}`,
+        `http://localhost:5057/api/Admin/Connection/${lpgNo}?status=${status}`,null,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
           },
         }
       );
-      console.log("Response:", response.data);
+      if(response.status==200 && response.data == "This User Is Already Have Connection"){
+        ToastError("Failed To Approve Connection User Have Already Connection Exist!!");
+      }
+      if(response.status==200 && response.data == "Connection status approved successfully."){
+        ToastSuccess("Successfully Approved!!");
+        setTimeout(() => {
+          router.push("/admin/connection");
+        },3000);
+      }
+      if(response.status==200 && response.data == "Connection status rejected due to You Have Already Hold Gas Connection."){
+        ToastSuccess("Successfully Rejected!!");
+        setTimeout(() => {
+          router.push("/admin/connection");
+        },3000);
+      }
     } catch (error) {
+      ToastError("Failed Update!!");
       console.error("Error:", error);
     }
   };
 
   return (
     <>
-<div className="page-wrapper">
+    <ToastContainer/>
+      <div className="page-wrapper">
         <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
             Connection Details
@@ -132,9 +157,7 @@ const ConnectionDetails: React.FC = () => {
                           type="text"
                           name="RationCardNumber"
                           id="RationCardNumber"
-                          value={
-                            connection ? connection.rationCardNumber : ""
-                          }
+                          value={connection ? connection.rationCardNumber : ""}
                           className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           disabled
                         />
@@ -174,9 +197,7 @@ const ConnectionDetails: React.FC = () => {
                           id="IsGovScheme"
                           value={
                             connection
-                              ? getSubsidyStatus(
-                                  connection.isGovScheme
-                                )
+                              ? getSubsidyStatus(connection.isGovScheme)
                               : ""
                           }
                           className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -189,18 +210,30 @@ const ConnectionDetails: React.FC = () => {
                         htmlFor="AadharCardNumber"
                         className="block text-sm font-semibold leading-6 text-gray-900"
                       >
-                        Aadhar Card No
+                        Document
                       </label>
                       <div className="mt-2.5">
                         <input
-                          type="text"
-                          name="AadharCardNumber"
-                          value={
-                            connection ? connection.aadharCardNo : ""
-                          }
-                          className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          disabled
+                          type="checkbox"
+                          id="verifiedCheckbox"
+                          name="verifiedCheckbox"
+                          className="ml-2"
+                          onChange={(e) => setIsVerified(e.target.checked)}
                         />
+                        <label
+                          htmlFor="verifiedCheckbox"
+                          className="ml-2 text-sm text-gray-900"
+                        >
+                          Verified
+                        </label>
+                        <a
+                          href={connection ? connection.poa : ""}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="ml-4 text-blue-500 hover:underline"
+                        >
+                          View
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -289,23 +322,33 @@ const ConnectionDetails: React.FC = () => {
                         Connection Status
                       </label>
                       <div className="mt-2.5">
-                      {connection && connection.status == "0" && <select
+                        {connection && connection.status == "0" && (
+                          <select
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             name="Status"
                             value={status}
-                            onChange={(e)=>{setStatus(e.target.value)}}
+                            onChange={(e) => {
+                              setStatus(e.target.value);
+                            }}
                           >
                             <option value="">---SELECT---</option>
                             <option value="Pending">Pending</option>
                             <option value="Approved">Approved</option>
                             <option value="Rejected">Rejected</option>
-                          </select>}
-                          {connection && connection.status == "1" &&  <input
-                          type="text"
-                          value={connection ? getConnectionStatus(connection.status) : ""}
-                          className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          disabled
-                        />}
+                          </select>
+                        )}
+                        {connection && connection.status == "1" && (
+                          <input
+                            type="text"
+                            value={
+                              connection
+                                ? getConnectionStatus(connection.status)
+                                : ""
+                            }
+                            className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            disabled
+                          />
+                        )}
                       </div>
                     </div>
                     <div className="pr-4 w-1/2">
@@ -364,9 +407,7 @@ const ConnectionDetails: React.FC = () => {
                           type="text"
                           name="PhoneNumber"
                           id="PhoneNumber"
-                          value={
-                            connection ? connection.phoneNumber : ""
-                          }
+                          value={connection ? connection.phoneNumber : ""}
                           className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           disabled
                         />
@@ -374,20 +415,21 @@ const ConnectionDetails: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              { connection && connection.status == "0" && <div className="flex items-center justify-center p-3">
+                {connection && connection.status == "0" && (
+                  <div className="flex items-center justify-center p-3">
                     <button
-                     onClick={handleSubmit}
+                      onClick={handleSubmit}
                       className="bg-blue-800 hover:bg-blue-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
                       Submit
                     </button>
-                  </div>}
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-      
     </>
   );
 };

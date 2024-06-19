@@ -14,6 +14,7 @@ using back_end.DTO;
 using back_end.Enums;
 using System.Security.Claims;
 using System.Linq.Expressions;
+using back_end.ServiceContracts;
 
 namespace back_end.Repositories
 {
@@ -21,11 +22,13 @@ namespace back_end.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly INotificationService _notificationService;
 
-        public ConnectionRepository(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public ConnectionRepository(ApplicationDbContext context, UserManager<ApplicationUser> userManager,INotificationService notificationService)
         {
             _context = context;
             _userManager = userManager;
+            _notificationService= notificationService;
         }
 
         public async Task<IEnumerable<Connection>> GetConnectionsAsync()
@@ -44,8 +47,8 @@ namespace back_end.Repositories
         public async Task<PagedConnectionsResult<Connection>> GetConnectionsByStatusAsync(string status, int page, int pageSize, string search = null)
         {
             IQueryable<Connection> query = _context.Connections
-    .Include(r => r.Product)
-    .Include(r => r.Product.Brand);
+                .Include(r => r.Product)
+                .Include(r => r.Product.Brand);
 
             switch (status)
             {
@@ -85,22 +88,33 @@ namespace back_end.Repositories
             };
         }
 
-        public async Task<Connection> UpdateConnectionAsync(string id, Connection updatedConnection)
+        public async Task<Connection> UpdateConnectionAsync(string id,string status)
         {
+
             var existingConnection = await _context.Connections.FindAsync(id);
+            var user = await _userManager.FindByIdAsync(existingConnection.UserId.ToString());
+
             if (existingConnection == null)
                 return null;
+            if (!Enum.TryParse(typeof(ConnectionStatus),status.ToString(), out var Status))
+            {
+                throw new Exception("Invalid brand status.");
+            }
 
-            // Update existing connection properties
+            existingConnection.Status=(ConnectionStatus)Status;
 
-            _context.Entry(existingConnection).CurrentValues.SetValues(updatedConnection);
+            _context.Connections.Update(existingConnection);
             await _context.SaveChangesAsync();
+            await _notificationService.SendNotificationAsync(user.FcsToken, "Connection Status", $"Connection {status}!!");
 
             return existingConnection;
         }
 
         public async Task<Connection> CreateConnectionAsync(ConnectionDTO connectionDTO)
         {
+            var admins = await _userManager.GetUsersInRoleAsync("Admin");
+            var adminEmail = admins.FirstOrDefault().Email;
+            var admindata = await _userManager.FindByEmailAsync(adminEmail);
             if (_context.Connections == null)
             {
                 throw new Exception("Entity set 'ApplicationDbContext.Connections' is null.");
@@ -168,11 +182,9 @@ namespace back_end.Repositories
 
             _context.Connections.Add(connection);
             await _context.SaveChangesAsync();
-
+            await _notificationService.SendNotificationAsync(admindata.FcsToken, "New Connection","New Connection Request Received!!");
             return connection;
         }
-
-
         public async Task<bool> DeleteConnectionAsync(string id)
         {
             var connectionToDelete = await _context.Connections.FindAsync(id);
@@ -184,7 +196,6 @@ namespace back_end.Repositories
 
             return true;
         }
-
         public string GenerateUniqueID()
         {
             long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(); // Get current timestamp

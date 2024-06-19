@@ -14,7 +14,7 @@ namespace back_end.ServiceContracts.Repository
         Task<Booking> CreateBookingAsync(BookingDTO bookingDTO, ClaimsPrincipal user);
         Task<PagedBookingResult<Booking>> GetBookingsAsync(bool history, int page, int pageSize, string search = null);
         Task<Booking> GetBookingByIdAsync(Guid id);
-        Task<Booking> GetBookingsByUserIdAsync(ClaimsPrincipal user);
+        Task<Booking> GetBookingsByUserIdAsync(string id);
         Task<bool> DeleteBookingAsync(Guid id);
         Task<(decimal?, IEnumerable<Connection>)> GetApprovedConnectionsAsync(ClaimsPrincipal user);
         Task<string> CreateCheckoutSessionAsync(BookingDTO booking);

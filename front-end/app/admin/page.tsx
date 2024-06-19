@@ -4,6 +4,7 @@ import axios from "axios";
 import AdminSidebar from "@/components/Sidebar/AdminSidebar";
 import ChartComponent from "@/components/Items/Chart";
 import { Booking } from "@/components/TypeInterface/AllType";
+import Cookies from "js-cookie";
 
 const Dashboard: React.FC = () => {
   const [countProduct, setCountProduct] = useState<number>(0);
@@ -12,12 +13,17 @@ const Dashboard: React.FC = () => {
   const [countSuppliers, setCountSuppliers] = useState<number>(0);
   const [userWiseBooking, setUserWiseBooking] = useState<Booking[]>([]);
   const [data, setData] = useState<any>(null);
+  const token= Cookies.get('token');
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5057/api/Admin/Dashboard"
+          "http://localhost:5057/api/Admin/Dashboard",
+          {headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          }},
         );
         const { TotalCylinder, TotalSupplier, TotalBooking, TotalRevenue } = response.data;
         setData(response.data);
@@ -37,7 +43,11 @@ const Dashboard: React.FC = () => {
     const fetchUserWiseBookingData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5057/api/Admin/UserWiseBooking"
+          "http://localhost:5057/api/Admin/UserWiseBooking",
+          {headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          }}
         );
         setUserWiseBooking(response.data);
       } catch (error) {

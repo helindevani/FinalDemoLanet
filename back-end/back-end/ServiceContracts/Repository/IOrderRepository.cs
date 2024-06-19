@@ -12,9 +12,10 @@ namespace back_end.ServiceContracts.Repository
     public interface IOrderRepository
     {
         Task<PagedOrdersResult<Order>> GetOrders(bool history, int page, int pageSize, string search = null);
+        Task<PagedOrdersResult<Order>> GetUserOrders(ClaimsPrincipal user, int page, int pageSize, string search = null);
         Task<Order> GetOrder(Guid id);
         Task<PagedOrdersResult<Order>> GetOrdersByStaff(bool history, ClaimsPrincipal user, int page, int pageSize, string search = null);
-        Task<Order> UpdateOrder(Guid id, OrderDTO orderDTO);
+        Task<Order> UpdateOrder(ClaimsPrincipal user,Guid id, OrderDTO orderDTO);
         Task<Order> CreateOrder(OrderDTO orderDTO, ClaimsPrincipal user);
         Task<bool> DeleteOrder(Guid id);
     }

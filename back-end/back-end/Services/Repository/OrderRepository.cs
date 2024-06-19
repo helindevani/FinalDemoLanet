@@ -28,10 +28,10 @@ namespace back_end.Services.Repository
         public async Task<PagedOrdersResult<Order>> GetOrders(bool history, int page, int pageSize, string search = null)
         {
             IQueryable<Order> ordersQuery = _context.Orders
-         .Include(r => r.Booking)
-         .Include(p => p.Booking.Product)
-         .Include(p => p.Booking.Product.Brand)
-         .Include(s => s.Staff);
+             .Include(r => r.Booking)
+             .Include(p => p.Booking.Product)
+             .Include(p => p.Booking.Product.Brand)
+             .Include(s => s.Staff);
 
             if (history)
             {
@@ -41,6 +41,41 @@ namespace back_end.Services.Repository
             {
                 ordersQuery = ordersQuery.Where(r => r.OrderStatus == OrderStatus.Placed || r.OrderStatus == OrderStatus.Confirmed || r.OrderStatus == OrderStatus.OnTheWay || r.OrderStatus == OrderStatus.StaffRejected);
             }
+
+            var totalOrders = await ordersQuery.CountAsync();
+
+            var pagedOrders = await ordersQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedOrdersResult<Order>
+            {
+                PagedOrders = pagedOrders,
+                TotalOrders = totalOrders
+            };
+        }
+
+        public async Task<PagedOrdersResult<Order>> GetUserOrders(ClaimsPrincipal user, int page, int pageSize, string search = null)
+        {
+            IQueryable<Order> ordersQuery = _context.Orders
+             .Include(r => r.Booking)
+             .Include(p => p.Booking.Product)
+             .Include(p => p.Booking.Product.Brand)
+             .Include(s => s.Staff);
+
+            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                throw new UnauthorizedAccessException("User ID not found in token.");
+            }
+
+            var userId = userIdClaim.Value;
+            var userData = await _userManager.FindByIdAsync(userId);
+
+            ordersQuery = ordersQuery.Where(r => r.OrderStatus == OrderStatus.Delivered && r.ClientEmail == userData.Email);
+
 
             var totalOrders = await ordersQuery.CountAsync();
 
@@ -72,7 +107,6 @@ namespace back_end.Services.Repository
             return order;
         }
 
-
         public async Task<PagedOrdersResult<Order>> GetOrdersByStaff(bool history, ClaimsPrincipal user, int page, int pageSize, string search = null)
         {
             var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
@@ -85,53 +119,50 @@ namespace back_end.Services.Repository
             var userId = userIdClaim.Value;
 
             IQueryable<Order> ordersQuery = _context.Orders
-        .Include(r => r.Booking)
+            .Include(r => r.Booking)
             .ThenInclude(b => b.Product)
                 .ThenInclude(p => p.Brand)
-        .Include(s => s.Staff)
-        .Where(o => o.StaffId.ToString() == userId);
+                .Include(s => s.Staff)
+                .Where(o => o.StaffId.ToString() == userId);
 
-    if (history)
-    {
-        ordersQuery = ordersQuery.Where(o => o.OrderStatus == OrderStatus.Delivered);
-    }
-    else
-    {
-        ordersQuery = ordersQuery.Where(o => o.OrderStatus != OrderStatus.Delivered && o.OrderStatus != OrderStatus.StaffRejected);
-    }
+            if (history)
+            {
+                ordersQuery = ordersQuery.Where(o => o.OrderStatus == OrderStatus.Delivered);
+            }
+            else
+            {
+                ordersQuery = ordersQuery.Where(o => o.OrderStatus != OrderStatus.Delivered && o.OrderStatus != OrderStatus.StaffRejected);
+            }
 
-    var totalOrders = await ordersQuery.CountAsync();
+            var totalOrders = await ordersQuery.CountAsync();
 
-    var pagedOrders = await ordersQuery
-        .Skip((page - 1) * pageSize)
-        .Take(pageSize)
-        .ToListAsync();
+            var pagedOrders = await ordersQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
-    return new PagedOrdersResult<Order>
-    {
-        PagedOrders = pagedOrders,
-        TotalOrders = totalOrders
-    };
+            return new PagedOrdersResult<Order>
+            {
+                PagedOrders = pagedOrders,
+                TotalOrders = totalOrders
+            };
         }
 
-        public async Task<Order> UpdateOrder(Guid id, OrderDTO orderDTO)
+        public async Task<Order> UpdateOrder(ClaimsPrincipal userdata,Guid id, OrderDTO orderDTO)
         {
-            var admins = await _userManager.GetUsersInRoleAsync("Admin");
-            var adminEmail = admins.FirstOrDefault().Email;
-            var admindata = await _userManager.FindByEmailAsync(adminEmail);
+            var userIdClaim = userdata.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
-            var staffs = await _userManager.GetUsersInRoleAsync("Staff");
-            var staffEmail = admins.FirstOrDefault().Email;
-            var staffdata = await _userManager.FindByEmailAsync(staffEmail);
+            if (userIdClaim == null)
+            {
+                throw new UnauthorizedAccessException("User ID not found in token.");
+            }
 
-            var userdata = await _userManager.FindByEmailAsync(orderDTO.ClientEmail);
-
-            var staff = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffId.ToString() == orderDTO.StaffId);
-
+            var userdataId = userIdClaim.Value;
             if (id.ToString() != orderDTO.OrderId)
             {
                 return null;
             }
+
             if (!Enum.TryParse(typeof(PaymentType), orderDTO.PaymentType.ToString(), out var paymenttype))
             {
                 return null;
@@ -145,32 +176,56 @@ namespace back_end.Services.Repository
             {
                 return null;
             }
-            var existingOrder = await _context.Orders.Include(b => b.Booking).FirstOrDefaultAsync(r => r.OrderId == id);
 
+            var existingOrder = await _context.Orders.Include(b => b.Booking).FirstOrDefaultAsync(r => r.OrderId == id);
             if (existingOrder == null)
             {
                 return null;
             }
-            existingOrder.OrderStatus = (OrderStatus)orderStatus;
-            if((OrderStatus)orderStatus == OrderStatus.OnTheWay)
-            {
-                await _notificationService.SendNotificationAsync(userdata.FcsToken, "Order Status", $"Your Assigned Order will be Successfully accepted by {staff.StaffName} and Order Is On The Way");
-            }
+
+            var admins = await _userManager.GetUsersInRoleAsync("Admin");
+            var admin = admins.FirstOrDefault();
+
+            var staffs = await _userManager.GetUsersInRoleAsync("Staff");
+            var staff = staffs.FirstOrDefault();
+
+            var user = await _userManager.FindByEmailAsync(orderDTO.ClientEmail);
+            var staffEntity = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffId.ToString() == orderDTO.StaffId);
+
+            existingOrder.OrderStatus =(OrderStatus) orderStatus;
             existingOrder.StaffId = Guid.Parse(orderDTO.StaffId);
-            if (orderDTO.IsStaffAccepted != null)
+
+            if (orderDTO.IsStaffAccepted.HasValue)
             {
-                existingOrder.IsStaffAccepted = orderDTO.IsStaffAccepted;
-                if ((bool)orderDTO.IsStaffAccepted)
+                bool isStaffAccepted = orderDTO.IsStaffAccepted.Value;
+                if (isStaffAccepted && existingOrder.IsStaffAccepted != true)
                 {
-                    await _notificationService.SendNotificationAsync(admindata.FcsToken, "Order Status", $"Your Assigned Order will be Successfully accepted by {staff.StaffName}");
-                    await _notificationService.SendNotificationAsync(userdata.FcsToken, "Order Status", $"Your Assigned Order will be Successfully accepted by {staff.StaffName}");
+                    await NotifyOrderStatusAsync(admin, user, staffEntity, "successfully accepted");
                 }
                 else
                 {
-                    await _notificationService.SendNotificationAsync(admindata.FcsToken, "Order Status", $"Your Assigned Order will be rejected by {staff.StaffName}");
+                    if (orderDTO.OrderStatus == "StaffRejected")
+                    {
+
+                        await NotifyOrderStatusAsync(admin, null, staffEntity, "rejected");
+                    }
                 }
-                
+                existingOrder.IsStaffAccepted = isStaffAccepted;
             }
+            if ((OrderStatus)orderStatus == OrderStatus.Placed)
+            {
+                await _notificationService.SendNotificationAsync(staff.FcsToken, "New Order Assign", $"New Order Of This {orderDTO.LpgNo} Is Assign You!!");
+            }
+            if ((OrderStatus)orderStatus == OrderStatus.Confirmed && orderDTO.IsStaffAccepted == true)
+            {
+                await NotifyOrderStatusAsync(admin, user, staffEntity, "Confirmed");
+            }
+
+            if ((OrderStatus)orderStatus == OrderStatus.OnTheWay)
+            {
+                await NotifyOrderUpdateAsync(user, staff, "on the way");
+            }
+
             if (orderDTO.OrderStatus == "Delivered")
             {
                 existingOrder.DeliveryDate = DateTime.UtcNow;
@@ -181,11 +236,47 @@ namespace back_end.Services.Repository
                     existingOrder.Booking.PaymentId = "Cash Payment";
                     existingOrder.Booking.PaymentStatus = PaymentStatus.Success;
                 }
-                await _notificationService.SendNotificationAsync(userdata.FcsToken, "Order Delivered", $"Your Order Of LPG No: {orderDTO.LpgNo} Number will be successfully delivered!!");
-
+                await NotifyOrderDeliveredAsync(user, admin, staffEntity, orderDTO.LpgNo);
             }
+
             await _context.SaveChangesAsync();
             return existingOrder;
+        }
+
+        private async Task NotifyOrderStatusAsync(ApplicationUser admin, ApplicationUser user, Staff staffEntity, string status)
+        {
+            if (admin != null)
+            {
+                await _notificationService.SendNotificationAsync(admin.FcsToken, "Order Status", $"Your assigned order will be {status} by {staffEntity.StaffName}");
+            }
+            if (user != null)
+            {
+                await _notificationService.SendNotificationAsync(user.FcsToken, "Order Status", $"Your order will be {status} by {staffEntity.StaffName}");
+            }
+        }
+
+        private async Task NotifyOrderUpdateAsync(ApplicationUser user, ApplicationUser staff, string update)
+        {
+            if (user != null)
+            {
+                await _notificationService.SendNotificationAsync(user.FcsToken, "Order Update", $"Your order is {update}!!");
+            }
+            if (staff != null)
+            {
+                await _notificationService.SendNotificationAsync(staff.FcsToken, "Order Update", $"Your order is {update}!!");
+            }
+        }
+
+        private async Task NotifyOrderDeliveredAsync(ApplicationUser user, ApplicationUser admin, Staff staffEntity, string lpgNo)
+        {
+            if (user != null)
+            {
+                await _notificationService.SendNotificationAsync(user.FcsToken, "Order Delivered", $"Your order of LPG No: {lpgNo} has been successfully delivered!!");
+            }
+            if (admin != null)
+            {
+                await _notificationService.SendNotificationAsync(admin.FcsToken, "Order Delivered", $"Your order of LPG No: {lpgNo} has been successfully delivered by {staffEntity.StaffName}!!");
+            }
         }
 
         public async Task<Order> CreateOrder(OrderDTO orderDTO, ClaimsPrincipal user)
@@ -198,6 +289,10 @@ namespace back_end.Services.Repository
             }
             var userData = await _userManager.FindByEmailAsync(orderDTO.ClientEmail);
             var userId = userIdClaim.Value;
+
+            var staffs = await _userManager.GetUsersInRoleAsync("Staff");
+            var staffEmail = staffs.FirstOrDefault().Email;
+            var staffdata = await _userManager.FindByEmailAsync(staffEmail);
 
             if (_context.Orders == null)
             {
@@ -261,7 +356,8 @@ namespace back_end.Services.Repository
                                   $"Customer Address: {order.Address}<br>";
 
             await _emailSenderService.SendEmailAsync(order.ClientEmail, "You Order Placed Successfully", emailContent);
-            await _notificationService.SendNotificationAsync(userData.FcsToken, "New Booking", $"You Have Receive Booking Of LPG No: {order.LpgNo} Number");
+            await _notificationService.SendNotificationAsync(userData.FcsToken, "Booking Update", $"Your Booking Of LPG No: {order.LpgNo} Number Is Confirmed");
+            await _notificationService.SendNotificationAsync(staffdata.FcsToken, "New Order Assigned", $"You Have Receive LPG No: {order.LpgNo} Number Order For Delivery");
             return order;
         }
 

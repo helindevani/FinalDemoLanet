@@ -2,7 +2,7 @@
 import { convertToLocalDate } from "@/components/Enums/EnumConverter";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { AppDispatch, RootState } from "@/store";
-import { fetchOrdersAdmin,Order, setPageSize,setPage } from "@/store/orderSlice";
+import { fetchOrdersAdmin,Order, setPageSize,setPage, fetchOrdersUser } from "@/store/orderSlice";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,10 +10,16 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import debounce from "lodash.debounce";
 import Cookies from "js-cookie";
+import { ToastContainer } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { ToastError, ToastWarning } from "@/components/ToastError";
+import LoadingSpinner from "@/components/Items/Spinner/LoadingSpinner";
 
 const ViewOrders = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [search, setSearch] = useState("");
+  const [loading,setIsLoading]=useState(true);
+  const router=useRouter();
 const { orders, totalCount, page, pageSize } = useSelector(
   (state: any) => state.order
 );
@@ -22,19 +28,81 @@ const token = Cookies.get("token");
 
 const fetchData = useCallback(
   debounce((page, pageSize,search) => {
-    dispatch(fetchOrdersAdmin({ page, pageSize,history:true,search }));
+    dispatch(fetchOrdersUser({ page, pageSize,search }));
   }, 1500),
   [dispatch]
 );
 
 useEffect(() => {
-  fetchData(page, pageSize,search);
-}, [dispatch, token, page, pageSize, fetchData,search]);
+  const fetchAllData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5057/api/User/AppliedNewConnection`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status == 204) {
+        ToastError(
+          "Sorry You have no any Active Connection So First Applied For connection"
+        );
+        setTimeout(() => {
+          router.push("/customer/newConnection");
+        }, 3000);
+      }
+      if (response.data.status == "Pending") {
+        ToastWarning(
+          `Your LPG No Is ${response.data.lpgNo} In Pending State!!`
+        );
+        router.push("/customer");
+      }
+      if (response.data.status == "Success") {
+        try {
+          const response = await axios.get(
+            "http://localhost:5057/api/Connections/checkConnectionLinked",
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (response.status === 200 && response.data) {
+            fetchData(page, pageSize,search);
+            setIsLoading(false);  
+          } else {
+            ToastWarning("Your Account Was Not Linked So First Link Your Account")
+            router.push("/customer/newConnection/linkConnection");
+          }
+        } catch (error) {
+          console.error("Error checking existing connection:", error);
+        }
+      }
+      if (response.data.status == "Rejected") {
+        ToastError(
+          "Your Connection Request Was Rejected Please Reapply!!"
+        );
+        router.push("/customer/newConnection");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  fetchAllData();
+}, [router, token,dispatch, page, pageSize, fetchData,search]);
+
+
 
 const totalPages = Math.ceil(totalCount / pageSize);
   return (
     <>
-      <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
+    <ToastContainer/>
+    {loading && <LoadingSpinner/>}
+      {!loading && <><div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
         <h3 className="sm:text-xl text-blue-800 font-semibold text-primary">
           Order History
         </h3>
@@ -162,6 +230,7 @@ const totalPages = Math.ceil(totalCount / pageSize);
                   </div>
                 </div>
       </div>
+    </>}
     </>
   );
 };

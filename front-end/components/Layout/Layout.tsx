@@ -1,9 +1,9 @@
 'use client';
-import React, { useState, useEffect, ReactNode } from 'react';
-import { useSelector } from 'react-redux';
-import Header from './Header';
-import AdminHeader from './AdminHeader';
+import React, { useState, useEffect } from 'react';
+import {useSelector } from 'react-redux';
 import { LayoutProps, RootState } from '../TypeInterface/AllType';
+import Header from './Header';
+
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { token } = useSelector((state: RootState) => state.auth);
@@ -15,7 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <>
-      {isLoggedIn ? <AdminHeader>{children}</AdminHeader> : <Header>{children}</Header>}
+   <Header isLogin={isLoggedIn}>{children}</Header>
     </>
   );
 };

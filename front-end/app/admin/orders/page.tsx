@@ -177,12 +177,12 @@ const ViewOrders = () => {
 
                         <td className="p-1   border-gray-300 flex justify-end">
                           <div className="m-1">
-                            <Link
+                            {getOrderStatus(order.orderStatus)!="Placed" &&<Link
                               href={`/admin/orders/${order.orderId}`}
                               className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center"
                             >
                               <FaEdit />
-                            </Link>
+                            </Link>}
                           </div>
                           <div className="m-1">
                             <button

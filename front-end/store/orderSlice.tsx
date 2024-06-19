@@ -115,6 +115,30 @@ export const fetchOrdersAdmin = createAsyncThunk<
   }
 );
 
+export const fetchOrdersUser = createAsyncThunk<
+  { data: Order[]; totalCount: number },
+  { page: number; pageSize: number;  search?: string }
+>(
+  "order/fetchOrdersUser",
+  async ({ page, pageSize, search = "" }) => {
+    const token = getToken();
+    const response = await axios.get<{
+      pagedOrders: Order[];
+      totalOrders: number;
+    }>(`${apiUrl}/User`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      params: { page, pageSize, search },
+    });
+    return {
+      data: response.data.pagedOrders,
+      totalCount: response.data.totalOrders,
+    };
+  }
+);
+
 export const fetchOrdersStaff = createAsyncThunk<
   { data: Order[]; totalCount: number },
   { page: number; pageSize: number; history: boolean; search?: string }
@@ -230,6 +254,10 @@ const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchOrdersAdmin.fulfilled, (state, action) => {
+        state.orders = action.payload.data;
+        state.totalCount = action.payload.totalCount;
+      })
+      .addCase(fetchOrdersUser.fulfilled, (state, action) => {
         state.orders = action.payload.data;
         state.totalCount = action.payload.totalCount;
       })

@@ -1433,3 +1433,5 @@ D:\FinalDemoLanet\FinalDemoLanet\back-end\back-end\obj\Debug\net7.0\back-end.gen
 D:\FinalDemoLanet\FinalDemoLanet\back-end\back-end\obj\Debug\net7.0\ref\back-end.dll
 D:\Final Demo Lanet\back-end\back-end\bin\Debug\net7.0\BouncyCastle.Crypto.dll
 D:\Final Demo Lanet\back-end\back-end\bin\Debug\net7.0\itextsharp.dll
+D:\Final Demo Lanet\back-end\back-end\bin\Debug\net7.0\Prometheus.NetStandard.dll
+D:\Final Demo Lanet\back-end\back-end\bin\Debug\net7.0\Prometheus.AspNetCore.dll

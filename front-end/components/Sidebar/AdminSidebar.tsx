@@ -11,6 +11,7 @@ import {
 import { BiCylinder, BiListCheck } from "react-icons/bi";
 import { IoReceiptSharp } from "react-icons/io5";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const AdminSidebar = () => {
   const [expandedMenu, setExpandedMenu] = useState("");
@@ -142,21 +143,21 @@ const AdminSidebar = () => {
                     <ul className="py-2 space-y-2">
                       {item.subMenu.map((subItem) => (
                         <li key={subItem.label}>
-                          <a
+                          <Link
                             href={subItem.href}
                             className={`flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 ${
                               router === subItem.href ? "bg-white shadow-lg text-blue-900" : ""
                             }`}
                           >
                             {subItem.label}
-                          </a>
+                          </Link>
                         </li>
                       ))}
                     </ul>
                   )}
                 </>
               ) : (
-                <a
+                <Link
                   href={item.href}
                   className={`flex items-center p-2 text-gray-700 hover:text-blue-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
                     router === item.href ? "bg-white shadow-lg text-blue-900" : ""
@@ -164,7 +165,7 @@ const AdminSidebar = () => {
                 >
                   {item.icon}
                   <span className="ms-3 hidden sm:block">{item.label}</span>
-                </a>
+                </Link>
               )}
             </li>
           ))}

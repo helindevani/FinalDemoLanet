@@ -10,6 +10,5 @@ namespace back_end.Domain.Identity
         public bool IsHasConnectionLinked { get; set; }
         public string? FcsToken { get; set; }
         public string? ProfileImage {  get; set; }
-        public string? BannerImage { get; set; }
     }
 }

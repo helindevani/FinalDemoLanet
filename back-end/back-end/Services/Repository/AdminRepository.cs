@@ -2,6 +2,7 @@
 using back_end.Domain.Entities;
 using back_end.Domain.Identity;
 using back_end.Enums;
+using back_end.ServiceContracts;
 using back_end.ServiceContracts.Repository;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -17,11 +18,15 @@ namespace back_end.Services.Repository
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly INotificationService _notificationService;
+        private readonly IEmailSenderService _emailSenderService;
 
-        public AdminRepository(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public AdminRepository(ApplicationDbContext context, UserManager<ApplicationUser> userManager, INotificationService notificationService, IEmailSenderService emailSenderService)
         {
             _context = context;
             _userManager = userManager;
+            _notificationService = notificationService;
+            _emailSenderService = emailSenderService;
         }
 
         public Dictionary<string, int> GetDashboardCounts()
@@ -55,6 +60,7 @@ namespace back_end.Services.Repository
             }
         }
 
+
         public async Task<List<Booking>> GetUserWiseBookingsAsync()
         {
             var bookings = await _context.Bookings
@@ -62,6 +68,7 @@ namespace back_end.Services.Repository
                                          .ToListAsync();
             return bookings;
         }
+
 
         public async Task<byte[]> OrderReport(DateTime startDate, DateTime endDate)
         {
@@ -102,7 +109,7 @@ namespace back_end.Services.Repository
         public async Task<IActionResult> UpdateConnectionStatus(ClaimsPrincipal userdata,string lpgNo, string status)
         {
             var connectionForm = await _context.Connections.FirstOrDefaultAsync(r => r.LpgNo == lpgNo);
-
+            var user1 = await _userManager.FindByIdAsync(connectionForm.UserId.ToString());
             var user = await _userManager.FindByIdAsync(connectionForm.UserId.ToString());
 
             var approverUserId = userdata.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -122,11 +129,17 @@ namespace back_end.Services.Repository
                 {
                     connectionForm.Status = ConnectionStatus.Approved;
                     await _context.SaveChangesAsync();
+
+                    string emailContent = $"Your Connection Request Approved Successfully!!!:<br><br>" +
+                                 $"LPG No : {lpgNo}<br>";
+                    await _emailSenderService.SendEmailAsync(connectionForm.EmailId, "Connection Update", emailContent);
+                    await _notificationService.SendNotificationAsync(user1.FcsToken, "Connection Status", $"Connection {status}!!");
                     return new OkObjectResult("Connection status approved successfully.");
                 }
                 else
                 {
-                    return new BadRequestObjectResult("This User Is Already Have Connection");
+                    await _notificationService.SendNotificationAsync(user1.FcsToken, "Connection Status", $"Connection Rejected Due To Already Have Connection!!");
+                    return new OkObjectResult("This User Is Already Have Connection");
                 }
             }
             else
@@ -138,9 +151,9 @@ namespace back_end.Services.Repository
                     user.IsHasConnection = false;
                     await _userManager.UpdateAsync(user);
                 }
-
+                _context.Connections.Remove(connectionForm);
                 await _context.SaveChangesAsync();
-
+                await _notificationService.SendNotificationAsync(user1.FcsToken, "Connection Status", $"Connection {status}!!");
                 return new OkObjectResult("Connection status rejected due to You Have Already Hold Gas Connection.");
             }
         }

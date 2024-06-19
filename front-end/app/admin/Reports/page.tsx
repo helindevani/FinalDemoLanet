@@ -7,20 +7,32 @@ const DatewiseReport = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-const token= Cookies.get("token");
-  const handleGenerateReport = async (e : any) => {
+  const token = Cookies.get("token");
+
+  const validate = () => {
+    if (!startDate || !endDate) {
+      return 'Please select both start date and end date';
+    }
+    if (new Date(startDate) > new Date(endDate)) {
+      return 'Start date must be before end date';
+    }
+    return '';
+  };
+
+  const handleGenerateReport = async (e: any) => {
     e.preventDefault();
     setErrorMessage('');
 
-    if (!startDate || !endDate) {
-      setErrorMessage('Please select both start date and end date');
+    const validationError = validate();
+    if (validationError) {
+      setErrorMessage(validationError);
       return;
     }
 
     try {
       const response = await axios.get('http://localhost:5057/api/Admin/GenrateReport', {
         params: { startDate, endDate },
-        responseType: 'blob', 
+        responseType: 'blob',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -64,7 +76,7 @@ const token= Cookies.get("token");
             <form className="space-y-4 px-5 py-8" onSubmit={handleGenerateReport}>
               <div className="flex items-center">
                 <label className="w-1/4 text-gray-700" htmlFor="startDate">
-                  Start Date
+                  Start Date <span className='text-red-500'>*</span>
                 </label>
                 <input
                   className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -77,7 +89,7 @@ const token= Cookies.get("token");
               </div>
               <div className="flex items-center pb-5">
                 <label className="w-1/4 text-gray-700" htmlFor="endDate">
-                  End Date
+                  End Date <span className='text-red-500'>*</span>
                 </label>
                 <input
                   className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

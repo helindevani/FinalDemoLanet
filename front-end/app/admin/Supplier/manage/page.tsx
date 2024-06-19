@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AdminSidebar from '@/components/Sidebar/AdminSidebar';
 import Cookies from 'js-cookie';
 import { fetchBrands, deleteBrand, setPage, setPageSize, Brand } from '@/store/supplierSlice';
 import { FaEdit, FaTrash } from 'react-icons/fa';
@@ -65,20 +64,19 @@ const ViewSupplier = () => {
         <div className="container m-auto">
           <div className="w-auto">
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-15 m-10 w-auto h-auto">
-              <div className="mb-20">
-                <a href="/admin/supplier">
-                  <button className="bg-purple-900 hover:bg-purple-950 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
+              <div className="mb-10">
+                <Link href="/admin/supplier">
+                  <button className="bg-blue-800 hover:bg-blue-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
                     Add Supplier
                   </button>
-                </a>
+                </Link>
               </div>
 
               <div className="flex justify-between items-center">
-                <div className="dataTables_length">
+                <div>
                   <label className="mr-3">
                     Show{' '}
                     <select
-                      name="myTable_length"
                       value={pageSize}
                       onChange={(e) => dispatch(setPageSize(Number(e.target.value)))}
                       className="form-select border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
@@ -89,7 +87,7 @@ const ViewSupplier = () => {
                     entries
                   </label>
                 </div>
-                <div id="myTable_filter" className="dataTables_filter">
+                <div>
                   <label className="flex items-center">
                     <span className="mr-1">Search:</span>
                     <input

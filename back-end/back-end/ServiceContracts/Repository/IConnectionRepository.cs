@@ -17,7 +17,7 @@ namespace back_end.Repositories
         Task<IEnumerable<Connection>> GetConnectionsAsync();
         Task<Connection> GetConnectionByIdAsync(string id);
         Task<PagedConnectionsResult<Connection>> GetConnectionsByStatusAsync(string status, int page, int pageSize, string search = null);
-        Task<Connection> UpdateConnectionAsync(string id, Connection updatedConnection);
+        Task<Connection> UpdateConnectionAsync(string id, string status);
         Task<Connection> CreateConnectionAsync(ConnectionDTO connectionDTO);
         Task<bool> CheckConnectionAppliedAsync(ClaimsPrincipal user);
         Task<bool> CheckConnectionLinkedAsync(ClaimsPrincipal user);

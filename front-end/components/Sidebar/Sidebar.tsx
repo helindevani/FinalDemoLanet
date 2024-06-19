@@ -1,5 +1,6 @@
 "use client";
-import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { BsCalendar } from "react-icons/bs";
 import { FaExpandArrowsAlt, FaTachometerAlt } from "react-icons/fa";
@@ -32,13 +33,13 @@ const Sidebar = () => {
                   : "text-gray-700 hover:text-blue-900 dark:text-white hover:bg-white hover:shadow-lg dark:hover:bg-gray-700"
               }`}
             >
-              <a
+              <Link
                 href="/customer"
                 className="flex items-center p-2 rounded-lg group"
               >
                 <FaTachometerAlt size={20} />
                 <span className="ms-3 hidden sm:block">Dashboard</span>
-              </a>
+              </Link>
             </li>
             <li
               className={`rounded-lg ${
@@ -47,13 +48,13 @@ const Sidebar = () => {
                   : "text-gray-700 hover:text-blue-900 dark:text-white hover:bg-white hover:shadow-lg dark:hover:bg-gray-700"
               }`}
             >
-              <a
+              <Link
                 href="/customer/newConnection"
                 className="flex items-center p-2 rounded-lg group"
               >
                 <FaExpandArrowsAlt size={20} />
                 <span className="ms-3 hidden sm:block">New Connection</span>
-              </a>
+              </Link>
             </li>
             <li
               className={`rounded-lg ${
@@ -62,13 +63,13 @@ const Sidebar = () => {
                   : "text-gray-700 hover:text-blue-900 dark:text-white hover:bg-white hover:shadow-lg dark:hover:bg-gray-700"
               }`}
             >
-              <a
+              <Link
                 href="/customer/connectionDetails"
                 className="flex items-center p-2 rounded-lg group"
               >
                 <IoInformationCircleSharp size={20} />
                 <span className="ms-3 hidden sm:block">Connection Details</span>
-              </a>
+              </Link>
             </li>
             <li
               className={`rounded-lg ${
@@ -108,18 +109,18 @@ const Sidebar = () => {
               {expandedMenu === "bookings" && (
                 <ul className="py-2 space-y-2">
                   <li>
-                    <a
+                    <Link
                       href="/customer/booking"
                       className={`flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 ${
                         isActive("/customer/booking") ? "bg-gray-200" : ""
                       }`}
                     >
                       Book Cylinder
-                    </a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a
+                    <Link
                       href="/customer/booking/history"
                       className={`flex items-center w-full p-2 text-gray-700 hover:text-blue-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 ${
                         isActive("/customer/booking/history")
@@ -128,7 +129,7 @@ const Sidebar = () => {
                       }`}
                     >
                       Booking History
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               )}
@@ -140,7 +141,7 @@ const Sidebar = () => {
                   : "text-gray-700 hover:text-blue-900 dark:text-white hover:bg-white hover:shadow-lg dark:hover:bg-gray-700"
               }`}
             >
-              <a
+              <Link
                 href="/customer/orders"
                 className="flex items-center p-2 rounded-lg group"
               >
@@ -148,7 +149,7 @@ const Sidebar = () => {
                 <span className="flex-1 ms-3 hidden sm:block text-left rtl:text-right whitespace-nowrap">
                   Track Booking
                 </span>
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

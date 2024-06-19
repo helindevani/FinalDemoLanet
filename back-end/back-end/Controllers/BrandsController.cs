@@ -12,7 +12,7 @@ namespace back_end.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize]
     public class BrandsController : ControllerBase
     {
         private readonly IBrandRepository _brandRepository;

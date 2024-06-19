@@ -12,7 +12,6 @@ namespace back_end.Services
         Task<IActionResult> LinkConnection(ClaimsPrincipal user, string LpgNo);
         Task<IActionResult> StaffRating(Guid id,int rating);
         Task<bool> IsGivenRating(Guid id);
-
         Task<byte[]> DownloadInvoice(Order order);
     }
 }

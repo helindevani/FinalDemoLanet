@@ -9,7 +9,7 @@ namespace back_end.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;

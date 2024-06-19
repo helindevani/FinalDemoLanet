@@ -13,7 +13,7 @@ namespace back_end.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize(Roles ="User")]
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userService;

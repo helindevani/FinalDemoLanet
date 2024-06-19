@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { TbHelpSquareRounded } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
+import Link from "next/link";
 
 const BookingDetails = () => {
   const [staffRating, setStaffRating] = useState<number | null>(null);
@@ -153,12 +154,12 @@ const token=Cookies.get("token");
               <tbody>
                 <tr>
                   <td className="py-1 pr-2 font-semibold">
-                    <a
+                    <Link
                       href="/download-invoice"
                       className=" py-1 pr-2 font-semibold"
                     >
                       Download Invoice
-                    </a>
+                    </Link>
                   </td>
                   <td className="py-1 pr-2 font-semibold">
                     <button onClick={downloadInvoice} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

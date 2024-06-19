@@ -56,7 +56,6 @@ namespace back_end.Services
                 PersonName = user.Name,
                 PhoneNumber=user.PhoneNumber,
                 ProfileImage = user.ProfileImage,
-                BannerImage= user.BannerImage,
                 Expiration = expiration,
             };
         }

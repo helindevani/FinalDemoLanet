@@ -15,7 +15,7 @@ namespace back_end.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize]
     public class BookingsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -88,10 +88,10 @@ namespace back_end.Controllers
             return order;
         }
 
-        [HttpGet("User")]
-        public async Task<ActionResult<IEnumerable<Booking>>> GetBooking()
+        [HttpGet("User/{lpgNo}")]
+        public async Task<ActionResult<IEnumerable<Booking>>> GetBooking(string lpgNo)
         {
-            var booking = await _bookingRepository.GetBookingsByUserIdAsync(User);
+            var booking = await _bookingRepository.GetBookingsByUserIdAsync(lpgNo);
             var staff = await _staffRepository.GetStaffs(1,5);
 
             if (booking == null)

@@ -73,16 +73,16 @@ const ViewCylinder = () => {
         <div className="container m-auto">
           <div className="w-auto">
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-15 m-10 w-auto h-auto">
-              <div className="mb-20">
-                <a href="/admin/cylinder">
-                  <button className="bg-purple-900 hover:bg-purple-950 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
+              <div className="mb-10">
+                <Link href="/admin/cylinder">
+                  <button className="bg-blue-800 hover:bg-blue-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
                     Add Cylinder
                   </button>
-                </a>
+                </Link>
               </div>
 
               <div className="flex justify-between items-center">
-                <div className="dataTables_length">
+                <div>
                   <label className="mr-3">
                     Show{" "}
                     <select
@@ -104,7 +104,7 @@ const ViewCylinder = () => {
                     <span className="mr-1">Search:</span>
                     <input
                       type="search"
-                      className="border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
+                      className="border-b-2 border-gray-500 focus:border-blue-700 shadow-md focus:outline-none"
                       placeholder=""
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
@@ -113,7 +113,7 @@ const ViewCylinder = () => {
                 </div>
               </div>
 
-              <div className="table-responsive justify-between mt-3">
+              <div className="table-responsive justify-between mt-3 overflow-x-auto">
                 <table className="w-full border border-gray-300">
                   <thead className="bg-white">
                     <tr>

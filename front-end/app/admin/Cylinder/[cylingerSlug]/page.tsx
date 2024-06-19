@@ -54,8 +54,8 @@ const EditProduct = () => {
   const token = Cookies.get("token");
 
   useEffect(() => {
-    dispatch(fetchBrands({page:100,pageSize:100}));
-    dispatch(fetchCategories({page:100,pageSize:100}));
+    dispatch(fetchBrands({page:1,pageSize:100}));
+    dispatch(fetchCategories({page:1,pageSize:100}));
   }, [dispatch, token]);
 
   useEffect(() => {
@@ -114,7 +114,6 @@ const EditProduct = () => {
       ];
 
     formData.CreatedBy = userName;
-    console.log(formData)
     try {
       const formDataToSend : any = new FormData();
       for (const [key, value] of Object.entries(formData)) {
@@ -131,9 +130,11 @@ const EditProduct = () => {
 
       const response = await dispatch(updateProduct({productId,data:formDataToSend}));
 
-      console.log("Product Updated successfully:", response.payload);
-      ToastSuccess("Product Updated Successfully!!");
-      router.push("/admin/cylinder/manage");
+      if (response.meta.requestStatus === 'fulfilled'){
+
+        ToastSuccess("Product Updated Successfully!!");
+        router.push("/admin/cylinder/manage");
+      }
     } catch (error) {
       console.error("Error creating brand:", error);
       ToastError("Product Not Updated Successfully");
@@ -142,7 +143,6 @@ const EditProduct = () => {
 
   return (
     <>
-=
         <ToastContainer />
         <div className="page-wrapper">
           <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
@@ -159,8 +159,8 @@ const EditProduct = () => {
           </div>
 
           <div className="container m-auto">
-            <div className="max-w-4xl mx-auto mb-28 h-screen">
-              <div className="bg-white shadow-md rounded px-8 pt-6 pb-15 m-10 w-3/4 h-auto">
+            <div className="max-w-4xl mx-auto mb-28">
+              <div className="bg-white shadow-md rounded px-8 pt-6 pb-15 m-10 h-auto">
                 <h1 className="text-xl text-blue-800 font-semibold text-primary">Product Info</h1>
                 <form className="space-y-4 px-5 py-8" onSubmit={handleSubmit}>
                   <div className="flex items-center">
@@ -307,7 +307,7 @@ const EditProduct = () => {
                     <button
                       type="submit"
                       id="createProductBtn"
-                      className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                      className="bg-blue-800 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
                       Submit
                     </button>

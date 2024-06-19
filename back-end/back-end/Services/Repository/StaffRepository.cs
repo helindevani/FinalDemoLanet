@@ -7,6 +7,7 @@ using back_end.ServiceContracts;
 using back_end.ServiceContracts.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace back_end.Services.Repository
 {
@@ -19,13 +20,58 @@ namespace back_end.Services.Repository
 
         private readonly IEmailSenderService _emailSender;
 
-        public StaffRepository(ApplicationDbContext context, IAccountRepository accountRepository, IEmailSenderService emailSender)
+        public StaffRepository(ApplicationDbContext context, IAccountRepository accountRepository, IEmailSenderService emailSender, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _accountRepository = accountRepository;
             _emailSender = emailSender;
+            _userManager=userManager;
         }
 
+        public Dictionary<string, int> GetDashboardCountsAsync(ClaimsPrincipal user)
+        {
+            Dictionary<string, int> data = new Dictionary<string, int>();
+            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                throw new UnauthorizedAccessException("User ID not found in token.");
+            }
+
+            var staffId = userIdClaim.Value;
+
+            try
+            {
+                var staffGuid = Guid.Parse(staffId);
+
+                int totalDeliveredOrders = _context.Orders
+                    .Where(s => s.StaffId == staffGuid && s.OrderStatus == OrderStatus.Delivered)
+                    .Count();
+
+                int totalActiveOrders = _context.Orders
+                    .Where(s => s.StaffId == staffGuid && s.OrderStatus == OrderStatus.Placed || s.OrderStatus == OrderStatus.Confirmed || s.OrderStatus == OrderStatus.OnTheWay)
+                    .Count();
+
+                var staff =  _context.Staffs
+                    .FirstOrDefault(s => s.StaffId == staffGuid);
+
+                int averageRating = 0;
+                if (staff != null && staff.RatingQuantity > 0)
+                {
+                    averageRating = (int)staff.Rating; 
+                }
+
+                data.Add("TotalDeliveredOrders", totalDeliveredOrders);
+                data.Add("TotalActiveOrders", totalActiveOrders);
+                data.Add("AverageRating", averageRating);
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving dashboard counts.", ex);
+            }
+        }
         public async Task<PagedStaffResult<Staff>> GetStaffs(int page, int pageSize, string search = null)
         {
             IQueryable<Staff> query = _context.Staffs;
@@ -80,45 +126,46 @@ namespace back_end.Services.Repository
 
         public async Task<Staff> CreateStaff(StaffDTO staffDTO)
         {
-            if (!Enum.TryParse(typeof(Status), staffDTO.Status.ToString(), out var status))
-                return null;
+                if (!Enum.TryParse(typeof(Status), staffDTO.Status.ToString(), out var status))
+                    return null;
 
-            var registerDTO = new RegisterDTO
-            {
-                Name = staffDTO.StaffName,
-                Email = staffDTO.EmailId,
-                MobaileNo = staffDTO.PhoneNumber,
-                Password = $"Staff@{staffDTO.PhoneNumber}",
-                ConfirmPassword = $"Staff@{staffDTO.PhoneNumber}",
-                Roles = new string[] { "Staff" }
-            };
-            await _accountRepository.UserRegisterRequest(registerDTO);
+                var registerDTO = new RegisterDTO
+                {
+                    Name = staffDTO.StaffName,
+                    Email = staffDTO.EmailId,
+                    MobaileNo = staffDTO.PhoneNumber,
+                    Password = $"Staff@{staffDTO.PhoneNumber}",
+                    ConfirmPassword = $"Staff@{staffDTO.PhoneNumber}",
+                    Roles = new string[] { "Staff" }
+                };
+                await _accountRepository.UserRegisterRequest(registerDTO);
 
-            ApplicationUser user = await _userManager.FindByEmailAsync(staffDTO.EmailId);
 
-            string emailContent = $"Your Staff Id Data:<br><br>" +
-                                 $"UserName: {staffDTO.EmailId}<br>" +
-                                 $"Password : {staffDTO.StaffName}@{staffDTO.PhoneNumber}<br>";
+                var staff = new Staff
+                {
+                    StaffName = staffDTO.StaffName,
+                    PhoneNumber = staffDTO.PhoneNumber,
+                    AadharCardNo = staffDTO.AadharCardNo,
+                    Address = staffDTO.Address,
+                    Gender = staffDTO.Gender,
+                    Status = (Status)status,
+                    JoiningDate = staffDTO.JoiningDate,
+                    CreatedBy = staffDTO.CreatedBy,
+                    EmailId = staffDTO.EmailId
+                };
 
-            await _emailSender.SendEmailAsync(staffDTO.EmailId, "You Staff Id Details", emailContent);
+                _context.Staffs.Add(staff);
+                await _context.SaveChangesAsync();
+                ApplicationUser user = await _userManager.FindByEmailAsync(staffDTO.EmailId);
 
-            var staff = new Staff
-            {
-                StaffName = staffDTO.StaffName,
-                PhoneNumber = staffDTO.PhoneNumber,
-                AadharCardNo = staffDTO.AadharCardNo,
-                Address = staffDTO.Address,
-                Gender = staffDTO.Gender,
-                Status = (Status)status,
-                JoiningDate = staffDTO.JoiningDate,
-                CreatedBy = staffDTO.CreatedBy,
-                EmailId = staffDTO.EmailId
-            };
+                string emailContent = $"Your Staff Id Data:<br><br>" +
+                                     $"UserName: {staffDTO.EmailId}<br>" +
+                                     $"Password : {staffDTO.StaffName}@{staffDTO.PhoneNumber}<br>";
 
-            _context.Staffs.Add(staff);
-            await _context.SaveChangesAsync();
+                await _emailSender.SendEmailAsync(staffDTO.EmailId, "You Staff Id Details", emailContent);
 
-            return staff;
+                return staff;
+            
         }
 
         public async Task<bool> DeleteStaff(Guid id)

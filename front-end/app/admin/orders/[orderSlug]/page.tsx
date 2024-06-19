@@ -4,7 +4,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
 import AdminSidebar from "@/components/Sidebar/AdminSidebar";
-import { getPaymentDoneOrNot, getPaymentMode, getPaymentStatus, getPaymentType } from "@/components/Enums/EnumConverter";
+import { getOrderStatus, getPaymentDoneOrNot, getPaymentMode, getPaymentStatus, getPaymentType } from "@/components/Enums/EnumConverter";
+import { ToastError, ToastSuccess } from "@/components/ToastError";
 
 interface OrderFormValues {
   OrderId: string;
@@ -77,7 +78,7 @@ const Order: React.FC = () => {
             CreatedBy: response.data.booking.createdBy,
             Address: response.data.booking.shippingAddress,
             ProductId : response.data.booking.productID,
-            OrderStatus :"",
+            OrderStatus :getOrderStatus(response.data.orderStatus),
             IsStaffAccepted : response.data.isStaffAccepted,
           });
           setIsStaffAccepted(response.data.isStaffAccepted);
@@ -87,9 +88,10 @@ const Order: React.FC = () => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
               },
+              params: { page:1, pageSize:100 },
             })
             .then((staffResponse) => {
-              setStaffs(staffResponse.data);
+              setStaffs(staffResponse.data.pagedStaffs);
             })
             .catch((error) => console.error("Error fetching staff data:", error));
         })
@@ -121,11 +123,11 @@ const Order: React.FC = () => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log("Order updated successfully:", response.data);
+       ToastSuccess("Order updated successfully!!")
         router.push("/admin/orders");
     } catch (error) {
+      ToastError("Failed to update order!!")
         console.error("Error updating order:", error);
-        // Handle error response, show error message
     }
 };
 
@@ -134,7 +136,7 @@ const Order: React.FC = () => {
       <div className="page-wrapper">
         <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
-            Order Creation
+            Order Details
           </h3>
           <nav className="flex items-center space-x-2">
             <a href="#" className="text-gray-400 hover:text-blue-800">
@@ -144,7 +146,7 @@ const Order: React.FC = () => {
             <span className="text-gray-600">Order Creation</span>
           </nav>
         </div>
-        <div className="container m-auto h-screen">
+        <div className="container m-auto">
           <div className="w-auto">
             <div className="bg-white shadow-md rounded px-8 pt-14 pb-16 m-10 w-auto h-auto">
               <form onSubmit={handleSubmit}>
@@ -283,7 +285,7 @@ const Order: React.FC = () => {
                       </div>
                     </div>
                     <div className="flex ">
-                      {isStaffAccepted === true && <div className="pr-4 w-1/2">
+                    <div className="pr-4 w-1/2">
                         <label
                           htmlFor="OrderStatus"
                           className="block text-sm font-semibold leading-6 text-gray-900"
@@ -291,18 +293,15 @@ const Order: React.FC = () => {
                           Order Status
                         </label>
                         <div className="mt-2.5">
-                          <select
+                          <input
                             className="w-full border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             name="OrderStatus"
                             value={formValues.OrderStatus}
-                            onChange={handleChange}
-                          >
-                            <option value="">---SELECT---</option>
-                            <option value="OnTheWay">On The Way</option>
-                            <option value="Rejected">Rejected</option>
-                          </select>
+                            disabled
+                          />
+                           
                         </div>
-                      </div>}
+                      </div>
                       {isStaffAccepted === false && (
                         <div className="pr-4 w-1/2">
                           <label
@@ -388,13 +387,13 @@ const Order: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center justify-center p-4">
-                    <button
+                  {isStaffAccepted==false &&  <button
                       type="submit"
                       id="createProductBtn"
                       className="bg-blue-800 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
                       Update Order
-                    </button>
+                    </button>}
                   </div>
                 </div>
               </form>

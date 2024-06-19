@@ -62,7 +62,7 @@ export default function Declaration({onChange} : changeType) {
         </div>
         <p >
           
-          <input type="Checkbox" name="IsDeclarationAccept" value="true" onChange={handleChange}/>  <b>I Accept Above Declaration </b>
+          <input type="Checkbox" name="IsDeclarationAccept" value="true" onChange={handleChange}/>  <b>I Accept Above Declaration <span className="text-red-500">*</span></b>
         </p>
       </div>
       

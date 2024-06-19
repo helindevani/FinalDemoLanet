@@ -15,7 +15,7 @@ namespace back_end.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -38,6 +38,13 @@ namespace back_end.Controllers
             return Ok(result);
         }
 
+        [HttpGet("User")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetUserOrders(int page, int pageSize, string search = null)
+        {
+            var result = await _orderRepository.GetUserOrders(User, page, pageSize, search);
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder(Guid id)
         {
@@ -55,7 +62,7 @@ namespace back_end.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Order>> PutOrder(Guid id,OrderDTO orderDTO)
         {
-            var result = await _orderRepository.UpdateOrder(id, orderDTO);
+            var result = await _orderRepository.UpdateOrder(User,id, orderDTO);
             return result;
 
         }

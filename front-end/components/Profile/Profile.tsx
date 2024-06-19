@@ -27,6 +27,7 @@ const ProfileComponent = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const token: any = useSelector((state: RootState) => state.auth);
+  const [validationError, setValidationError] = useState('');
 
   useEffect(() => {
     const number: string = token?.token?.phoneNumber;
@@ -39,7 +40,18 @@ const ProfileComponent = () => {
     setName(name);
   }, [token.token]);
 
-  console.log(emailId, name, phoneNo, profileImg);
+  const validateForm = () => {
+    if (!password || !newPassword || !confirmNewPassword) {
+      return 'All fields are required.';
+    }
+    if (newPassword !== confirmNewPassword) {
+      return 'New password and confirm new password do not match.';
+    }
+    if (newPassword.length < 8) {
+      return 'New password must be at least 8 characters long and with Special character and one digit  .';
+    }
+    return '';
+  };
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -122,6 +134,11 @@ const ProfileComponent = () => {
   };
 
   const handleChangePassword = async () => {
+    const error = validateForm();
+    if (error) {
+      setValidationError(error);
+      return;
+    }
     try {
       const data = {Password:password,NewPassword:newPassword,ConfirmNewPassword:confirmNewPassword};
 
@@ -144,10 +161,9 @@ const ProfileComponent = () => {
           router.push("/");
         }
       }
-      if (response.status == 500 || response.status == 400) {
-        ToastError("Please Provide Valid Data");
-      }
+      
     } catch (error) {
+      ToastError("Please Provide Valid Data");
       console.error("There was an error updating the profile!", error);
     }
   };
@@ -344,6 +360,7 @@ const ProfileComponent = () => {
               </div>
               <div className="p-4">
                 <div className="space-y-4 px-5 py-8">
+                {validationError && <div className="text-red-500">{validationError}</div>}
                   <div className="flex items-center">
                     <label className="w-1/4 text-gray-700" htmlFor="name">
                       Old Password
@@ -376,7 +393,6 @@ const ProfileComponent = () => {
                       onChange={(e) => setConfirmNewPassword(e.target.value)}
                       className="w-3/4 border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
-                   {(password != confirmNewPassword) && <p className="text-red-500">Entered Password Should Not Match</p>}
                   </div>
                 </div>
                 <div className="flex justify-center mt-6 space-x-4">

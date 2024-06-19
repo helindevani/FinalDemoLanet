@@ -6,12 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using back_end.Services.Repository;
 
 namespace back_end.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize]
     public class StaffsController : ControllerBase
     {
         private readonly IStaffRepository _staffRepository;
@@ -27,6 +28,14 @@ namespace back_end.Controllers
             var result = await _staffRepository.GetStaffs(page, pageSize, search);
             return Ok(result);
         }
+
+        [HttpGet("Dashboard")]
+        public ActionResult<Dictionary<string, int>> GetCount()
+        {
+            var data = _staffRepository.GetDashboardCountsAsync(User);
+            return Ok(data);
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Staff>> GetStaff(Guid id)

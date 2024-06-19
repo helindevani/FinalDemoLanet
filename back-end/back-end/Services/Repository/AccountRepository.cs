@@ -10,6 +10,7 @@ using System.Security.Claims;
 using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
 using back_end.DatabaseContext;
+using Microsoft.AspNetCore.Mvc;
 
 namespace back_end.Services.Repository
 {
@@ -76,7 +77,7 @@ namespace back_end.Services.Repository
                 throw new InvalidOperationException("Failed to reset password");
         }
 
-        public async Task<AuthenticationResponse> UserLoginRequest(LoginDTO loginDTO)
+        public async Task<IActionResult> UserLoginRequest(LoginDTO loginDTO)
         {
             var result = await _signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, isPersistent: false, lockoutOnFailure: false);
 
@@ -84,25 +85,34 @@ namespace back_end.Services.Repository
             {
                 var user = await _userManager.FindByEmailAsync(loginDTO.Email);
 
-                user.FcsToken = loginDTO.FcmToken;
-
                 if (user == null)
-                    throw new InvalidOperationException("User not found");
+                {
+                    return new BadRequestObjectResult("User not found");
+                }
+
+                user.FcsToken = loginDTO.FcmToken;
 
                 var roles = await _userManager.GetRolesAsync(user);
 
                 if (roles == null)
-                    throw new InvalidOperationException("Something went wrong");
+                {
+                    return new BadRequestObjectResult("Failed to retrieve user roles");
+                }
 
                 var authenticationResponse = _jwtService.CreateJwtToken(user, roles.ToList());
 
-                await _userManager.UpdateAsync(user);
+                var updateResult = await _userManager.UpdateAsync(user);
 
-                return authenticationResponse;
+                if (!updateResult.Succeeded)
+                {
+                    return new BadRequestObjectResult("Failed to update user information");
+                }
+
+                return new OkObjectResult(authenticationResponse);
             }
             else
             {
-                throw new InvalidOperationException("Invalid email or password");
+                return new BadRequestObjectResult("Invalid email or password");
             }
         }
 
@@ -202,10 +212,6 @@ namespace back_end.Services.Repository
             var userId = userIdClaim.Value;
             var user1= await _userManager.FindByIdAsync(userId);
             user1.PhoneNumber = userdata.PhoneNumber;
-            if(userdata.BannerImage != null)
-            {
-                user1.BannerImage = await UploadImageToCloudinaryAsync(userdata.BannerImage);
-            }
             if (userdata.ProfileImage != null)
             {
                 user1.ProfileImage = await UploadImageToCloudinaryAsync(userdata.ProfileImage);

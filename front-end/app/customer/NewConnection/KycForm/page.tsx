@@ -9,6 +9,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { ToastError, ToastSuccess } from "@/components/ToastError";
 import { ToastContainer } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   FirstName: string;
@@ -46,6 +47,7 @@ interface FormData {
 export default function Connection() {
   const [step, setStep] = useState(1);
   const [submissionSuccessful, setSubmissionSuccessful] = useState(false);
+  const router=useRouter();
   const [formData, setFormData] = useState<any>({
     FirstName: "",
     LastName: "",
@@ -185,9 +187,9 @@ export default function Connection() {
         );
 
         if (response.status === 201) {
-          console.log("Form submitted successfully");
           ToastSuccess("Your Request Added");
-          setSubmissionSuccessful(true); 
+          setSubmissionSuccessful(true);
+          router.push('/customer');
         } else {
           console.error("Unexpected response status:", response.status);
           ToastError("Unexpected response from server");
@@ -221,7 +223,7 @@ export default function Connection() {
             </nav>
           </div>
 
-          <div className="container m-auto h-screen">
+          <div className="container m-auto ">
             <div className="w-auto">
               <div className="bg-white shadow-md rounded px-8 pt-14 pb-15 m-10 w-auto h-auto">
                 <div className="relative flex items-center justify-center space-x-6 m-10">

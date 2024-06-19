@@ -1,44 +1,59 @@
 'use client';
 
-import StaffSidebar from "@/components/Sidebar/StaffSidebar";
-
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import StaffChartComponent from "@/components/Items/StaffChart";
 
 const Dashboard = () => {
+  const [activeOrders, setActiveOrders] = useState<number>(0);
+  const [deliveredOrders, setDeliveredOrders] = useState<number>(0);
+  const [rating, setRating] = useState<number>(0);
+  const [data, setData] = useState<any>(null);
+  const token=Cookies.get('token');
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5057/api/Staffs/Dashboard",{headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          }}
+        );
+        const { AverageRating, TotalActiveOrders, TotalDeliveredOrders} = response.data;
+        setData(response.data);
+        setActiveOrders(TotalActiveOrders);
+        setDeliveredOrders(TotalDeliveredOrders);
+        setRating(AverageRating);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
   return (
     <>
+ <div className="flex justify-between top-0 bg-white border border-gray-300 p-3 h-screen mb-8 sm:h-auto w-auto text-sm"></div>
+      <div className="grid grid-cols-3 gap-4 p-5 mb-4">
+        <div className="bg-slate-400 text-white p-4 rounded-lg sm:text-sm">
+          <h2 className="text-xl font-semibold">Total Active Orders</h2>
+          <p className="text-4xl font-bold">{activeOrders}</p>
+        </div>
+        <div className="bg-yellow-500 text-white p-4 rounded-lg">
+          <h2 className="text-xl font-semibold">Total Delivered Order</h2>
+          <p className="text-4xl font-bold">{deliveredOrders}</p>
+        </div>
+        <div className="bg-purple-500 text-white p-4 rounded-lg">
+          <h2 className="text-xl font-semibold">Average Rating</h2>
+          <p className="text-4xl font-bold">{rating} <span>&#9733;</span></p>
+        </div>
+      </div>
 
-    <div className="page-wrapper">
-        <div className="flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
-          <h3 className="text-xl text-blue-800 font-semibold text-primary">
-            DashBoard
-          </h3>
-          <nav className="flex items-center space-x-2">
-            <a href="#" className="text-gray-400 hover:text-blue-800">
-              Home
-            </a>
-            <span className="text-gray-400">{`>`}</span>
-            <span className="text-gray-600">Dashboard</span>
-          </nav>
-        </div>
-
-        <div className="container m-auto h-screen">
-          <div className="w-auto">
-            <div className="bg-white shadow-md rounded px-8 pt-14 pb-15 m-10 w-auto h-auto">
-        <div className="bg-white px-6 py-8 sm:px-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">Welcome to Gas Booking</h1>
-          <p className="text-lg text-gray-700 mb-6">Book your gas cylinders hassle-free with our user-friendly platform.</p>
-          <p className="text-lg text-gray-700 mb-6">We offer:</p>
-          <ul className="list-disc list-inside text-lg text-gray-700 mb-6">
-            <li>Easy online booking process</li>
-            <li>Fast delivery</li>
-            <li>Secure payment options</li>
-            <li>24/7 customer support</li>
-          </ul>
-          <p className="text-lg text-gray-700 mb-6">Start booking now and experience convenience at your fingertips!</p>
-        </div>
-        </div>
-        </div>
-        </div>
+      <div className="bg-white shadow-md rounded px-8 p-5 m-10 w-auto h-auto">
+          <StaffChartComponent data={data} />
         </div>
 
     </>

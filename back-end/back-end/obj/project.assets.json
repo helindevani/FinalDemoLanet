@@ -2464,6 +2464,25 @@
           }
         }
       },
+      "Microsoft.Extensions.Http/6.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0",
+          "Microsoft.Extensions.Logging": "6.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "6.0.0",
+          "Microsoft.Extensions.Options": "6.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.Extensions.Http.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Extensions.Http.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.Extensions.Identity.Core/7.0.18": {
         "type": "package",
         "dependencies": {
@@ -3285,6 +3304,41 @@
         "runtime": {
           "lib/netstandard2.0/NuGet.Versioning.dll": {}
         }
+      },
+      "prometheus-net/7.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Http": "6.0.0"
+        },
+        "compile": {
+          "lib/net6.0/Prometheus.NetStandard.dll": {
+            "related": ".deps.json;.pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Prometheus.NetStandard.dll": {
+            "related": ".deps.json;.pdb;.xml"
+          }
+        }
+      },
+      "prometheus-net.AspNetCore/7.0.0": {
+        "type": "package",
+        "dependencies": {
+          "prometheus-net": "7.0.0"
+        },
+        "compile": {
+          "lib/net6.0/Prometheus.AspNetCore.dll": {
+            "related": ".deps.json;.pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Prometheus.AspNetCore.dll": {
+            "related": ".deps.json;.pdb;.xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {
         "type": "package",
@@ -8025,6 +8079,25 @@
         "microsoft.extensions.hosting.abstractions.nuspec"
       ]
     },
+    "Microsoft.Extensions.Http/6.0.0": {
+      "sha512": "15+pa2G0bAMHbHewaQIdr/y6ag2H3yh4rd9hTXavtWDzQBkvpe2RMqFg8BxDpcQWssmjmBApGPcw93QRz6YcMg==",
+      "type": "package",
+      "path": "microsoft.extensions.http/6.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/Microsoft.Extensions.Http.dll",
+        "lib/net461/Microsoft.Extensions.Http.xml",
+        "lib/netstandard2.0/Microsoft.Extensions.Http.dll",
+        "lib/netstandard2.0/Microsoft.Extensions.Http.xml",
+        "microsoft.extensions.http.6.0.0.nupkg.sha512",
+        "microsoft.extensions.http.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
+    },
     "Microsoft.Extensions.Identity.Core/7.0.18": {
       "sha512": "qGVzg238K8I0lS9bqNT5hmRvPm4OdCxtCiwHi3mlbbo1yNrFvbdKjifjMpehjAys5RG4ukbMn9lte4rNqN1AlQ==",
       "type": "package",
@@ -9523,6 +9596,41 @@
         "lib/netstandard2.0/NuGet.Versioning.dll",
         "nuget.versioning.6.6.1.nupkg.sha512",
         "nuget.versioning.nuspec"
+      ]
+    },
+    "prometheus-net/7.0.0": {
+      "sha512": "ECFDmwoG6gDrbwOz41HaWAJMTO0+oVu26N9/Dg0HPXgmi4Shux+OZGKLjUEwhGSNcKarLuaPn/0KMinMP1P3PQ==",
+      "type": "package",
+      "path": "prometheus-net/7.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "images/prometheus-net-logo.png",
+        "lib/net462/Prometheus.NetStandard.dll",
+        "lib/net462/Prometheus.NetStandard.pdb",
+        "lib/net462/Prometheus.NetStandard.xml",
+        "lib/net6.0/Prometheus.NetStandard.deps.json",
+        "lib/net6.0/Prometheus.NetStandard.dll",
+        "lib/net6.0/Prometheus.NetStandard.pdb",
+        "lib/net6.0/Prometheus.NetStandard.xml",
+        "prometheus-net.7.0.0.nupkg.sha512",
+        "prometheus-net.nuspec"
+      ]
+    },
+    "prometheus-net.AspNetCore/7.0.0": {
+      "sha512": "UQYk20n8e+SPXRZhxT46Ten14xiWz/1WZJGXBkAArJ7NvY8Ghk0t/28Px568JplyHAFRAE6S9wIdWbGw9X1SKQ==",
+      "type": "package",
+      "path": "prometheus-net.aspnetcore/7.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "images/prometheus-net-logo.png",
+        "lib/net6.0/Prometheus.AspNetCore.deps.json",
+        "lib/net6.0/Prometheus.AspNetCore.dll",
+        "lib/net6.0/Prometheus.AspNetCore.pdb",
+        "lib/net6.0/Prometheus.AspNetCore.xml",
+        "prometheus-net.aspnetcore.7.0.0.nupkg.sha512",
+        "prometheus-net.aspnetcore.nuspec"
       ]
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {
@@ -14040,7 +14148,9 @@
       "Swashbuckle.AspNetCore.Swagger >= 6.5.0",
       "Swashbuckle.AspNetCore.SwaggerGen >= 6.5.0",
       "Swashbuckle.AspNetCore.SwaggerUI >= 6.5.0",
-      "iTextSharp >= 5.5.13.3"
+      "iTextSharp >= 5.5.13.3",
+      "prometheus-net >= 7.0.0",
+      "prometheus-net.AspNetCore >= 7.0.0"
     ]
   },
   "packageFolders": {
@@ -14170,6 +14280,14 @@
           "iTextSharp": {
             "target": "Package",
             "version": "[5.5.13.3, )"
+          },
+          "prometheus-net": {
+            "target": "Package",
+            "version": "[7.0.0, )"
+          },
+          "prometheus-net.AspNetCore": {
+            "target": "Package",
+            "version": "[7.0.0, )"
           }
         },
         "imports": [

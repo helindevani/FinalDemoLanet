@@ -1,5 +1,7 @@
 ﻿using back_end.Domain.Entities;
 using back_end.DTO;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace back_end.ServiceContracts.Repository
 {
@@ -12,6 +14,7 @@ namespace back_end.ServiceContracts.Repository
     public interface IStaffRepository
     {
         Task<PagedStaffResult<Staff>> GetStaffs(int page, int pageSize, string search = null);
+        Dictionary<string, int> GetDashboardCountsAsync(ClaimsPrincipal user);
         Task<Staff> GetStaff(Guid id);
         Task<bool> UpdateStaff(Guid id, StaffDTO staffDTO);
         Task<Staff> CreateStaff(StaffDTO staffDTO);

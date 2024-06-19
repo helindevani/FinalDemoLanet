@@ -1,55 +1,34 @@
-'use client';
+"use client";
 import {
   configureStore,
   createSlice,
   createAsyncThunk,
-  PayloadAction
+  PayloadAction,
 } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import axios from "axios";
-import axiosInstance from '../Interceptor/axiosConfig';
-
-interface LoginCredentials {
-  email: string;
-  password: string;
-  rememberPassword: boolean;
-  fcmToken : string | null;
-}
-
-interface RegistrationData {
-  Email: string;
-  Name : string;
-  MobaileNo : string;
-  Password: string;
-  ConfirmPassword: string;
-}
-
-interface ResetPasswordData {
-  Email: string;
-  NewPassword: string;
-} 
-
-interface ForgotPasswordData {
-  Email: string;
-}
-
-interface AuthState {
-  token: string | null;
-  error: string | null;
-  loading: boolean;
-  status : string;
-}
+import {
+  AuthState,
+  LoginCredentials,
+  RegistrationData,
+  ResetPasswordData,
+  ForgotPasswordData,
+} from "@/components/TypeInterface/AllType";
+import { AnyRecord } from "dns";
 
 export const loginUser = createAsyncThunk<string, LoginCredentials>(
   "auth/loginUser",
-  async ({ email, password, fcmToken,rememberPassword }, { rejectWithValue }) => {
+  async (
+    { email, password, fcmToken, rememberPassword },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axios.post(
         "http://localhost:5057/api/Account/login",
         {
           Email: email,
           Password: password,
-          FcmToken : fcmToken
+          FcmToken: fcmToken,
         },
         {
           headers: {
@@ -73,10 +52,9 @@ export const loginUser = createAsyncThunk<string, LoginCredentials>(
   }
 );
 
-export const registerUser = createAsyncThunk<string,RegistrationData>(
+export const registerUser = createAsyncThunk<string, RegistrationData>(
   "auth/registerUser",
   async (data: RegistrationData, { rejectWithValue }) => {
-    console.log(data);
     try {
       const response = await axios.post(
         "http://localhost:5057/api/Account/register",
@@ -89,7 +67,7 @@ export const registerUser = createAsyncThunk<string,RegistrationData>(
   }
 );
 
-export const resetPassword = createAsyncThunk<string,ResetPasswordData>(
+export const resetPassword = createAsyncThunk<string, ResetPasswordData>(
   "auth/resetPassword",
   async (data: ResetPasswordData) => {
     try {
@@ -109,9 +87,9 @@ export const resetPassword = createAsyncThunk<string,ResetPasswordData>(
   }
 );
 
-export const forgotPassword = createAsyncThunk<string,ForgotPasswordData>(
+export const forgotPassword = createAsyncThunk<string, ForgotPasswordData>(
   "auth/forgotPassword",
-  async (data : ForgotPasswordData):Promise<any> => {
+  async (data: ForgotPasswordData): Promise<any> => {
     try {
       const response = await axios.post(
         "http://localhost:5057/api/Account/forgotpassword",
@@ -133,74 +111,77 @@ const initialState: AuthState = {
   token: null,
   error: null,
   loading: false,
-  status: 'idle',
+  status: "idle",
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logout: (state : any) =>{
-      state.token=null
-      state.status='idle'
-      Cookies.remove('token')
+    logout: (state: any) => {
+      state.token = null;
+      state.status = "idle";
+      Cookies.remove("token");
     },
-    setAuthStatus: (state, action : PayloadAction<string>) => {
+    setAuthStatus: (state, action: PayloadAction<string>) => {
       state.status = action.payload;
-  }
-},
-  extraReducers: (builder : any) => {
+    },
+  },
+  extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state : AuthState) => {
+      .addCase(loginUser.pending, (state: AuthState) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state : AuthState, action : PayloadAction<string>) => {
+      .addCase(
+        loginUser.fulfilled,
+        (state: AuthState, action: PayloadAction<string>) => {
+          state.loading = false;
+          state.token = action.payload;
+          state.status = "success";
+        }
+      )
+      .addCase(loginUser.rejected, (state: AuthState, action: any) => {
         state.loading = false;
-        state.token = action.payload;
-        state.status = 'success';
+        state.error = action.payload;
+        state.status = "error";
       })
-      .addCase(loginUser.rejected, (state : AuthState, action : PayloadAction<string>) => {
-        state.loading = false;
-        (state.error as any) = action.payload;
-        state.status = 'error';
-      })
-      .addCase(registerUser.pending, (state : AuthState) => {
+      .addCase(registerUser.pending, (state: AuthState) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state : AuthState) => {
+      .addCase(registerUser.fulfilled, (state: AuthState) => {
         state.loading = false;
       })
-      .addCase(registerUser.rejected, (state : AuthState, action : PayloadAction<string>) => {
+      .addCase(registerUser.rejected, (state: AuthState, action: any) => {
         state.loading = false;
-        (state.error as any) = action.payload;
+        state.error = action.payload;
       })
-      .addCase(resetPassword.pending, (state : AuthState) => {
+      .addCase(resetPassword.pending, (state: AuthState) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(resetPassword.fulfilled, (state : AuthState) => {
+      .addCase(resetPassword.fulfilled, (state: AuthState) => {
         state.loading = false;
       })
-      .addCase(resetPassword.rejected, (state : AuthState, action : any) => {
+      .addCase(resetPassword.rejected, (state: AuthState, action: any) => {
         state.loading = false;
-        (state.error as any) = action.error.message;
+        state.error = action.payload;
       })
-      .addCase(forgotPassword.pending, (state : AuthState, action : PayloadAction<string>) => {
+      .addCase(forgotPassword.pending, (state: AuthState) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(forgotPassword.fulfilled, (state : AuthState) => {
+      .addCase(forgotPassword.fulfilled, (state: AuthState) => {
         state.loading = false;
       })
-      .addCase(forgotPassword.rejected, (state : AuthState, action : any) => {
+      .addCase(forgotPassword.rejected, (state: AuthState, action: any) => {
         state.loading = false;
-        (state.error as any) = action.error.message;
+        state.error = action.payload;
       });
-  }
+  },
 });
 
-export const { setAuthStatus , logout} = authSlice.actions;
+export const { setAuthStatus, logout } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "xVWzMzK7beqbsdB89W52nfTtcc8b8VfaCSQKGVcZV/EMvboLErXbJ2HeMLimxIH/qTBFVhHYhQyR/QU9wrjVCg==",
+  "dgSpecHash": "WNJqC9MS5kmxpMQiw/Xg+mRLHtT/KYo6pLM9Ey97zoybcEJR1X1JQ4tzbY/jBctcHhorQDK7PRPMatJ3mGm72g==",
   "success": true,
   "projectFilePath": "D:\\Final Demo Lanet\\back-end\\back-end\\back-end.csproj",
   "expectedPackageFiles": [
@@ -144,6 +144,7 @@
     "C:\\Users\\Helin Devani\\.nuget\\packages\\microsoft.extensions.features\\7.0.18\\microsoft.extensions.features.7.0.18.nupkg.sha512",
     "C:\\Users\\Helin Devani\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\2.2.0\\microsoft.extensions.fileproviders.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Helin Devani\\.nuget\\packages\\microsoft.extensions.hosting.abstractions\\2.2.0\\microsoft.extensions.hosting.abstractions.2.2.0.nupkg.sha512",
+    "C:\\Users\\Helin Devani\\.nuget\\packages\\microsoft.extensions.http\\6.0.0\\microsoft.extensions.http.6.0.0.nupkg.sha512",
     "C:\\Users\\Helin Devani\\.nuget\\packages\\microsoft.extensions.identity.core\\7.0.18\\microsoft.extensions.identity.core.7.0.18.nupkg.sha512",
     "C:\\Users\\Helin Devani\\.nuget\\packages\\microsoft.extensions.identity.stores\\7.0.18\\microsoft.extensions.identity.stores.7.0.18.nupkg.sha512",
     "C:\\Users\\Helin Devani\\.nuget\\packages\\microsoft.extensions.localization\\2.2.0\\microsoft.extensions.localization.2.2.0.nupkg.sha512",
@@ -194,6 +195,8 @@
     "C:\\Users\\Helin Devani\\.nuget\\packages\\nuget.projectmodel\\6.6.1\\nuget.projectmodel.6.6.1.nupkg.sha512",
     "C:\\Users\\Helin Devani\\.nuget\\packages\\nuget.protocol\\6.6.1\\nuget.protocol.6.6.1.nupkg.sha512",
     "C:\\Users\\Helin Devani\\.nuget\\packages\\nuget.versioning\\6.6.1\\nuget.versioning.6.6.1.nupkg.sha512",
+    "C:\\Users\\Helin Devani\\.nuget\\packages\\prometheus-net\\7.0.0\\prometheus-net.7.0.0.nupkg.sha512",
+    "C:\\Users\\Helin Devani\\.nuget\\packages\\prometheus-net.aspnetcore\\7.0.0\\prometheus-net.aspnetcore.7.0.0.nupkg.sha512",
     "C:\\Users\\Helin Devani\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.2\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "C:\\Users\\Helin Devani\\.nuget\\packages\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.2\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "C:\\Users\\Helin Devani\\.nuget\\packages\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl\\4.3.2\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",

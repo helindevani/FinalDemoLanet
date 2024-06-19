@@ -145,7 +145,7 @@ const BookingDetails = () => {
                           <td className="p-3 border border-b border-gray-300 text-center">{getPaymentStatus(booking.paymentStatus)}</td>
                           <td className="p-3 border-gray-300 flex justify-end text-center">
                             <div className="m-1">
-                              <Link href="/admin/booking/order" className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center">
+                              <Link href={`/admin/booking/${booking.lpgNo}`} className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center">
                                 <FaEdit />
                               </Link>
                             </div>

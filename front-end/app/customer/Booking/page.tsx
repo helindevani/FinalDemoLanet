@@ -5,32 +5,105 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
 import { useRouter } from "next/navigation";
-import { ToastError } from "@/components/ToastError";
+import { ToastError, ToastWarning } from "@/components/ToastError";
 import { ToastContainer } from "react-toastify";
+import LoadingSpinner from "@/components/Items/Spinner/LoadingSpinner";
 
 const stripePromise = loadStripe(
   "pk_test_51PHNghSJ9wEfpjx5wXi25pxsX2zIg30sO9fFPA1xyIeJ01SqEazYAi8SmKUCPkY4OrJ1Z5mRp84SUZ6T03LcDqJr00Vs5XSeZD"
 );
 
 export default function Booking() {
+  const [loading, setIsLoading]=useState(true);
   const [data, setData] = useState<any>();
   const [paymentType, setPaymentType] = useState<string>();
   const token = Cookies.get("token");
   const router = useRouter();
 
   useEffect(() => {
-    if (token) {
-      const response = axios
-        .get(`http://localhost:5057/api/Bookings/Details`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => setData(response.data))
-        .catch((error) => console.error("Error fetching data:", error));
-    }
-  }, [token]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5057/api/User/AppliedNewConnection`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status == 204) {
+          ToastError(
+            "Sorry You have no any Active Connection So First Applied For connection"
+          );
+          setTimeout(() => {
+            router.push("/customer/newConnection");
+          }, 3000);
+        }
+        if (response.data.status == "Pending") {
+          ToastWarning(
+            `Your LPG No Is ${response.data.lpgNo} In Pending State!!`
+          );
+          setTimeout(() => {
+          router.push("/customer");
+        }, 3000);
+        }
+        if (response.data.status == "Success") {
+          try {
+            const response = await axios.get(
+              "http://localhost:5057/api/Connections/checkConnectionLinked",
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+            if (response.status === 200 && response.data) {
+              try{
+                const response = await axios
+                  .get(`http://localhost:5057/api/Bookings/Details`, {
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
+                    },
+                  })
+                  if(response.status == 200){
+                    setData(response.data);
+                    setIsLoading(false);
+                  }
+              }
+              catch(error){
+                ToastError("Failed To Load Data!!")
+                router.push('/customer');
+                console.error("Error fetching data:", error)
+              }
+                
+            } else {
+              ToastWarning("Your Account Was Not Linked So First Link Your Account")
+              setTimeout(() => {
+              router.push("/customer/newConnection/linkConnection");
+            }, 3000);
+            }
+          } catch (error) {
+            console.error("Error checking existing connection:", error);
+          }
+        }
+        if (response.data.status == "Rejected") {
+          ToastError(
+            "Your Connection Request Was Rejected Please Reapply!!"
+          );
+          setTimeout(() => {
+          router.push("/customer/newConnection");
+        }, 3000);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [router, token]);
 
   const handleBooking = async (event: any) => {
     event.preventDefault();
@@ -86,15 +159,21 @@ export default function Booking() {
           );
 
           if(response.status==201){
-            console.log("Booking Request Add Successfully!!");
-            router.push('/customer/orders');
+
+              router.push('/customer/orders');
+            
           }
           else if (response.status === 200 && response.data === "Last booking is pending.") {
             ToastError("Last booking is pending.");
+            setTimeout(() => {
+              router.push('/customer/orders');
+            }, 3000);
         }
         else if (response.status === 200 && response.data === "Order is placed. Please wait for delivery.") {
           ToastError("Your Last Booking Will Be Confirmed Please Wait For Delivery Of Your Order.");
+          setTimeout(() => {
           router.push('/customer/orders');
+        }, 3000);
       }
         } catch (error) {
           console.error("Error creating Stripe Checkout session:", error);
@@ -102,12 +181,12 @@ export default function Booking() {
       }
       
   };
-  console.log(data);
 
   return (
     <>
       <ToastContainer/>
-      <div className="page-wrapper">
+      {loading &&<LoadingSpinner/>}
+      {!loading && <div className="page-wrapper">
         <div className="sticky flex justify-between top-0 bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm z-30 border">
           <h3 className="text-xl text-blue-800 font-semibold text-primary">
             Book Your Cylinder
@@ -263,7 +342,7 @@ export default function Booking() {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
     </>
   );
 }

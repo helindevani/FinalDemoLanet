@@ -55,12 +55,12 @@ const ViewCategories = () => {
         <div className="container m-auto">
           <div className="w-auto ">
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-15 m-10 w-auto h-auto">
-              <div className="mb-20">
-                <a href="/admin/categories">
-                  <button className="bg-purple-900 hover:bg-purple-950 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
+              <div className="mb-10">
+                <Link href="/admin/categories">
+                  <button className="bg-blue-800 hover:bg-blue-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
                     Add Category
                   </button>
-                </a>
+                </Link>
               </div>
 
               <div className="flex justify-between items-center">
@@ -93,7 +93,7 @@ const ViewCategories = () => {
                 </div>
               </div>
 
-              <div className="table-responsive justify-between mt-3">
+              <div className="table-responsive justify-between mt-3 overflow-x-auto">
                 <table className="w-full border border-gray-300">
                   <thead className="bg-white">
                     <tr>

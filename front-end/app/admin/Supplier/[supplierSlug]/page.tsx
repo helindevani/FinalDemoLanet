@@ -23,12 +23,10 @@ const EditSupplier = () => {
   );
 
   useEffect(() => {
-    return () => {
       if (brand) {
         setBrandName(brand.brandName);
         setBrandStatus(getStatusString(brand.brandStatus));
       }
-    };
   }, [brand]);
 
   const handleSubmit = async (e: any) => {
@@ -55,11 +53,10 @@ const EditSupplier = () => {
 
     try {
       const response = await dispatch(updateBrand({brandId,data}));
-      console.log('Brand Updated successfully:', response.payload);
-      setBrandName("");
-      setBrandStatus("");
-      ToastSuccess("Brand Updated Successfully!!");
-      router.push("/admin/supplier/manage");
+      if (response.meta.requestStatus === 'fulfilled'){
+        ToastSuccess("Brand Updated Successfully!!");
+        router.push("/admin/supplier/manage");
+      }
 
     } catch (error) {
       console.error("Error creating brand:", error);
@@ -85,7 +82,7 @@ const EditSupplier = () => {
           </div>
 
           <div className="container m-auto">
-            <div className="max-w-4xl mx-auto h-screen">
+            <div className="max-w-4xl mx-auto">
               <div className="bg-white shadow-md rounded px-8 pt-6 pb-15 m-10 w-3/4 h-1/2">
                 <form className="space-y-4 px-5 py-8" onSubmit={handleSubmit}>
                   <div className="flex items-center">
@@ -123,7 +120,7 @@ const EditSupplier = () => {
                       type="submit"
                       name="create"
                       id="createProductBtn"
-                      className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                      className="bg-blue-800 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
                       Submit
                     </button>

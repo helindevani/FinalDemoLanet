@@ -15,6 +15,7 @@ const EditStaff = () => {
   const [aadharNo,setAadharNo]=useState<string>();
   const [address,setAddress]=useState<string>();
   const [phoneNo,setPhoneNo]=useState<string>();
+  const [email,setEmail]=useState<string>();
   const [status,setStatus]=useState<string>();
   const [joinDate,setJoinDate] = useState<string>();
   const [error, setError] = useState<any>("");
@@ -29,17 +30,17 @@ const EditStaff = () => {
   );
 
   useEffect(() => {
-    return () => {
+   
       if (staff) {
         setName(staff.staffName);
         setGender(staff.gender);
         setAadharNo(staff.aadharCardNo);
         setAddress(staff.address);
+        setEmail(staff.emailId);
         setPhoneNo(staff.phoneNumber);
         setStatus(getStatusString(staff.status));
         setJoinDate(staff.joiningDate.substring(0, 10));
       }
-    };
   }, [staff]);
 
   const handleSubmit = async (e: any) => {
@@ -59,6 +60,7 @@ const EditStaff = () => {
 
       const data: any = {
         StaffId: staffId,
+        EmailId:email,
         StaffName: name,
         Gender: gender,
         AadharCardNo: aadharNo,
@@ -71,9 +73,10 @@ const EditStaff = () => {
 
     try {
       const response = await dispatch(updateStaff({ staffId, data }));
-      console.log("Staff Updated successfully:", response.payload);
-      ToastSuccess("Staff Updated Successfully!!");
-      router.push("/admin/DeliveryStaff/ManageStaff");
+      if(response.meta.requestStatus == 'fulfilled'){
+        ToastSuccess("Staff Updated Successfully!!");
+        router.push("/admin/staff/manage");
+      }
     } catch (error) {
       console.error("Error Updating Staff:", error);
       ToastError("Staff Not Updated!!");
@@ -99,8 +102,8 @@ const EditStaff = () => {
           </div>
 
           <div className="container m-auto">
-            <div className="max-w-4xl mx-auto mb-14 h-screen">
-              <div className="bg-white shadow-md rounded px-8 pt-6 pb-10 m-10 w-3/4 h-auto">
+            <div className="max-w-4xl mx-auto mb-14">
+              <div className="bg-white shadow-md rounded px-8 pt-6 pb-10 m-10 h-auto">
               <form className="space-y-4 pb-5" onSubmit={handleSubmit}>
                   <div className="flex items-center">
                     <label className="w-1/4 text-gray-700" htmlFor="name">

@@ -17,6 +17,7 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using back_end.DTO;
 using System.Text.Json;
+using Prometheus;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,13 +41,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 });
 
-StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("front-end", builder =>
     {
-        builder.WithOrigins("http://localhost:3000")
+        builder.WithOrigins("http://localhost:3009")
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials();
@@ -133,12 +132,18 @@ app.UseSwaggerUI();
 
 app.UseRouting();
 
+app.UseHttpMetrics();
+
 app.UseCors("front-end");
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapMetrics();
+});
 
 app.Run();

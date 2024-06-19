@@ -10,7 +10,7 @@ namespace back_end.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize]
     public class ConnectionsController : ControllerBase
     {
         private readonly IConnectionRepository _connectionRepository;
@@ -70,14 +70,10 @@ namespace back_end.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutConnection(string id, Connection connection)
+        public async Task<IActionResult> PutConnection(string id, [FromQuery] string status)
         {
-            if (id != connection.LpgNo)
-            {
-                return BadRequest();
-            }
-
-            var updatedConnection = await _connectionRepository.UpdateConnectionAsync(id, connection);
+       
+            var updatedConnection = await _connectionRepository.UpdateConnectionAsync(id, status);
 
             if (updatedConnection == null)
             {

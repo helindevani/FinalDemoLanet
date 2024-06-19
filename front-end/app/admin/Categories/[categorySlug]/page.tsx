@@ -24,12 +24,10 @@ const EditCategory = () => {
   );
 
   useEffect(() => {
-    return () => {
       if (category) {
         setCategoryName(category.categoryName);
         setCategoryStatus(getStatusString(category.categoryStatus));
       }
-    };
   }, [category]);
 
   const handleSubmit = async (e: any) => {
@@ -56,9 +54,11 @@ const EditCategory = () => {
 
     try {
       const response = await dispatch(updateCategory({ categoryId, data }));
-      console.log("Category Updated successfully:", response.payload);
-      ToastSuccess("Category Updated Successfully!!");
-      router.push("/admin/categories/manage");
+      if (response.meta.requestStatus === 'fulfilled'){
+        ToastSuccess("Category Updated Successfully!!");
+        router.push("/admin/categories/manage");
+
+      }
     } catch (error) {
       console.error("Error creating Category:", error);
       ToastError("Category Not Updated!!");
@@ -116,12 +116,12 @@ const EditCategory = () => {
                     </select>
                   </div>
 
-                  <div className="flex items-center justify-start">
+                  <div className="flex items-center justify-center">
                     <button
                       type="submit"
                       name="create"
                       id="createProductBtn"
-                      className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                      className="bg-blue-800 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
                       Submit
                     </button>

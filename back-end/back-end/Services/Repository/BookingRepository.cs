@@ -8,6 +8,7 @@ using back_end.ServiceContracts.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using Stripe.Checkout;
 using Stripe.Climate;
 using System.Security.Claims;
@@ -61,6 +62,7 @@ namespace back_end.Services.Repository
         public async Task<string> CreateCheckoutSessionAsync(BookingDTO booking)
         {
             var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId.ToString() == booking.PaymentId);
+            StripeConfiguration.ApiKey = "sk_test_51PHNghSJ9wEfpjx5FTuMJ3wBmD22iBQvgZWtEUulIRZmvRjmD6iPDgyGBbMNHupQNVkHmEcpVOeKTI1Gi9DqnW9W00UV7FbeR8";
             var options = new SessionCreateOptions
             {
                 PaymentMethodTypes = new List<string> { "card" },
@@ -82,8 +84,8 @@ namespace back_end.Services.Repository
                     },
                 },
                 Mode = "payment",
-                SuccessUrl = "http://localhost:3000/customer/orders",
-                CancelUrl = "http://localhost:3000/customer/booking",
+                SuccessUrl = "http://localhost:3009/customer/orders",
+                CancelUrl = "http://localhost:3009/customer/booking",
                 CustomerEmail = booking.EmailId,
                 ClientReferenceId = booking.BookingId,
                 Metadata = new Dictionary<string, string>
@@ -228,25 +230,18 @@ namespace back_end.Services.Repository
             };
         }
 
-        public async Task<Booking> GetBookingsByUserIdAsync(ClaimsPrincipal user)
+        public async Task<Booking> GetBookingsByUserIdAsync(string lpgNo)
         {
             if (_context.Bookings == null)
             {
                 return null;
             }
-            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-
-            if (userIdClaim == null)
-            {
-                throw new UnauthorizedAccessException("User ID not found in token.");
-            }
-
-            var userId = userIdClaim.Value;
             var booking = await _context.Bookings
-           .Include(r => r.Product)
-           .Include(s => s.Product.Brand)
-           .FirstOrDefaultAsync(r => r.CreatedBy == userId);
-
+         .Include(r => r.Product)
+         .ThenInclude(p => p.Brand)
+         .Where(b => b.LpgNo == lpgNo)
+         .OrderByDescending(b => b.BookingDate)
+         .FirstOrDefaultAsync();
             return booking;
         }
 

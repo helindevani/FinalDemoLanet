@@ -4,28 +4,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
 import StaffSidebar from "@/components/Sidebar/StaffSidebar";
-
-interface OrderFormValues {
-  OrderId: string;
-  LpgNo: string;
-  ClientName: string;
-  ClientContact: string;
-  ClientEmail: string;
-  StaffId: string;
-  BookingId: string;
-  Amount: string;
-  PaymentType: string;
-  PaymentStatus: string;
-  CreatedBy: string;
-  Address: string;
-  ProductId: string;
-  OrderStatus: string;
-  IsStaffAccepted: boolean | null;
-}
-
-interface StaffActionProps {
-  orderId: string;
-}
+import { ToastError, ToastSuccess } from "../ToastError";
+import { ToastContainer } from "react-toastify";
+import { OrderFormValues,StaffActionProps } from "../TypeInterface/AllType";
 
 const StaffAction: React.FC<StaffActionProps> = ({orderId}) => {
   const router = useRouter();
@@ -117,9 +98,10 @@ const StaffAction: React.FC<StaffActionProps> = ({orderId}) => {
           },
         }
       );
-      console.log("Order updated successfully:", response.data);
+      ToastSuccess("Order Action Successfully Applied!!")
       router.push("/staff/orders");
     } catch (error) {
+      ToastError("Failed To Update Action!!")
       console.error("Error updating order:", error);
     }
   };
@@ -168,6 +150,8 @@ const StaffAction: React.FC<StaffActionProps> = ({orderId}) => {
   };
 
   return (
+    <>
+    <ToastContainer/>
     <form onSubmit={handleSubmit} className="space-y-4 px-5 py-8">
       <div className="flex items-center">
         <label className="w-1/4 text-gray-700" htmlFor="name">
@@ -236,6 +220,7 @@ const StaffAction: React.FC<StaffActionProps> = ({orderId}) => {
         </button>
       </div>
     </form>
+    </>
   );
 };
 

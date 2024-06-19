@@ -2,13 +2,13 @@
 import {  useState } from "react";
 import { TbHelpSquareRounded } from "react-icons/tb";
 import { TrackByOrderProps } from "../TypeInterface/AllType";
-import { convertToLocalDate } from "../Enums/EnumConverter";
+import { convertToLocalDate, getOrderStatus, getPaymentMode, getPaymentStatus } from "../Enums/EnumConverter";
 
 
 const TrackByOrder : React.FC<TrackByOrderProps> = ({ data }) => {
   const [staffRating, setStaffRating] = useState(0);
 
-  const allSteps = ["Placed", "Confirmed", "On The Way", "Delivered"];
+  const allSteps = ["Placed", "Confirmed", "OnTheWay", "Delivered"];
 
  const steps = allSteps.map((step, index) => ({
   name: step,
@@ -104,11 +104,11 @@ const TrackByOrder : React.FC<TrackByOrderProps> = ({ data }) => {
               </tr>
               <tr>
                 <td className="py-1 pr-2 font-semibold">Payment Type:</td>
-                <td className="py-1">{data?.paymentType}</td>
+                <td className="py-1">{getPaymentMode(data?.paymentType)}</td>
               </tr>
               <tr>
                 <td className="py-1 pr-2 font-semibold">Payment Status:</td>
-                <td className="py-1">{data?.paymentStatus}</td>
+                <td className="py-1">{getPaymentStatus(data?.paymentStatus)}</td>
               </tr>
               <tr>
                 <td className="py-1 pr-2 font-semibold">Amount:</td>
@@ -177,7 +177,4 @@ const TrackByOrder : React.FC<TrackByOrderProps> = ({ data }) => {
 };
 
 export default TrackByOrder;
-function getOrderStatus(orderStatus: number): string {
-  throw new Error("Function not implemented.");
-}
 

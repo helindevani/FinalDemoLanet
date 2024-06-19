@@ -1,9 +1,13 @@
-'use client';
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
+import Provider from "@/store/Provider";
 import "./globals.css";
-import Layout from "@/components/Layout/Layout";
-import {store,persistor} from "../store";
+import { Metadata } from "next";
+
+
+export const metadata: Metadata = {
+  title: "RefillSmart",
+  description:
+    "RefillSmart: RefillSmart Is Provide Quick Booking Facilities",
+};
 
 export default function RootLayout({
   children,
@@ -14,13 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      <Provider store={store}>
-       <PersistGate loading={null} persistor={persistor}>
-        <Layout>
+      <Provider>
         {children}
-        </Layout>
-        </PersistGate>
-    </Provider>
+      </Provider>
         </body>
     </html>
   );

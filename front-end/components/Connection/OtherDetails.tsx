@@ -48,7 +48,7 @@ export default function OtherDetails({onChange} : changeType) {
       </div>
 
       <div className="m-5 border p-5 border-gray-700">
-        <b>Cash Transfer Section </b>
+        <b>Cash Transfer Section <span className="text-red-500">*</span></b>
         <p className="p-5">
           Government Has Launched The <b>GiveItUp</b> Scheme Which Is Aimed
           Which Is aimed at Motivating LPG users who can afford to pay the
@@ -84,7 +84,7 @@ export default function OtherDetails({onChange} : changeType) {
                   htmlFor="RationCardNumber"
                   className="block text-sm font-semibold leading-6 text-gray-900"
                 >
-                  Aadhar Card Number
+                  Aadhar Card Number <span className="text-red-500">*</span>
                 </label>
                 <div className="mt-2.5">
                   <input
@@ -103,7 +103,7 @@ export default function OtherDetails({onChange} : changeType) {
       </div>
 
       <div className="m-5 border p-5 border-gray-700">
-        <b>Ration Card </b>
+        <b>Ration Card <span className="text-red-500">*</span></b>
         <p className="p-5">
           Upload the scan copies of ration document required for cash
           transfer(In case name is appearing in any ration card issued by the
@@ -116,7 +116,7 @@ export default function OtherDetails({onChange} : changeType) {
               htmlFor="State"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
-              State
+              State <span className="text-red-500">*</span>
             </label>
             <div className="mt-2.5">
               <select
@@ -137,7 +137,7 @@ export default function OtherDetails({onChange} : changeType) {
               htmlFor="RationCardNumber"
               className="block text-sm font-semibold leading-6 text-gray-900"
             >
-              Ration Card Number
+              Ration Card Number <span className="text-red-500">*</span>
             </label>
             <div className="mt-2.5">
               <input

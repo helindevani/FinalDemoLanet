@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 
 export interface HeaderProps {
   children?: ReactNode;
+  isLogin:boolean;
 }
 
 export interface Booking {
@@ -132,3 +133,60 @@ export interface Booking {
     userId: string;
   }
   
+  export interface ResetPasswordData {
+    Email: string;
+    NewPassword: string;
+  }
+
+  export interface LoginCredentials {
+    email: string;
+    password: string;
+    rememberPassword: boolean;
+    fcmToken : string | null;
+  }
+
+  export interface AuthState {
+    token: string | null;
+    error: string | null;
+    loading: boolean;
+    status : string;
+  }
+
+  export interface RegistrationData {
+    Email: string;
+    Name : string;
+    MobaileNo : string;
+    Password: string;
+    ConfirmPassword: string;
+  }
+
+  export interface ResetPasswordData {
+    Email: string;
+    NewPassword: string;
+  } 
+
+  export interface ForgotPasswordData {
+    Email: string;
+  }
+
+  export interface OrderFormValues {
+    OrderId: string;
+    LpgNo: string;
+    ClientName: string;
+    ClientContact: string;
+    ClientEmail: string;
+    StaffId: string;
+    BookingId: string;
+    Amount: string;
+    PaymentType: string;
+    PaymentStatus: string;
+    CreatedBy: string;
+    Address: string;
+    ProductId: string;
+    OrderStatus: string;
+    IsStaffAccepted: boolean | null;
+  }
+
+  export interface StaffActionProps {
+    orderId: string;
+  }

@@ -36,18 +36,18 @@ const ViewOrders = () => {
   return (
     <>
       {/* <div className="page-wrapper"> */}
-        <div className="flex justify-between bg-white p-1 h-10 mb-10 sm:h-auto w-auto text-sm">
-          <h3 className="text-xl text-blue-800 font-semibold text-primary">
-            Order Details
-          </h3>
-          <nav className="flex items-center space-x-2">
-            <a href="#" className="text-gray-400 hover:text-blue-800">
-              Home
-            </a>
-            <span className="text-gray-400">{`>`}</span>
-            <span className="text-gray-600">Order Details</span>
-          </nav>
-        </div>
+      <div className="flex justify-between bg-white p-3 h-10 mb-10 sm:h-auto w-auto text-sm">
+        <h3 className="text-xl text-blue-800 font-semibold text-primary">
+          Order History
+        </h3>
+        <nav className="flex items-center space-x-2">
+          <a href="#" className="text-gray-400 hover:text-blue-800">
+            Home
+          </a>
+          <span className="text-gray-400">{`>`}</span>
+          <span className="text-gray-600">Order History</span>
+        </nav>
+      </div>
 
         <div className="container m-auto h-screen">
           <div className="w-auto">

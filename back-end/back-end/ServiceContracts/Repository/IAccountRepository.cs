@@ -1,6 +1,7 @@
 ﻿ using back_end.Domain.Entities;
 using back_end.Domain.Identity;
 using back_end.DTO;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace back_end.ServiceContracts.Repository
@@ -9,7 +10,7 @@ namespace back_end.ServiceContracts.Repository
     {
         Task<RegisterationResponse> UserRegisterRequest(RegisterDTO registerDTO);
         Task<bool> EmailCheckRequest(string email);
-        Task<AuthenticationResponse> UserLoginRequest(LoginDTO loginDTO);
+        Task<IActionResult> UserLoginRequest(LoginDTO loginDTO);
         Task<ForgotPasswordRequest> ForgotPasswordRequest(ForgotPasswordRequest request);
         Task<bool> ResetPasswordRequest(ResetPasswordRequestData request);
         Task<bool> ChangePasswordAsync(ClaimsPrincipal user,ChangePasswordRequest request);

@@ -6,9 +6,11 @@ import axios from "axios";
 import { ToastError, ToastSuccess } from "@/components/ToastError";
 import { ToastContainer } from "react-toastify";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LinkConnection() {
   const [connectionNo, setConnectionNo] = useState<string>();
+  const router=useRouter();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -20,28 +22,35 @@ export default function LinkConnection() {
       return;
     }
     const data = { LpgNo: connectionNo };
+try{
+  const response = await axios.post(
+    `http://localhost:5057/api/User/LinkConnection`,
+    data,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get("token")}`,
+      },
+    }
+  );
+  if (response.status == 200) {
+    ToastSuccess("Your Account Will Be Linked Successfully");
+    setTimeout(() => {
+      router.push("/customer/connectionDetails");
+    }, 3000);
+  }
+}
+catch(error:any){
 
-    const response = await axios.post(
-      `http://localhost:5057/api/User/LinkConnection`,
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      }
-    );
-    if (response.statusText == "User Was Linked Successfully On His Account") {
-      ToastSuccess("Your Account Will Be Linked Successfully");
-    }
-    if (response.statusText == "User Was Already Linked Account With System") {
-      ToastError("You Have Already Linked Your Account");
-    }
-    if (response.statusText == "User Was Not Linked With System") {
-      ToastError("Please Provide Valid Data!!");
-    }
+    ToastError(error);
+    setTimeout(() => {
+      router.push("/customer/connectionDetails");
+    }, 3000);
+  }
 
-    console.log("Form submitted successfully");
+
+    
+   
   };
   return (
     <>

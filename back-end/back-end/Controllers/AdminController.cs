@@ -17,7 +17,7 @@ namespace back_end.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize(Roles="Admin")]
     public class AdminController : ControllerBase
     {
         private readonly IAccountRepository _userService;
@@ -33,55 +33,6 @@ namespace back_end.Controllers
             _adminRepository = adminRepository;
         }
 
-        //[HttpPost("MakeAdmin/{userId}")]
-        //public async Task<IActionResult> MakeAdminRequest(Guid userId)
-        //{
-        //    try
-        //    {
-        //        // Check if the user exists and has requested admin role
-        //        if (_context.AdminRequests == null)
-        //        {
-        //            return NotFound();
-        //        }
-
-        //        var adminRequest = await _context.AdminRequests.FirstOrDefaultAsync(req => req.Id == userId); 
-        //        if (adminRequest == null)
-        //        {
-        //            return NotFound();
-        //        }
-
-        //        var user = await _context.Users.FindAsync(userId);
-
-        //        if (user != null && await _userService.IsUserInRoleAsync(user, "Admin"))
-        //        {
-        //            return BadRequest("User already has an admin role.");
-        //        }
-
-        //        var success = await _userService.AddAdminRoleAsync(userId);
-
-        //        if (success)
-        //        {
-        //            if (adminRequest.RequestTypeName == Enums.RequestType.MakeAdmin)
-        //            {
-        //                adminRequest.Status = Enums.RequestStatus.Approved;
-        //                _context.AdminRequests.Update(adminRequest);
-        //                await _context.SaveChangesAsync();
-        //                //await _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveApproval", "Your request has been approved.");
-        //            }
-
-        //            return Ok("Admin role added successfully.");
-        //        }
-        //        else
-        //        {
-        //            return BadRequest("Failed to add admin role.");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Log the exception
-        //        return StatusCode(500, "Internal server error");
-        //    }
-        //}
 
         [HttpPut("Connection/{lpgNo}")]
         public async Task<IActionResult> ConnectionAction(string lpgNo,[FromQuery] string status)
@@ -95,38 +46,6 @@ namespace back_end.Controllers
         {
             var data = _adminRepository.GetDashboardCounts();
             return Ok(data);
-        }
-
-        public class UserWithRoles
-        {
-            public string UserId { get; set; }
-            public string UserName { get; set; }
-            public string Email { get; set; }
-            public List<string> Roles { get; set; }
-        }
-
-        // GET: api/User
-        [HttpGet("Users")]
-        public async Task<ActionResult<IEnumerable<UserWithRoles>>> GetUsersWithRoles()
-        {
-            var usersWithRoles = new List<UserWithRoles>();
-
-            var users = await _usermanager.Users.ToListAsync();
-
-            foreach (var user in users)
-            {
-                var userRoles = await _usermanager.GetRolesAsync(user);
-                var userWithRoles = new UserWithRoles
-                {
-                    UserId = user.Id.ToString(),
-                    UserName = user.UserName,
-                    Roles = userRoles.ToList(),
-                    Email = user.Email
-                };
-                usersWithRoles.Add(userWithRoles);
-            }
-
-            return usersWithRoles;
         }
 
         [HttpGet("GenrateReport")]

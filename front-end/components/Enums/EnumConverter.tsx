@@ -19,11 +19,11 @@ export const getBookingStatus = (value: number): string => {
       case 1:
         return "Confirmed";
       case 2:
-        return "On The Way";
+        return "OnTheWay";
       case 3:
         return "Delivered";
       case 4:
-        return "Staff Rejected";
+        return "StaffRejected";
         case 5:
         return "Rejected";
       default:
@@ -69,7 +69,7 @@ export const getBookingStatus = (value: number): string => {
       case 0:
         return "Online";
       case 1:
-        return "CashOnDelivery";
+        return "COD";
       default:
         return "";
     }
@@ -80,7 +80,7 @@ export const getBookingStatus = (value: number): string => {
       case 0:
         return "Online";
       case 1:
-        return "CashOnDelivery";
+        return "COD";
       default:
         return "";
     }
@@ -133,22 +133,22 @@ export const getBookingStatus = (value: number): string => {
 export const getStatusClass = (status: number) => {
   switch (status) {
     case 0:
-      return "bg-green-500"; // Available status
+      return "bg-green-500"; 
     case 1:
-      return "bg-red-500"; // Not Available status
+      return "bg-red-500"; 
     default:
-      return ""; // Default background color
+      return "";
   }
 };
 
 export const getStatusClasss = (status: string) => {
   switch (status) {
     case "0":
-      return "bg-green-500"; // Available status
+      return "bg-green-500"; 
     case "1":
-      return "bg-red-500"; // Not Available status
+      return "bg-red-500"; 
     default:
-      return ""; // Default background color
+      return ""; 
   }
 };
 
@@ -163,4 +163,19 @@ export const getConnectionStatus=(value : number) : string =>{
       default :
           return "";
   }
+};
+
+export const isValidEmail = (email: string) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+export const isValidMobile = (mobile : any) => {
+  const re = /^[0-9]{10}$/;
+  return re.test(mobile);
+};
+
+export const isValidPassword = (password : any) => {
+  const re = /^(?=.*[a-z])(?=.*\d).{5,}$/;
+  return re.test(password);
 };

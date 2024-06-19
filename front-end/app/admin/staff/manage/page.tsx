@@ -1,7 +1,6 @@
 "use client";
 import { format } from 'date-fns';
 import { useCallback, useEffect, useState } from "react";
-import AdminSidebar from "@/components/Sidebar/AdminSidebar";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
@@ -58,12 +57,12 @@ const ViewStaff = () => {
         <div className="container m-auto">
           <div className="w-auto">
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-15 m-10 w-auto h-auto">
-              <div className="mb-20">
-                <a href="/admin/staff">
-                  <button className="bg-blue-800 hover:bg-purple-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
+              <div className="mb-10">
+                <Link href="/admin/staff">
+                  <button className="bg-blue-800 hover:bg-blue-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-blue-700">
                     Add Staff
                   </button>
-                </a>
+                </Link>
               </div>
 
               <div className="flex justify-between items-center">
@@ -96,7 +95,7 @@ const ViewStaff = () => {
                 </div>
               </div>
 
-              <div className="table-responsive justify-between mt-3">
+              <div className="table-responsive justify-between mt-3 overflow-x-auto">
                 <table className="w-full border border-gray-300">
                   <thead className="bg-white">
                     <tr>
@@ -164,7 +163,7 @@ const ViewStaff = () => {
                         <td className="p-3 border-gray-300 flex justify-end">
                           <div className="m-1">
                             <Link
-                              href={`/admin/DeliveryStaff/${staff.staffId}`}
+                              href={`/admin/staff/${staff.staffId}`}
                               className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-2 rounded flex items-center"
                             >
                               <FaEdit />

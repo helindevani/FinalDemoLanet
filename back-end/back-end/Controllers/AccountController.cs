@@ -53,23 +53,30 @@ namespace back_end.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> PostLogin([FromBody]LoginDTO loginDTO)
+        public async Task<IActionResult> PostLogin([FromBody] LoginDTO loginDTO)
         {
-            if (ModelState.IsValid == false)
+            if (!ModelState.IsValid)
             {
                 string errorMessage = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
                 return Problem(errorMessage);
             }
+
             var result = await _userRepository.UserLoginRequest(loginDTO);
-            
-            if (result != null)
-                return Ok(result);
 
+            if (result is OkObjectResult)
+            {
+                return result;
+            }
+            else if (result is BadRequestObjectResult)
+            {
+                return result;
+            }
             else
-                return BadRequest("Please Provide Valid Data");
-
-
+            {
+                return BadRequest("Please provide valid data");
+            }
         }
+
 
         [HttpPatch]
         public async Task<IActionResult> UpdateUserData([FromForm]UserUpdateRequest userdata)

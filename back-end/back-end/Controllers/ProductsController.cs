@@ -12,7 +12,7 @@ namespace back_end.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
@@ -26,6 +26,17 @@ namespace back_end.Controllers
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts(int page, int pageSize, string search = null)
         {
             var products = await _productRepository.GetProductsAsync(page,pageSize,search);
+            if (products == null)
+            {
+                return NotFound();
+            }
+            return Ok(products);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Product>> GetProduct(Guid id)
+        {
+            var products = await _productRepository.GetProductByIdAsync(id);
             if (products == null)
             {
                 return NotFound();

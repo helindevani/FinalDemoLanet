@@ -4,6 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
 import StaffSidebar from "@/components/Sidebar/StaffSidebar";
+import { ToastError, ToastSuccess, ToastWarning } from "../ToastError";
 
 interface OrderFormValues {
   OrderId: string;
@@ -123,11 +124,11 @@ const OrderDetails: React.FC<StaffActionProps> = ({orderId}) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log("Order updated successfully:", response.data);
+        ToastSuccess("Order Status Updated Successfully!!")
         router.push("/staff/orders");
     } catch (error) {
+      ToastError("Failed To Update Order Status!!")
         console.error("Error updating order:", error);
-        // Handle error response, show error message
     }
 };
 
@@ -308,6 +309,7 @@ const OrderDetails: React.FC<StaffActionProps> = ({orderId}) => {
                             onChange={handleChange}
                           >
                             <option value="">---SELECT---</option>
+                            <option value="OnTheWay">On The Way</option>
                             <option value="Delivered">Delivered</option>
                             <option value="Rejected">Rejected</option>
                           </select>
