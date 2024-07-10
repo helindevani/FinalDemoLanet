@@ -64,6 +64,7 @@ const ApproveConnection = () => {
                   <span className="mr-1">Search:</span>
                   <input
                     type="search"
+                    placeholder="Enter Ration Card No."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="border-b-2 border-gray-500 focus:border-blue-700 shadow-md"

@@ -3,40 +3,52 @@
   "WorkspaceRootPath": "D:\\Final Demo Lanet\\back-end\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\servicecontracts\\repository\\iadminrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\servicecontracts\\repository\\iadminrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\services\\repository\\adminrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\services\\repository\\adminrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\domain\\identity\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\domain\\identity\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\services\\repository\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\services\\repository\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\domain\\identity\\applicationrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\domain\\identity\\applicationrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\servicecontracts\\repository\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\servicecontracts\\repository\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\domain\\entities\\forgotpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\domain\\entities\\forgotpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\domain\\entities\\connection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\domain\\entities\\connection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\domain\\entities\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\domain\\entities\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\domain\\entities\\brand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\domain\\entities\\brand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\domain\\entities\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\domain\\entities\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\domain\\entities\\adminrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\domain\\entities\\adminrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\databasecontext\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\databasecontext\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|d:\\final demo lanet\\back-end\\back-end\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FAC673F-A699-4B71-92F2-877DACAE8577}|back-end\\back-end.csproj|solutionrelative:back-end\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,7 +58,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -58,111 +70,150 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "ApplicationUser.cs",
               "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Identity\\ApplicationUser.cs",
               "RelativeDocumentMoniker": "back-end\\Domain\\Identity\\ApplicationUser.cs",
               "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Identity\\ApplicationUser.cs",
               "RelativeToolTip": "back-end\\Domain\\Identity\\ApplicationUser.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-19T17:45:45.35Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "AdminController.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\AdminController.cs",
-              "RelativeDocumentMoniker": "back-end\\Controllers\\AdminController.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\AdminController.cs",
-              "RelativeToolTip": "back-end\\Controllers\\AdminController.cs",
-              "ViewState": "AQIAABwAAAAAAAAAAAAkwDAAAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-19T17:01:04.579Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "IAdminRepository.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\ServiceContracts\\Repository\\IAdminRepository.cs",
-              "RelativeDocumentMoniker": "back-end\\ServiceContracts\\Repository\\IAdminRepository.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\ServiceContracts\\Repository\\IAdminRepository.cs",
-              "RelativeToolTip": "back-end\\ServiceContracts\\Repository\\IAdminRepository.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAA3AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-19T17:02:32.691Z",
+              "WhenOpened": "2024-06-20T08:22:04.17Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AdminRepository.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Services\\Repository\\AdminRepository.cs",
-              "RelativeDocumentMoniker": "back-end\\Services\\Repository\\AdminRepository.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Services\\Repository\\AdminRepository.cs",
-              "RelativeToolTip": "back-end\\Services\\Repository\\AdminRepository.cs",
-              "ViewState": "AQIAABcAAAAAAAAAAAA3wEYAAAAAAAAA",
+              "Title": "ApplicationRole.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Identity\\ApplicationRole.cs",
+              "RelativeDocumentMoniker": "back-end\\Domain\\Identity\\ApplicationRole.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Identity\\ApplicationRole.cs",
+              "RelativeToolTip": "back-end\\Domain\\Identity\\ApplicationRole.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-19T17:02:15.193Z",
+              "WhenOpened": "2024-06-20T08:22:02.463Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "back-end\\Controllers\\UserController.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\UserController.cs",
-              "RelativeToolTip": "back-end\\Controllers\\UserController.cs",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAAADEAAAAJAAAA",
+              "DocumentIndex": 2,
+              "Title": "ForgotPasswordRequest.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\ForgotPasswordRequest.cs",
+              "RelativeDocumentMoniker": "back-end\\Domain\\Entities\\ForgotPasswordRequest.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\ForgotPasswordRequest.cs",
+              "RelativeToolTip": "back-end\\Domain\\Entities\\ForgotPasswordRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-19T16:58:10.641Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "IUserRepository.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\ServiceContracts\\Repository\\IUserRepository.cs",
-              "RelativeDocumentMoniker": "back-end\\ServiceContracts\\Repository\\IUserRepository.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\ServiceContracts\\Repository\\IUserRepository.cs",
-              "RelativeToolTip": "back-end\\ServiceContracts\\Repository\\IUserRepository.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAuwA0AAAAqAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-19T16:56:57.645Z",
+              "WhenOpened": "2024-06-20T08:21:56.716Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "UserRepository.cs",
-              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Services\\Repository\\UserRepository.cs",
-              "RelativeDocumentMoniker": "back-end\\Services\\Repository\\UserRepository.cs",
-              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Services\\Repository\\UserRepository.cs",
-              "RelativeToolTip": "back-end\\Services\\Repository\\UserRepository.cs",
-              "ViewState": "AQIAAF4AAAAAAAAAAAAQwNAAAAAAAAAA",
+              "Title": "Connection.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\Connection.cs",
+              "RelativeDocumentMoniker": "back-end\\Domain\\Entities\\Connection.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\Connection.cs",
+              "RelativeToolTip": "back-end\\Domain\\Entities\\Connection.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-19T16:46:33.046Z",
+              "WhenOpened": "2024-06-20T08:21:55.076Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Category.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\Category.cs",
+              "RelativeDocumentMoniker": "back-end\\Domain\\Entities\\Category.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\Category.cs",
+              "RelativeToolTip": "back-end\\Domain\\Entities\\Category.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-20T08:21:53.055Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Brand.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\Brand.cs",
+              "RelativeDocumentMoniker": "back-end\\Domain\\Entities\\Brand.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\Brand.cs",
+              "RelativeToolTip": "back-end\\Domain\\Entities\\Brand.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-20T08:21:50.103Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Booking.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\Booking.cs",
+              "RelativeDocumentMoniker": "back-end\\Domain\\Entities\\Booking.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\Booking.cs",
+              "RelativeToolTip": "back-end\\Domain\\Entities\\Booking.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-20T08:21:42.767Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AdminRequest.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\AdminRequest.cs",
+              "RelativeDocumentMoniker": "back-end\\Domain\\Entities\\AdminRequest.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Domain\\Entities\\AdminRequest.cs",
+              "RelativeToolTip": "back-end\\Domain\\Entities\\AdminRequest.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAUwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-20T08:21:34.852Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "back-end\\Controllers\\AccountController.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "back-end\\Controllers\\AccountController.cs",
+              "ViewState": "AQIAADgAAAAAAAAAAAAUwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-20T08:21:18.264Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\DatabaseContext\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "back-end\\DatabaseContext\\ApplicationDbContext.cs",
+              "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\DatabaseContext\\ApplicationDbContext.cs",
+              "RelativeToolTip": "back-end\\DatabaseContext\\ApplicationDbContext.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAxAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-20T08:20:44.115Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\appsettings.json",
               "RelativeDocumentMoniker": "back-end\\appsettings.json",
               "ToolTip": "D:\\Final Demo Lanet\\back-end\\back-end\\appsettings.json",
               "RelativeToolTip": "back-end\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAA7AAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB4AAAAoAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2024-06-19T06:14:11.258Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 11,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Final Demo Lanet\\back-end\\back-end\\Program.cs",
               "RelativeDocumentMoniker": "back-end\\Program.cs",
@@ -170,8 +221,7 @@
               "RelativeToolTip": "back-end\\Program.cs",
               "ViewState": "AQIAACEAAAAAAAAAAAAAADMAAAAHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-17T16:44:49.986Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-17T16:44:49.986Z"
             }
           ]
         }

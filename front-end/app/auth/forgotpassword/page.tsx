@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { forgotPassword } from "@/store/authSlice";
 import Footer from "@/components/Layout/Footer";
 import { isValidEmail } from "@/components/Enums/EnumConverter";
+import { ToastError, ToastSuccess } from "@/components/ToastError";
+import { ToastContainer } from "react-toastify";
 
 interface ForgotPasswordData {
   Email: string;
@@ -24,11 +26,21 @@ const ForgotPassword = () => {
     setError(""); 
 
     const data: ForgotPasswordData = { Email: email };
-    dispatch(forgotPassword(data));
+    try{
+      const response=dispatch(forgotPassword(data));
+    if(response.meta.requestStatus == 'fulfilled'){
+      ToastSuccess("Password Change Request Successfully Placed Please Change Password Using Sended Mail In Your Register Email Id!!");
+    }
+    }
+    catch(error){
+      ToastError("Failed To Password Change Request Please Provide Valid Email Address!!");
+    }
+    
   };
 
   return (
     <>
+    <ToastContainer/>
       <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">

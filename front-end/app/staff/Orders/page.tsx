@@ -76,7 +76,7 @@ const ViewOrders = () => {
                     <input
                       type="search"
                       className="border-b-2 border-gray-500 shadow-md focus:outline-none"
-                      placeholder=""
+                      placeholder="Enter Lpg No"
                       value={search}
                       onChange={(e)=>(setSearch(e.target.value))}
                     />

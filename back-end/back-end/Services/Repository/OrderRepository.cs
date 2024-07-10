@@ -8,6 +8,7 @@ using back_end.ServiceContracts.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace back_end.Services.Repository
 {
@@ -42,6 +43,11 @@ namespace back_end.Services.Repository
                 ordersQuery = ordersQuery.Where(r => r.OrderStatus == OrderStatus.Placed || r.OrderStatus == OrderStatus.Confirmed || r.OrderStatus == OrderStatus.OnTheWay || r.OrderStatus == OrderStatus.StaffRejected);
             }
 
+            if (!string.IsNullOrEmpty(search))
+            {
+                var searchLower = search.ToLower();
+                ordersQuery = ordersQuery.Where(r => r.LpgNo.ToLower().Contains(searchLower));
+            }
             var totalOrders = await ordersQuery.CountAsync();
 
             var pagedOrders = await ordersQuery
@@ -76,7 +82,11 @@ namespace back_end.Services.Repository
 
             ordersQuery = ordersQuery.Where(r => r.OrderStatus == OrderStatus.Delivered && r.ClientEmail == userData.Email);
 
-
+            if (!string.IsNullOrEmpty(search))
+            {
+                var searchLower = search.ToLower();
+                ordersQuery = ordersQuery.Where(r => r.OrderId.ToString().ToLower().Contains(searchLower));
+            }
             var totalOrders = await ordersQuery.CountAsync();
 
             var pagedOrders = await ordersQuery
@@ -132,6 +142,12 @@ namespace back_end.Services.Repository
             else
             {
                 ordersQuery = ordersQuery.Where(o => o.OrderStatus != OrderStatus.Delivered && o.OrderStatus != OrderStatus.StaffRejected);
+            }
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                var searchLower = search.ToLower();
+                ordersQuery = ordersQuery.Where(r => r.LpgNo.ToLower().Contains(searchLower));
             }
 
             var totalOrders = await ordersQuery.CountAsync();

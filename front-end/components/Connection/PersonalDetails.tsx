@@ -402,7 +402,7 @@ export default function PersonalDetails({ onChange }: ChangeType) {
                 <option value="">--------SELECT---------</option>
                 {products.map((product: any) => (
                   <option key={product.productId} value={product.productId}>
-                    {product.productName} <span>{product.brand.brandName}</span>
+                    {product.productName}-{product.brand.brandName}-{product.category.categoryName}
                   </option>
                 ))}
               </select>

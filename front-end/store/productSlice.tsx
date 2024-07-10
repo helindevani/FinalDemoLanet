@@ -1,13 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "js-cookie";
-
+import { Category } from "./categorySlice";
 type AppDispatch = (arg: any) => any;
 
 interface Brand {
   brandId: string;
   brandName: string;
 }
+
 
 export type Product = {
   productId: string;
@@ -20,6 +21,7 @@ export type Product = {
   status: string;
   createdBy: string;
   brand: Brand;
+  category : Category;
 };
 
 interface ProductState {

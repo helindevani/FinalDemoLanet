@@ -77,7 +77,7 @@ const BookingHistory = () => {
                     <input
                       type="search"
                       className="border-b-2 border-gray-500 focus:border-blue-700 shadow-md"
-                      placeholder=""
+                      placeholder="Enter Product Name"
                       value={search}
                       onChange={(e)=>(setSearch(e.target.value))}
                     />
