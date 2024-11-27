@@ -31,6 +31,8 @@
 - Report Generation
 - Metrics Monitoring
 
+## Video demo
+- [demo](https://drive.google.com/file/d/1JxrrbxP9f1KGdq-W8m8rI_xoCJI9ZAGF/view?usp=drivesdk)
 
 ## Author
 ### Helin Devani
